@@ -192,7 +192,7 @@ def build_ass(cues, overlays, hook, cfg, total, hook_at=0.0):
 ScriptType: v4.00+
 PlayResX: {W}
 PlayResY: {H}
-WrapStyle: 2
+WrapStyle: 0
 ScaledBorderAndShadow: yes
 
 [V4+ Styles]

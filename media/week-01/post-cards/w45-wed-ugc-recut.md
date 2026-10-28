@@ -7,8 +7,8 @@
 | **Format** | [13 · UGC re-cut (from the Drive folder)](../../../formats/13-ugc-recut.md) |
 | **Length** | 20–25 s |
 | **Talent / props** | none new — 2–3 clips from the Drive folder "DigiRoo UGC Videos for Babson Team" |
-| **Status** | scripted (clips pending: add the Drive folder to "My Drive" so the connector can pull them, or AirDrop to `media/raw/week-01/w45-wed-ugc-recut/`) |
-| **Review flag** | **[REVIEW: permission]** — confirm each creator has OK'd reposting; log in `media/raw/permissions.md` |
+| **Status** | **cut** → `media/cuts/w45-wed-ugc-recut.mp4` (26.5 s), built from three of her own Instagram reels (Dec 2024 Christmas, Sep 2025 car, Nov 2025 "6-7"); preview frames in `../wed-preview/strip.png` |
+| **Review flag** | none for rights (all three source reels are her own posts). Segments carrying retired claims were skipped: Christmas 3.2–14.3 s ("preventing"), car after 9 s ("neck strain"). Source reels carry their own burned-in captions, so no new bottom captions were added. |
 
 ## Hook (first 1.5 s)
 - **Spoken:** (creator's own first line)
@@ -69,4 +69,4 @@ Comment prompt (every post, per baseline lesson): "Where does your kid do most o
 
 ## Edit notes for `edit-cuts`
 clips: `media/raw/week-01/w45-wed-ugc-recut/*` in the order above · caption style: default (creator words as captions) · end card: yes
-edit file: `media/week-01/edits/w45-wed-ugc-recut.json` (prepared; fill in the three filenames)
+edit file: `media/week-01/edits/w45-wed-ugc-recut.json` (final)

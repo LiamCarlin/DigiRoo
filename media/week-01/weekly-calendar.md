@@ -6,7 +6,7 @@ Posting window: 11:00–13:00 and 19:00–21:00 ET · Cadence: 5 + 1 bonus · Cr
 |---|---|---|---|---|---|---|---|
 | Mon Nov 2 | 12:00 PM | TT + IG + FB | A | 01 POV slouch spot | POV: you look over and see this | [w45-mon-pov-couch](post-cards/w45-mon-pov-couch.md) | scripted |
 | Tue Nov 3 | 8:05 PM | TT + IG + FB | B | 03 Chiro explains | It's not the screen time, it's the screen height | [w45-tue-chiro-screen-height](post-cards/w45-tue-chiro-screen-height.md) | scripted · [REVIEW: clinician] |
-| Wed Nov 4 | 11:50 AM | TT + IG + FB | C | 13 UGC re-cut | other parents on the iPad slouch: | [w45-wed-ugc-recut](post-cards/w45-wed-ugc-recut.md) | scripted · clips pending |
+| Wed Nov 4 | 11:50 AM | TT + IG + FB | C | 13 UGC re-cut | other parents on the iPad slouch: | [w45-wed-ugc-recut](post-cards/w45-wed-ugc-recut.md) | **cut** (from her IG reels; preview in wed-preview/) |
 | Thu Nov 5 | 8:00 PM | TT + IG + FB | A | 07 Three things | 3 things nobody told me about kids + iPads | [w45-thu-three-things](post-cards/w45-thu-three-things.md) | scripted |
 | Fri Nov 6 | 12:10 PM | TT + IG + FB | D | 10 Season hook + 02 before/after | the iPad gift that comes with a posture plan | [w45-fri-gift-season](post-cards/w45-fri-gift-season.md) | scripted |
 | Sat Nov 7 (bonus) | 11:30 AM | TT + IG | E | 08 Founder story | I made this for my daughter. | [w45-sat-founder-story](post-cards/w45-sat-founder-story.md) | scripted |
