@@ -1,0 +1,8 @@
+{"output": "out/test-cut.mp4", "hook": "POV: you look over and see this",
+ "end_card": {"line1": "Screen Time, Elevated.", "line2": "DigiRoo · link in bio", "seconds": 2.0},
+ "caption": {"words_per_cue": 3},
+ "clips": [
+  {"file": "clip01.mp4", "text": "Every parent has seen this.", "trim": "auto"},
+  {"file": "clip02.mp4", "text": "So the screen comes up instead.", "trim": "auto", "overlay": "and now I don't have to say sit up"},
+  {"file": "clip03.mp4", "text": "DigiRoo. It's in my bio.", "trim": [0.5, 3.5], "mute": true}
+ ]}

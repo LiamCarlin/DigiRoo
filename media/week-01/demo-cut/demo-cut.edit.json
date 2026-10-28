@@ -1,0 +1,29 @@
+{
+  "output": "/tmp/claude-0/-home-user/85ef84d5-9a82-5960-a0d9-87cc6410a5e7/scratchpad/testclips/out/test-cut.mp4",
+  "duration_sec": 13.4,
+  "clips": [
+    {
+      "clip": "clip01.mp4",
+      "trim_mode": "silence",
+      "start": 1.01,
+      "end": 5.01,
+      "duration": 4.0
+    },
+    {
+      "clip": "clip02.mp4",
+      "trim_mode": "silence",
+      "start": 0.31,
+      "end": 4.7,
+      "duration": 4.4
+    },
+    {
+      "clip": "clip03.mp4",
+      "trim_mode": "manual",
+      "start": 0.5,
+      "end": 3.5,
+      "duration": 3.0
+    }
+  ],
+  "captions": 6,
+  "hook": "POV: you look over and see this"
+}

@@ -1,0 +1,8 @@
+media/raw/**
+!media/raw/.gitkeep
+*.mp4
+*.mov
+*.MOV
+__pycache__/
+.DS_Store
+!media/week-01/demo-cut/*.mp4
