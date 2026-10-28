@@ -28,7 +28,11 @@ description: Run DigiRoo's clinician affiliate outreach — pick the next 10 ped
 - Rows with status `replied` → summarise the reply, propose the next step (send one-pager / ask address / create code), draft it.
 
 ### "onboard <clinic>"
-- Create the code name (`DR<LASTNAME>10`), note it in `tracker.csv` (`code`), write the Shopify discount instructions (10% off, no min, tracks to this affiliate) for her to create (or do it via `shopify-admin` with her go), draft the "welcome + content pack" message, and list the 3 posts from `formats/14-affiliate-clinic-post.md` to generate for them (run `content-week` with pillar B ×3, tagged with their handle, flagged [REVIEW: clinician]).
+1. Create the code name (`DR<LASTNAME>10`), note it in `tracker.csv` (`code`), and write the Shopify discount instructions (10% off, no minimum, one code per clinic) for her to create (or do it via `shopify-admin` with her go).
+2. Make the clinic's folder `affiliates/onboarded/<clinic-slug>/` with `clinic.json` (`CLINIC`, `CLINICIAN`, `HANDLE`, `CODE`, `CITY`).
+3. Fill the pack: copy `affiliates/content-pack/post-0{1,2,3}-*.md` and `edits/*.json` into the folder with the placeholders replaced; run `python3 affiliates/content-pack/build_pdfs.py affiliates/onboarded/<clinic-slug>/` for the handout and code card; run `edit-cuts` on the three edit files (add `"intro"` if the clinic sent a selfie line) to produce the three mp4s.
+4. Draft the "welcome + content pack" message from `templates/outreach-dm.md` (the "if they reply yes" block), attach the three videos, the handout PDF, the code card PDF and the captions. Flag the two clinician-voiced intros **[REVIEW: clinician]** for Antonia and the clinic.
+5. Log `onboarded` in `tracker.csv` with the date; set `next_action_date` to the 1st of next month for the monthly loop (new post + their numbers + thanks).
 
 ### "add this clinic"
 - Append a row to `clinician-list.csv` with whatever she gives; fill fit_score by the rubric in `affiliates/list-sources.md`.
