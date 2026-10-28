@@ -15,4 +15,11 @@ Short answers are fine. Anything you skip, we'll run with the default in bracket
 11. What hours do you want posts to go out, and in which time zone? [11–1 and 7–9, US Eastern]
 12. Free native schedulers (Meta Business Suite + TikTok Studio) or a dashboard tool like Metricool? [native, free]
 
+From pulling your TikTok and Instagram history:
+
+13. Were either of these boosted or shared by partners: the Screenagers screening invite (Dec 2024, 38.2K plays) or the summer webinar promo (May 2024, 9,021)? Instagram → the post → View insights shows it. [we treat both as boosted and benchmark on your typical reel, 769 plays]
+14. Your collab reels with @enlighteningells (84K plays) and @checollab (24.5K) are your biggest ever. Can we study those videos, and would either do another one? [we only use the links and public play counts until they agree]
+15. OK to change both bios to "The kids' iPad case that lifts the screen to eye level. Screen Time, Elevated."? TikTok currently says "prevent Tech Neck" and Instagram says "the only kid-friendly tablet case…", and both are lines we'd rather not defend. [no change until you say yes]
+16. Who is the pediatric chiropractor behind "20-year-olds with the spinal health of 40-year-olds"? If we can name them on screen, we can keep using it. [we won't reuse the quote]
+
 One small favour: open the "DigiRoo UGC Videos for Babson Team" folder in Google Drive, right-click it and choose "Add shortcut to Drive" (or re-share it directly to liamzcarlin@gmail.com). Our tools can only see folders that are in the shared-with-me list, and that unlocks the automatic video cuts.

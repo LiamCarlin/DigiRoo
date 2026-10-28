@@ -1,6 +1,6 @@
 # Instagram baseline — @kidsdigitalwellness (pulled 2026-10-28, with Antonia's approval)
 
-Source: the 20 most recent posts authored by @kidsdigitalwellness. Post links were read from her profile grid in a logged-in Chrome (read-only). Each post was then downloaded with yt-dlp 2026.10.26 using Chrome cookies, because yt-dlp's profile extractor is broken. The 3 pinned posts (2022–23) and 7 collabs owned by other accounts were left out. Videos, photo-post metadata and `posts.csv` are in `media/raw/kidsdigitalwellness/` (not committed). Frame grabs and teardown stubs for the 13 reels are in `research/teardowns/<date>-<id>/`.
+Source: the 20 most recent posts authored by @kidsdigitalwellness. Post links were read from her profile grid in a logged-in Chrome (read-only). Each post was then downloaded with yt-dlp 2026.10.26 using Chrome cookies, because yt-dlp's profile extractor is broken. The 3 pinned posts (2022–23) and 7 collabs owned by other accounts were left out. Videos, photo-post metadata and `posts.csv` are in `media/raw/kidsdigitalwellness/` (not committed). Frame grabs and filled teardowns for the 13 reels are in `research/teardowns/<date>-<id>/` (spoken lines not transcribed).
 
 **Views:** Instagram metadata has no play counts, so reel views are the play counts shown on her Reels tab on 2026-10-28. One is rounded on screen (38.2K). Photo posts have no public view count, so the column is blank. Likes and comments come from the post metadata.
 
@@ -58,7 +58,7 @@ Bio note: "the only kid-friendly tablet case…" is a superlative we can't sourc
 ## What the numbers say
 1. **Instagram is the bigger channel, but not by as much as the followers suggest.** It has 995 followers against 42 on TikTok (about 24×), yet the same video gets only 1–3× the plays here, and the "6-7" post about 29×. The reel median is 769 against 210 for TikTok (all 30 posts).
 2. **Her two biggest solo reels are local event promos, not product.** The Screenagers invite (38.2K, 123 likes) is her most-liked post by far. It opens on the flyer and then cuts to Antonia outdoors introducing herself as the founder. The summer webinar promo did 9,021. Both have very low like rates (0.3–0.5% against 1–5% on her other reels), which points to reach well outside her followers. Ask Antonia whether either was boosted (Insights shows it) before treating them as organic.
-3. **Collabs carry the most reach on her grid.** The @enlighteningells collab (84K) and @checollab collab (24.5K) beat everything she has posted alone. Collabs are now most of her recent activity. They aren't in the format library yet: candidate **format 16: collab reel** (co-post with a parent, educator or local org; she brings the product and the topic).
+3. **Collabs carry the most reach on her grid.** The @enlighteningells collab (84K) and @checollab collab (24.5K) beat everything she has posted alone. Collabs are now most of her recent activity. Now **format 16: collab reel** (`formats/16-collab-reel.md`): co-post with a parent, educator or local org; she brings the product and the topic.
 4. **Kid in frame one wins for product, same as TikTok.** "iPad this Christmas? Then you need…" (2,650) is her best organic product reel. Car "on the go" (815) and the "6-7" kid (866) come next. The retail-display clip of Antonia alone did 661.
 5. **Clinician content works only as a short teaser in her voice.** The 90 s "geriatric neck" teaser did 1,143. The 21-minute IG Live replay with Dr. Coffin did 134, and the screen-recorded @alignwithwellness reel did 153. Clip the best 20 s of any Live into format 03 rather than posting the full replay.
 6. **Photos are announcement flyers and draw few likes.** Event, Prime Day and webinar graphics get 10–18 likes, the same as her daughter's Women's Day photo. None is a stance or education carousel, the kind that won on TikTok (2,184). Test that here.
@@ -80,4 +80,4 @@ Bio note: "the only kid-friendly tablet case…" is a superlative we can't sourc
 | School visit, retail display | 08 founder | Keep; fix the "world's first" line |
 | Screenagers recap | 06 / 08 | Keep the fast cut; open on people, not boxes |
 | Collabs (@enlighteningells, @checollab) | **16 collab reel (new)** | Plan one a month |
-| Event/promo flyers, pillars graphic | – | Move flyers to Stories; use the feed for stance/education carousels (TikTok format 15) |
+| Event/promo flyers, pillars graphic | – | Move flyers to Stories; use the feed for stance carousels (format 15) |

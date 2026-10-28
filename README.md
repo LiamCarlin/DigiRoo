@@ -24,7 +24,7 @@ If you have no ideas on a Monday, just say `plan my week`. Claude proposes from 
 ## Where things live
 ```
 DIGIROO-brief.md        who we are, who we talk to, what we can say, hashtags   ← update when something changes
-format-library.md       14 proven short-form formats (formats/ has the scripts)
+format-library.md       16 short-form formats (formats/ has the scripts)
 lessons-learned.md      what worked, week by week (Claude appends; you read)
 media/week-NN/          calendar, post cards, shoot card, cuts for each week
 affiliates/             clinic list (127, mirrored to Google Sheet: https://docs.google.com/spreadsheets/d/19PT0OrWsCpwaCnSpZxLmAhDeJtkuu9f-kQtF4aKJs2w), tracker, templates, one-pager

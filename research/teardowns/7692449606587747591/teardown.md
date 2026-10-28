@@ -1,7 +1,7 @@
 # Teardown — 7692449606587747591 · Your son needs this iPad case
 
-**Source:** media/raw/tiktok-digiroocase/7692449606587747591.mp4 · **Views:** ? · **Likes:** ? · **Posted:** ? · **Length:** 19.3s
-**Caption:** 
+**Source:** https://www.tiktok.com/@digiroocase/video/7692449606587747591 · **Views:** 521 · **Likes:** 8 · **Comments:** 0 · **Posted:** 2026-10-03 · **Length:** 19.0s
+**Caption:** Protective, durable and Ergonomic!! DigiRoo covers it all. Designed with  sons and daughters in mind 😉
 **Hashtags:** 
 
 ## Hook type (first 3 s)

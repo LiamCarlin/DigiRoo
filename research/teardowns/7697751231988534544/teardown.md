@@ -1,8 +1,8 @@
 # Teardown — 7697751231988534544 · World Spine Day chiro stat
 
-**Source:** media/raw/tiktok-digiroocase/7697751231988534544.mp4 · **Views:** ? · **Likes:** ? · **Posted:** ? · **Length:** 55.1s
-**Caption:** 
-**Hashtags:** 
+**Source:** https://www.tiktok.com/@digiroocase/video/7697751231988534544 · **Views:** 620 · **Likes:** 15 · **Comments:** 0 · **Posted:** 2026-10-17 · **Length:** 55.0s
+**Caption:** #worldspineday A pediatric chiropractor said he was seeing 20-year-olds with the spinal health of 40-year-olds 😵‍💫 DigiRoo was designed as a kid-friendly ergonomic iPad case that supports positive pos
+**Hashtags:** #worldspineday #screentimeelevated
 
 ## Hook type (first 3 s)
 credential + stat, spoken; arrives at ~3 s after a walk-in

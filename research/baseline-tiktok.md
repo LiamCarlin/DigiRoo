@@ -47,7 +47,7 @@ Bio note: "prevent Tech Neck" is a claim the brief avoids (§5). Suggest: "The k
 
 ## All 30 posts (local pull, 2026-10-27)
 
-Pulled on a laptop with `bash tools/pull_instagram.sh https://www.tiktok.com/@digiroocase 30` (yt-dlp 2026.10.26, Chrome cookies): 25 videos + 5 photo posts. Raw files and `posts.csv` are in `media/raw/digiroocase/` (not committed, 75 MB). Every video has a teardown stub with frames in `research/teardowns/<date>-<id>/`. The 8 hand-filled teardowns from the cloud pull stay in `research/teardowns/<id>/`. Numbers for the 10 posts above haven't moved.
+Pulled on a laptop with `bash tools/pull_instagram.sh https://www.tiktok.com/@digiroocase 30` (yt-dlp 2026.10.26, Chrome cookies): 25 videos + 5 photo posts. Raw files and `posts.csv` are in `media/raw/digiroocase/` (not committed, 75 MB). Every video has a filled teardown with frames: the 8 from the cloud pull in `research/teardowns/<id>/`, the other 17 in `research/teardowns/<date>-<id>/`. Spoken lines weren't transcribed (faster-whisper's PyAV dependency won't build on Python 3.15). Numbers for the 10 posts above haven't moved.
 
 **Account totals:** 9,350 views · 176 likes (matches the profile) · 6 comments · 20 shares · 7 saves. **Median 210 views, mean 312.** 3 of 30 cleared 600; 1 cleared 1,000. Photo posts median 320 vs videos 199.
 
@@ -82,7 +82,7 @@ Pulled on a laptop with `bash tools/pull_instagram.sh https://www.tiktok.com/@di
 | 2023-09-29 | 893 | 3 | 0 | 4 | 0 | 37 | video | Animated "Meet DigiRoo" launch intro | – |
 
 ### What the full history adds
-1. **Her best post ever is a no-product stance carousel.** "Screentime is NOT a bad choice" did 2,184 views, 3.5× the next best. It got reach without engagement (4 likes, 0 comments), and a similar carousel three days later did 150, so it's one hit, not yet a pattern. With photo posts at a median of 320 against 199 for videos, this overturns "retire static graphics on TikTok" above. Keep one stance carousel a week and test two more before deciding. Candidate **format 15: stance carousel** (pillar A).
+1. **Her best post ever is a no-product stance carousel.** "Screentime is NOT a bad choice" did 2,184 views, 3.5× the next best. It got reach without engagement (4 likes, 0 comments), and a similar carousel three days later did 150, so it's one hit, not yet a pattern. With photo posts at a median of 320 against 199 for videos, this overturns "retire static graphics on TikTok" above. Keep one stance carousel a week and test two more before deciding. Now **format 15: stance carousel** (pillar A, `formats/15-stance-carousel.md`).
 2. **The 2023 launch batch went nowhere.** Seven polished kid-plus-text clips ran on seven straight days. Apart from the animated intro (893), each got 11–32 views. Posting generic product clips every day built nothing. Since then her posts have a median about 10× higher.
 3. **Antonia on camera earns likes.** Her talking head has the best like rate of any video with 100+ views: 9% (18 on 199), against 6.6% for the sunset. The lobby walk (13 likes) and the panel clip (2 comments, 2 shares) come next. Pillar E and format 07 are under-used.
 4. **Long, borrowed authority doesn't travel.** The Dr. Hanstad duet (119 s) did 39 views and the Maine News segment (118 s) did 219, about median. The chiro angle works when it's short and in her own voice (World Spine Day, 620).

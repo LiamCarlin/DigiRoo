@@ -14,6 +14,11 @@ Each `weekly-review` run appends one entry. `content-week` reads the latest entr
 **Baseline lessons applied to Week 01:** kid in frame one; stat/hook in the first 1.5 s; every caption asks for a comment or a share; one founder/Bermuda post a week.
 **Antonia's gut:** "Time to get media, time to edit, time to post" are the roadblocks. Ideas aren't.
 
+## Baseline addendum — full history (pulled 2026-10-27/28)
+**TikTok (all 30 posts):** median 210 views, mean 312, 3 of 30 above 600; photo posts median 320 vs videos 199 · **Instagram (last 20 own posts):** 995 followers, reel median 769 plays, 16 comments total; collabs on her grid reached 84K and 24.5K · Detail: `research/baseline-tiktok.md`, `research/baseline-instagram.md`
+**Best:** "Screentime is NOT a bad choice" stance carousel (TikTok, 2,184); Screenagers invite (IG, 38.2K, possibly boosted); "iPad this Christmas? Then you need…" (IG, 2,650, best organic product reel). **Worst:** the 2023 daily launch batch (11–32 views each); Dr. Hanstad duet (39, 119 s).
+**Added to the plan:** format 15 stance carousel (test 2 more); format 16 collab reel (one a month); keep trend comparisons on IG Reels first; clip clinician Lives and news segments to ≤30 s instead of posting them whole.
+
 ## Objections / comments heard (running list, feeds format 12)
 - "Will my kid actually use the stand or ignore it?"
 - "Is $50 worth it for a case?"

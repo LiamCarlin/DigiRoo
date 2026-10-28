@@ -23,7 +23,8 @@
 | Recognition | Fast Company Innovation by Design 2022, Honourable Mention (Wellness); patent granted; Inspired Internet Pledge signatory (2025) | Royal Gazette, Bernews, inspiredinternet.org |
 | Where to buy | kidsdigitalwellness.com (Shopify, DTC); Walmart.com; Amazon; Bermuda retail (A.F. Smith, Gibbons) | listings |
 | Traction | ~1,200 units lifetime, mostly Bermuda retail; now ~3 units/month DTC | Antonia, Oct call |
-| TikTok today | 42 followers, 30 videos, median 305 views on the last 10 posts (best 620: World Spine Day chiro stat) | pulled 2026-10-28, `research/baseline-tiktok.md` |
+| TikTok today | 42 followers, 30 posts, median 210 views across all 30 (best 2,184: "Screentime is NOT a bad choice" carousel; best recent video 620: World Spine Day) | pulled 2026-10-27, `research/baseline-tiktok.md` |
+| Instagram today | 995 followers, 266 posts. Last 20 own posts: reel median 769 plays (best 38.2K: Screenagers event invite, possibly boosted); collabs on her grid reached 84K and 24.5K | pulled 2026-10-28, `research/baseline-instagram.md` |
 | Ships to | ⚠️ US, Canada, Bermuda, UK (default) | |
 
 **Product name on camera:** say "DigiRoo" (DIJ-ee-roo) out loud once per video. Spell "DigiRoo" with capital D and R in text.
@@ -65,7 +66,13 @@
 | "Looking down at a screen puts a lot of extra load on a kid's neck." | Specific numbers like "40 lb of pressure" unless cited on screen to a source (e.g., Hansraj 2014 estimate for adults — note it's adults). |
 | "Pediatric chiropractors use it in their clinics." (once ≥1 affiliate confirms) | Any clinician endorsement before they've agreed in writing. |
 
-⚠️ Already live and worth tidying: TikTok bio says "prevent Tech Neck"; one caption says "reduces Tech Neck". Suggested bio: "The kids' iPad case that lifts the screen to eye level. Screen Time, Elevated."
+⚠️ Already live and worth tidying:
+- Bios: TikTok says "prevent Tech Neck"; Instagram says "the only kid-friendly tablet case…". Suggested bio for both: "The kids' iPad case that lifts the screen to eye level. Screen Time, Elevated."
+- On screen: "The world's first height adjustable iPad case for kids!" (IG, Jul 2024); "Approved by physiotherapists" (TikTok, Oct 2023); "20% of people suffer from tech neck" (unsourced); the booth banner says "designed to prevent 'Tech Neck'".
+- Captions: "reduces / prevents / mitigates Tech Neck", "reduces neck strain", "#1 choice for healthy ergonomic support".
+- The "20-year-olds with the spinal health of 40-year-olds" chiro quote needs a named, on-record source before it's used again.
+
+Old posts stay up; just don't reuse these lines. Full list in `research/baseline-tiktok.md` and `research/baseline-instagram.md`.
 
 Every clinician-facing or clinician-voiced post gets flagged **[REVIEW: clinician]** in the post card so Antonia checks it.
 
@@ -73,10 +80,10 @@ Every clinician-facing or clinician-voiced post gets flagged **[REVIEW: clinicia
 
 | # | Pillar | Share | Job | Typical formats |
 |---|---|---|---|---|
-| A | **Parent-POV lifestyle** | 2/wk | Relatability, shares, saves | POV slouch spot; day-in-the-life; car/plane/restaurant; "things I didn't know until…" |
+| A | **Parent-POV lifestyle** | 2/wk | Relatability, shares, saves | POV slouch spot; day-in-the-life; car/plane/restaurant; "things I didn't know until…"; stance carousel (15) |
 | B | **Posture & tech-neck education** | 1/wk | Keyword reach, clinician-shareable | 20-s explainer; stitch-the-stat; myth vs. habit; "what a pediatric chiro told me" |
 | C | **Product demo / UGC repurpose** | 1/wk | Conversion, trust | Unboxing with a kid; 7-second before/after; "25 positions in 15 s"; Drive UGC clips re-cut |
-| D | **Awareness hook / trend** | 1/wk | Discovery | Calendar hooks (World Spine Day, back-to-school, gift guides); trending sound with a slouch-to-lift reveal |
+| D | **Awareness hook / trend** | 1/wk | Discovery | Calendar hooks (World Spine Day, back-to-school, gift guides); trending sound with a slouch-to-lift reveal; collab reel with a partner (16) |
 | E | **Founder / behind-the-scenes** | 0–1/wk (bonus) | Trust, Bermuda pride | "Why I made this"; packing orders; Bermuda beach shoot; "3 units/month, let's change that" |
 
 Default weekly plan: **Mon A · Tue B · Wed C · Thu A · Fri D** (+ optional Sat E). Cross-post every TikTok to IG Reels and Facebook.
@@ -136,6 +143,10 @@ Say at least two of these out loud in every video, naturally: **tech neck**, **s
 | 10 | Can you grant TikTok/IG analytics access, or send weekly screenshots? | Screenshots |
 | 11 | Posting window you prefer (ET or AST)? | 11:00–13:00 and 19:00–21:00 ET |
 | 12 | Scheduler: native (free) or Metricool/Buffer dashboard? | Native (Meta Business Suite + TikTok Studio) |
+| 13 | Were the Screenagers invite (Dec 2024, 38.2K plays) and the summer webinar promo (May 2024, 9,021) boosted or pushed by partners? | Treat both as boosted; benchmark on the reel median (769) |
+| 14 | OK to download and study the collab reels (@enlighteningells 84K, @checollab 24.5K), and would those partners collab again? | Links and public play counts only; no download until the partner agrees |
+| 15 | OK to change both bios to the §5 suggestion? | No change until you say yes |
+| 16 | Who is the pediatric chiropractor behind "20-year-olds with the spinal health of 40-year-olds", and can we name them? | Don't reuse the quote |
 
 ## 12. Settings the skills read
 
