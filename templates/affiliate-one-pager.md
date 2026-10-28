@@ -13,7 +13,7 @@ A protective kids' iPad case with a patented, height-adjustable stand built in. 
 |---|---|
 | **Free unit** | One DigiRoo for your clinic or waiting room, shipped free. |
 | **Your code** | e.g. `DRSMITH10`: families get 10% off at kidsdigitalwellness.com; you earn **15% commission** on every order, paid monthly. |
-| **Content pack** | Three short posture-education posts (video + caption) you can post as-is or edit. Parent-friendly, no medical claims, your handle tagged. |
+| **Content pack** | Three short posture-education videos (20 s, 10 s, 25 s) with captions, ready to post as-is or with a 5-second intro from you. Parent-friendly, no medical claims, your handle and code on every end card. |
 | **Parent handout** | Optional one-page "screen posture at home" PDF with your clinic's name on it. |
 | **Zero admin** | No minimums, no contract, no reporting. Reply "stop" to end anytime. |
 

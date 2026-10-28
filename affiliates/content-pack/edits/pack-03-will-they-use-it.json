@@ -1,0 +1,36 @@
+{
+  "output": "../../../media/cuts/pack-03-will-they-use-it.mp4",
+  "hook": "\"will my kid actually use it?\"",
+  "end_card": {
+    "line1": "{{HANDLE}} · code {{CODE}}",
+    "line2": "DigiRoo · not medical advice",
+    "seconds": 3
+  },
+  "caption": {
+    "words_per_cue": 3
+  },
+  "clips": [
+    {
+      "file": "../../media/raw/week-01/w45-mon-pov-couch/shot1.mov",
+      "text": "Will my kid actually use the stand, or just ignore it? Fair question. Here's day one.",
+      "trim": "auto",
+      "mute": true,
+      "overlay": "day 1"
+    },
+    {
+      "file": "../../media/raw/week-01/w45-mon-pov-couch/broll-kid-flips-stand.mov",
+      "text": "Here's week two.",
+      "trim": "auto",
+      "mute": true,
+      "overlay": "week 2"
+    },
+    {
+      "file": "../../media/raw/week-01/w45-mon-pov-couch/shot4.mov",
+      "text": "Turns out eye level is just comfier. They figure it out. DigiRoo. Code {{CODE}} from {{CLINIC}} gets you ten percent off.",
+      "trim": "auto",
+      "mute": true,
+      "overlay": "eye level is just comfier"
+    }
+  ],
+  "vo": "../../media/raw/week-01/pack/vo-03.m4a"
+}

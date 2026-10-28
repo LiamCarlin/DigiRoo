@@ -20,6 +20,7 @@ Runs anywhere with ffmpeg + Python 3.10+. Whisper (faster-whisper) is optional a
    - `hook` = the card's on-screen hook text.
    - per clip: `text` = that shot's spoken line; `overlay` = that shot's on-screen text; `trim` = `"auto"` (default), `[start,end]` if she said "use 0:04–0:09", or `null` for B-roll; `mute: true` for B-roll under VO.
    - `end_card` default on; `music` only if she dropped a bed file.
+   - `vo` = a separately recorded voice memo (m4a) to lay over muted clips; `intro` = a clip to prepend untouched (used by the affiliate pack for the clinic's 5-second selfie line; the hook banner then starts after it).
 3. **Run:** `python3 skills/edit-cuts/edit_cuts.py --edit media/<week>/edits/<post-id>.json`
    - Whisper present → each clip is trimmed to the spoken segment that matches its script line, captions are word-timed.
    - Whisper absent/blocked → `--no-whisper` behaviour: leading/trailing silence trimmed, captions spread across the clip by word length. Still post-ready.

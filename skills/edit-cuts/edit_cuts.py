@@ -26,6 +26,8 @@ edit.json schema
   "end_card": {"line1": "Screen Time, Elevated.", "line2": "DigiRoo · link in bio", "seconds": 2.5},
   "caption": {"words_per_cue": 3, "uppercase": false, "size": 72, "margin_v": 430},
   "music": {"file": "bed.mp3", "volume": 0.15},     # optional
+  "intro": "clinic-intro.mov",                      # optional: a clip prepended untouched (affiliate pack: the clinic's 5-s selfie line)
+  "vo": "vo.m4a",                                   # optional: separately recorded voice-over, mixed over the clips (starts after the intro)
   "clips": [
     {"file": "IMG_0001.MOV", "text": "Every parent has seen this.", "trim": "auto"},
     {"file": "IMG_0002.MOV", "text": "", "trim": [0.5, 4.0], "overlay": "and now I don't have to say sit up"},
@@ -184,7 +186,7 @@ def cues_from_text(text, offset, dur, per_cue):
         out.append((t, t + seg, " ".join(g))); t += seg
     return out
 
-def build_ass(cues, overlays, hook, cfg, total):
+def build_ass(cues, overlays, hook, cfg, total, hook_at=0.0):
     font = pick_font(); size = int(cfg.get("size", 72)); mv = int(cfg.get("margin_v", 430)); up = cfg.get("uppercase", False)
     head = f"""[Script Info]
 ScriptType: v4.00+
@@ -204,7 +206,7 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
 """
     ev = []
     if hook:
-        ev.append(f"Dialogue: 1,{ass_t(0)},{ass_t(min(2.2, total))},Hook,,0,0,0,,{{\\fad(0,150)}}{esc(hook.upper() if up else hook)}")
+        ev.append(f"Dialogue: 1,{ass_t(hook_at)},{ass_t(min(hook_at + 2.2, total))},Hook,,0,0,0,,{{\\fad(0,150)}}{esc(hook.upper() if up else hook)}")
     for s, e, txt in overlays:
         ev.append(f"Dialogue: 1,{ass_t(s)},{ass_t(e)},Over,,0,0,0,,{{\\fad(120,120)}}{esc(txt)}")
     for s, e, txt in cues:
@@ -249,6 +251,9 @@ def main():
     os.makedirs(os.path.dirname(out) or ".", exist_ok=True)
     tmp = tempfile.mkdtemp(prefix="cuts_"); parts = []; cues = []; overlays = []; offset = 0.0; log = []
     per_cue = int(cfg.get("caption", {}).get("words_per_cue", 3))
+    intro_dur = 0.0
+    if cfg.get("intro"):
+        cfg["clips"] = [{"file": cfg["intro"], "text": "", "trim": "auto", "_intro": True}] + list(cfg["clips"])
 
     for i, clip in enumerate(cfg["clips"]):
         src = clip["file"] if os.path.isabs(clip["file"]) else os.path.join(base, clip["file"])
@@ -276,6 +281,7 @@ def main():
         if clip.get("overlay"):
             overlays.append((offset + 0.1, offset + d - 0.1, clip["overlay"]))
         log.append({"clip": os.path.basename(src), "trim_mode": mode, "start": round(start or 0, 2), "end": round(end or 0, 2), "duration": round(d, 2)})
+        if clip.get("_intro"): intro_dur = d
         parts.append(dst); offset += d
 
     ec = cfg.get("end_card")
@@ -286,15 +292,23 @@ def main():
     lst = os.path.join(tmp, "list.txt"); open(lst, "w").write("".join(f"file '{p}'\n" for p in parts))
     joined = os.path.join(tmp, "joined.mp4")
     run(["ffmpeg", "-y", "-hide_banner", "-loglevel", "error", "-f", "concat", "-safe", "0", "-i", lst, "-c", "copy", joined])
-    ass = os.path.join(tmp, "caps.ass"); open(ass, "w", encoding="utf-8").write(build_ass(cues, overlays, cfg.get("hook"), cfg.get("caption", {}), total))
+    ass = os.path.join(tmp, "caps.ass"); open(ass, "w", encoding="utf-8").write(build_ass(cues, overlays, cfg.get("hook"), cfg.get("caption", {}), total, hook_at=intro_dur))
 
     cmd = ["ffmpeg", "-y", "-hide_banner", "-loglevel", "error", "-i", joined]
-    music = cfg.get("music")
+    music = cfg.get("music"); vo = cfg.get("vo")
+    extra_in, fc, mix = [], [f"[0:v]ass={shlex.quote(ass)}[v]"], ["[0:a]"]
+    if vo:
+        vp = vo if os.path.isabs(vo) else os.path.join(base, vo)
+        extra_in += ["-i", vp]; idx = len(extra_in) // 2
+        delay = int(intro_dur * 1000)
+        fc.append(f"[{idx}:a]adelay={delay}|{delay},loudnorm=I=-16:TP=-1.5:LRA=11[vo]"); mix.append("[vo]")
     if music and music.get("file"):
         mp = music["file"] if os.path.isabs(music["file"]) else os.path.join(base, music["file"])
-        cmd += ["-stream_loop", "-1", "-i", mp, "-filter_complex",
-                f"[0:v]ass={shlex.quote(ass)}[v];[1:a]volume={music.get('volume', 0.15)}[m];[0:a][m]amix=inputs=2:duration=first:dropout_transition=0[a]",
-                "-map", "[v]", "-map", "[a]"]
+        extra_in += ["-stream_loop", "-1", "-i", mp]; idx = sum(1 for x in extra_in if x == "-i")
+        fc.append(f"[{idx}:a]volume={music.get('volume', 0.15)}[m]"); mix.append("[m]")
+    if len(mix) > 1:
+        fc.append("".join(mix) + f"amix=inputs={len(mix)}:duration=first:dropout_transition=0:normalize=0[a]")
+        cmd += extra_in + ["-filter_complex", ";".join(fc), "-map", "[v]", "-map", "[a]"]
     else:
         cmd += ["-vf", f"ass={shlex.quote(ass)}"]
     cmd += ["-t", f"{total:.3f}", "-c:v", "libx264", "-preset", "medium", "-crf", "20", "-pix_fmt", "yuv420p",
