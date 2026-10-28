@@ -20,7 +20,7 @@
 ## Collection routine
 - **Monday, 10 min:** Antonia screenshots TT Studio (last 7 days, per post) + IG Insights (per Reel) + Shopify Analytics overview, drops them in the Claude Project, says "review the week".
 - `weekly-review` fills the per-post table and appends to `lessons-learned.md`.
-- Baseline capture this week: last 10 posts on each account (views, likes, comments, shares, saves, date, format).
+- Baseline capture this week: last 10 posts on each account (views, likes, comments, shares, saves, date, format). Done, wider: TikTok all 30 posts, Instagram last 20 own posts (`research/baseline-tiktok.md`, `research/baseline-instagram.md`).
 
 ## Analysis cuts for the paper
 - Views by pillar, by format, by hook type, by time slot, kid-on-camera vs. not.
