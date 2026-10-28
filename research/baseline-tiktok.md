@@ -45,5 +45,50 @@ Bio note: "prevent Tech Neck" is a claim the brief avoids (§5). Suggest: "The k
 | Sunset affirmation | 08 founder / Bermuda | Keep monthly, add one line of product |
 | Static graphics | – | Retire on TikTok; keep for IG carousels/stories |
 
+## All 30 posts (local pull, 2026-10-27)
+
+Pulled on a laptop with `bash tools/pull_instagram.sh https://www.tiktok.com/@digiroocase 30` (yt-dlp 2026.10.26, Chrome cookies): 25 videos + 5 photo posts. Raw files and `posts.csv` are in `media/raw/digiroocase/` (not committed, 75 MB). Every video has a teardown stub with frames in `research/teardowns/<date>-<id>/`. The 8 hand-filled teardowns from the cloud pull stay in `research/teardowns/<id>/`. Numbers for the 10 posts above haven't moved.
+
+**Account totals:** 9,350 views · 176 likes (matches the profile) · 6 comments · 20 shares · 7 saves. **Median 210 views, mean 312.** 3 of 30 cleared 600; 1 cleared 1,000. Photo posts median 320 vs videos 199.
+
+| Period | Posts | Median views | Likes |
+|---|---|---|---|
+| 2023-09-29 → 10-05 (launch batch, one a day) | 7 | 22 | 7 |
+| 2025-06 → 2025-12 | 16 | 214 | 123 |
+| 2026 | 7 | 320 | 46 |
+
+### The 20 posts the embed didn't show
+| Date | Views | Likes | Com | Shares | Saves | Sec | Type | What it is | Format |
+|---|---|---|---|---|---|---|---|---|---|
+| 2025-11-25 | 477 | 9 | 0 | 0 | 0 | 8 | video | Trade-show booth pan, "Working to preserve little spines everywhere!" | 08 |
+| 2025-11-15 | 287 | 9 | 2 | 2 | 0 | 7 | video | Antonia on a panel stage: "What I'd tell you to limit… as a PIMU-certified advocate" | 08 |
+| 2025-11-12 | 343 | 13 | 0 | 1 | 1 | 7 | video | Antonia walks a hotel lobby with the box; caption "SIT UP STRAIGHT… this one's for you" | 01 / 08 |
+| 2025-11-11 | 228 | 2 | 0 | 0 | 1 | 9 | video | Girl at a Christmas-tree table with the purple unit, "Just 4 weeks until school's out" | 10 |
+| 2025-11-10 | 150 | 1 | 0 | 0 | 0 | – | photo | Stance carousel: "Banning devices is pointless" + her family's rules | 15? |
+| 2025-11-07 | **2,184** | 4 | 0 | 1 | 0 | – | photo | Stance carousel: "Screentime is NOT a bad choice… it's a PERSONAL choice" | 15? |
+| 2025-11-06 | 39 | 1 | 0 | 1 | 0 | 119 | video | Duet with Dr. Ryan Hanstad on kids' posture | 05 |
+| 2025-11-05 | 360 | 8 | 0 | 0 | 0 | – | photo | #phototrend carousel: "You've seen kids hunched over their screens" | – |
+| 2025-11-05 | 199 | 18 | 0 | 2 | 0 | 64 | video | Antonia to camera: "Parents of tech savvy kids need to hear this" | 07 |
+| 2025-11-05 | 30 | 2 | 0 | 1 | 0 | 15 | video | "6-7" trend: boy snaps a flimsy rival case | 11 / 12 |
+| 2025-10-30 | 153 | 4 | 1 | 0 | 0 | 5 | video | Customer photo collage (Ava + pink unit) | 13 |
+| 2025-10-15 | 51 | 1 | 0 | 0 | 0 | 27 | video | Graphic: "Struggling to balance screen time? You're not alone" + 3 habits | – |
+| 2025-06-04 | 200 | 10 | 1 | 0 | 0 | 21 | video | Product on stand, typed text "As a mom, here's why I'm loving the DigiRoo" | 02 |
+| 2023-10-05 | 27 | 0 | 0 | 0 | 0 | 32 | video | "Mama Approved!": girl on the floor with the unit | 06 |
+| 2023-10-04 | 11 | 0 | 0 | 0 | 0 | 22 | video | "Posture with generic (or no) tablet case": girl hunched on couch | 02 |
+| 2023-10-03 | 32 | 0 | 0 | 1 | 0 | 32 | video | Boy slumped at desk, "Back to school doesn't have to mean back or neck pain!" | 02 |
+| 2023-10-02 | 12 | 0 | 0 | 0 | 0 | 34 | video | Boy on couch, "Did you know… 20% of people suffer from tech neck" | 05 |
+| 2023-10-01 | 14 | 2 | 0 | 1 | 0 | 58 | video | "Hey mamas, if your kids are anything like mine": girl on the floor | 06 |
+| 2023-09-30 | 22 | 2 | 0 | 0 | 0 | 10 | video | Girl swaps out a generic case, "Goodbye generic iPad cases" | 04 |
+| 2023-09-29 | 893 | 3 | 0 | 4 | 0 | 37 | video | Animated "Meet DigiRoo" launch intro | – |
+
+### What the full history adds
+1. **Her best post ever is a no-product stance carousel.** "Screentime is NOT a bad choice" did 2,184 views, 3.5× the next best. It got reach without engagement (4 likes, 0 comments), and a similar carousel three days later did 150, so it's one hit, not yet a pattern. With photo posts at a median of 320 against 199 for videos, this overturns "retire static graphics on TikTok" above. Keep one stance carousel a week and test two more before deciding. Candidate **format 15: stance carousel** (pillar A).
+2. **The 2023 launch batch went nowhere.** Seven polished kid-plus-text clips ran on seven straight days. Apart from the animated intro (893), each got 11–32 views. Posting generic product clips every day built nothing. Since then her posts have a median about 10× higher.
+3. **Antonia on camera earns likes.** Her talking head has the best like rate of any video with 100+ views: 9% (18 on 199), against 6.6% for the sunset. The lobby walk (13 likes) and the panel clip (2 comments, 2 shares) come next. Pillar E and format 07 are under-used.
+4. **Long, borrowed authority doesn't travel.** The Dr. Hanstad duet (119 s) did 39 views and the Maine News segment (118 s) did 219, about median. The chiro angle works when it's short and in her own voice (World Spine Day, 620).
+5. **A trend sound alone didn't help.** The "6-7" post did 30 views. Format 11 needs a real slouch-to-lift reveal, not just the sound.
+6. **Asking for comments isn't enough.** "Tag a Mom friend in the comments" got 0. There are 6 comments across 30 posts. Prompts need a question parents want to answer (e.g. "What's your family's one screen rule?").
+7. **More claims to retire (§5):** "Avoid tech-neck with Digiroo!", "Back to school doesn't have to mean back or neck pain!", an unsourced "20% of people suffer from tech neck", "preventing Tech Neck", "prevents kids from hunching over", "reducing neck strain", "Tech Neck be gone!". These are old posts, so leave them up but don't reuse the lines.
+
 ## Instagram
-@kidsdigitalwellness could not be pulled: Instagram serves a login wall to anonymous requests and rate-limits yt-dlp (HTTP 429). It needs a logged-in session, which means running `tools/pull_instagram.sh` on a laptop where Instagram is signed in. Nothing here was spoofed or bypassed.
+@kidsdigitalwellness is still not pulled. The cloud run hit a login wall and HTTP 429 rate limits. A local run on 2026-10-27 read Chrome's logged-in cookies fine but failed for a different reason: yt-dlp marks its Instagram *profile* extractor as broken ("Unable to extract data"), so it can't list the account's posts at all. Nothing was spoofed or bypassed. `research/baseline-instagram.md` waits on a working way to list the posts. yt-dlp's single-post Instagram extractor is not marked broken, so a list of post URLs is the likely route (untested).
