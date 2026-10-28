@@ -39,7 +39,7 @@ Keywords hit: sit up, screen (time), DigiRoo
 ## Captions
 **TikTok**
 ```
-the iPad slouch is undefeated… until the screen moves instead of her neck 😅 #momsoftiktok #techneck #ipadkids #kidsposture #digiroo
+the iPad slouch is undefeated… until the screen moves instead of her neck 😅 What's the one word you say more than "sit up"? 👇 #momsoftiktok #techneck #ipadkids #kidsposture #digiroo
 ```
 **Instagram Reels**
 ```
@@ -48,6 +48,8 @@ POV: you look over and your kid is folded in half over Bluey. Again.
 I stopped saying "sit up" and moved the screen instead. DigiRoo is a kids' iPad case with a stand built in: the screen comes up to her eyes, so her head doesn't go down to it.
 
 It's in my bio if you want one. 🦘
+
+What's the one word you say more than "sit up"? 👇
 
 #techneck #kidsposture #screentime #ipadkids #momlife #kidsdigitalwellness #digiroo #screentimeelevated
 ```
@@ -58,6 +60,7 @@ The iPad slouch is undefeated… until the screen moves instead of her neck. Dig
 
 ## CTA
 "It's in my bio if you want one."
+Comment prompt (every post, per baseline lesson): "What's the one word you say more than "sit up"? 👇"
 
 ## Platform notes
 - Cover frame: shot 1 slouch with the POV text

@@ -46,7 +46,7 @@ Keywords hit: iPad (case on screen), DigiRoo; "screen time" on screen
 ## Captions
 **TikTok**
 ```
-I made this for my daughter in lockdown. 1,200 families later, here's the story #smallbusiness #momboss #bermuda #screentime #digiroo
+I made this for my daughter in lockdown. 1,200 families later, here's the story Bermuda parents: where did you first spot a DigiRoo? 👇 #smallbusiness #momboss #bermuda #screentime #digiroo
 ```
 **Instagram Reels**
 ```
@@ -55,6 +55,8 @@ I made this for my daughter. Then about 1,200 other families bought it.
 Lockdown 2020, she was folded in half over an iPad, and I couldn't un-see it. I sketched a case with a stand that lifts the screen, built it, patented it, and it picked up a Fast Company Innovation by Design mention in 2022.
 
 Now I'm trying to get it into more homes, from Bermuda, part-time, with a phone. Follow along. 🦘
+
+Bermuda parents: where did you first spot a DigiRoo? 👇
 
 #smallbusiness #momboss #bermuda #bermudabusiness #screentime #kidsdigitalwellness #digiroo #screentimeelevated
 ```
@@ -65,6 +67,7 @@ I made DigiRoo for my daughter in 2020. About 1,200 families later, here's the s
 
 ## CTA
 "Follow along."
+Comment prompt (every post, per baseline lesson): "Bermuda parents: where did you first spot a DigiRoo? 👇"
 
 ## Platform notes
 - Pin this post on both profiles

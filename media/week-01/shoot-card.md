@@ -1,6 +1,6 @@
 # Shoot card — week of 2026-11-02
 
-**Total estimate:** 75 min · **Posts covered:** Mon, Tue, Thu, Fri, Sat (Wed is a re-cut, nothing to film) · **Kid needed:** Block 2 only (15 min)
+**Total estimate:** 80 min · **Posts covered:** Mon, Tue, Thu, Fri, Sat + 5 photos for Sun's carousel (Wed is a re-cut, nothing to film) · **Kid needed:** Block 2 only (15 min)
 
 ## Before you start (5 min)
 - [ ] Phone charged, ≥5 GB free, lens wiped
@@ -48,6 +48,11 @@ Shots Mon 1/3/4 are reused by Tue, Thu and Sat, so get these clean.
 | Sat | 6 | Last line | selfie | "Follow along. DigiRoo." | 2 |
 | Sat | 2 | Photo of the 2020 sketch / prototype pics | top-down | — | 3 |
 | Sat | 5 | 10 s of island: window view, beach, or packing an order | handheld | — | 5 |
+
+## Photos for Sunday's carousel (5 min, spread across blocks)
+- Block 1: dinner table with no devices; iPad in a basket/drawer
+- Block 2: kid watching with the stand raised (side-on), kid upright (front)
+- Block 3: product in a real room, stand at full height
 
 ## B-roll to grab while you're there (10 min, spread across blocks)
 - Hands adjusting the stand through 3 heights, slow (Block 3)
