@@ -22,7 +22,8 @@ timing kicks in automatically.
 edit.json schema
 {
   "output": "media/cuts/w45-mon-pov-couch.mp4",
-  "hook": "POV: you look over and see this",        # top overlay, first 2 s (optional)
+  "hook": "POV: you look over and see this",        # top banner, first 2 s (optional; prefer "title")
+  "title": "how to fix the iPad slouch (mom + inventor)",  # persistent title, upper third, whole video (video-rules rule 1)
   "end_card": {"line1": "Screen Time, Elevated.", "line2": "DigiRoo · link in bio", "seconds": 2.5},
   "caption": {"words_per_cue": 3, "uppercase": false, "size": 72, "margin_v": 430},
   "music": {"file": "bed.mp3", "volume": 0.15},     # optional
@@ -186,25 +187,28 @@ def cues_from_text(text, offset, dur, per_cue):
         out.append((t, t + seg, " ".join(g))); t += seg
     return out
 
-def build_ass(cues, overlays, hook, cfg, total, hook_at=0.0):
+def build_ass(cues, overlays, hook, cfg, total, hook_at=0.0, title=None):
     font = pick_font(); size = int(cfg.get("size", 72)); mv = int(cfg.get("margin_v", 430)); up = cfg.get("uppercase", False)
     head = f"""[Script Info]
 ScriptType: v4.00+
 PlayResX: {W}
 PlayResY: {H}
-WrapStyle: 2
+WrapStyle: 0
 ScaledBorderAndShadow: yes
 
 [V4+ Styles]
 Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
 Style: Cap,{font},{size},&H00FFFFFF,&H000000FF,&H00000000,&H80000000,-1,0,0,0,100,100,0,0,1,6,1,2,80,80,{mv},1
 Style: Hook,{font},{int(size*1.15)},&H00FFFFFF,&H000000FF,&H00000000,&H9A000000,-1,0,0,0,100,100,0,0,3,10,0,8,70,70,300,1
-Style: Over,{font},{int(size*0.95)},&H0000FFFF,&H000000FF,&H00000000,&H80000000,-1,0,0,0,100,100,0,0,1,6,1,5,90,90,0,1
+Style: Over,{font},{int(size*0.95)},&H00FFFFFF,&H000000FF,&H00000000,&H80000000,-1,0,0,0,100,100,0,0,1,5,1,5,90,90,0,1
+Style: Title,{font},{int(size*0.9)},&H00FFFFFF,&H000000FF,&H00000000,&H9A000000,-1,0,0,0,100,100,0,0,3,10,0,8,90,90,380,1
 
 [Events]
 Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
 """
     ev = []
+    if title:
+        ev.append(f"Dialogue: 1,{ass_t(hook_at)},{ass_t(total)},Title,,0,0,0,,{esc(title)}")
     if hook:
         ev.append(f"Dialogue: 1,{ass_t(hook_at)},{ass_t(min(hook_at + 2.2, total))},Hook,,0,0,0,,{{\\fad(0,150)}}{esc(hook.upper() if up else hook)}")
     for s, e, txt in overlays:
@@ -275,6 +279,8 @@ def main():
             else:
                 start, end = silence_trim(src); mode = "silence"
         dst = os.path.join(tmp, f"c{i:02d}.mp4")
+        try: clip["_src_h"] = int(run(["ffprobe", "-v", "error", "-select_streams", "v:0", "-show_entries", "stream=height", "-of", "csv=p=0", src]).stdout.strip().splitlines()[0])
+        except Exception: clip["_src_h"] = 1920
         d = normalise(src, dst, start, end, mute=clip.get("mute", False))
         if text:
             cues += cues_from_words(words, offset, per_cue) if mode == "whisper" else cues_from_text(text, offset, d, per_cue)
@@ -292,7 +298,7 @@ def main():
     lst = os.path.join(tmp, "list.txt"); open(lst, "w").write("".join(f"file '{p}'\n" for p in parts))
     joined = os.path.join(tmp, "joined.mp4")
     run(["ffmpeg", "-y", "-hide_banner", "-loglevel", "error", "-f", "concat", "-safe", "0", "-i", lst, "-c", "copy", joined])
-    ass = os.path.join(tmp, "caps.ass"); open(ass, "w", encoding="utf-8").write(build_ass(cues, overlays, cfg.get("hook"), cfg.get("caption", {}), total, hook_at=intro_dur))
+    ass = os.path.join(tmp, "caps.ass"); open(ass, "w", encoding="utf-8").write(build_ass(cues, overlays, cfg.get("hook"), cfg.get("caption", {}), total, hook_at=intro_dur, title=cfg.get("title")))
 
     cmd = ["ffmpeg", "-y", "-hide_banner", "-loglevel", "error", "-i", joined]
     music = cfg.get("music"); vo = cfg.get("vo")
@@ -319,6 +325,19 @@ def main():
               open(os.path.splitext(out)[0] + ".edit.json", "w"), indent=2)
     shutil.rmtree(tmp, ignore_errors=True)
     print(json.dumps({"output": out, "srt": srt, "duration_sec": round(total, 2), "clips": log, "captions": len(cues)}, indent=2))
+    cuts = len(parts) - (1 if cfg.get("end_card") else 0) - 1
+    checks = [
+        ("title or hook in frame one", bool(cfg.get("title") or cfg.get("hook"))),
+        ("<= 3 cuts, one subject, one setting", cuts <= 3),
+        ("10-30 s (or scripted explainer / tutorial)", 10 <= total <= 32),
+        ("one text system (no overlay over burned-in captions)", not cfg.get("_burned_in_captions")),
+        ("ends with a save/share line + question (end_card line2 or last overlay)", any("?" in (o[2] or "") for o in overlays) or "?" in (cfg.get("end_card") or {}).get("line2", "")),
+        ("sources >= 1080x1920 (not upscaled)", all(float(c.get("_src_h", 1920)) >= 1080 for c in cfg["clips"])),
+    ]
+    print("\nvideo-rules checklist (skills/content-week/references/video-rules.md):")
+    for name, ok in checks: print(("  [x] " if ok else "  [ ] ") + name)
+    print("  [ ] problem (slouch) visible before the product  <- check by eye, frame one")
+    print("  [ ] no claim words (brief §5)                      <- check captions + overlays")
 
 if __name__ == "__main__":
     main()

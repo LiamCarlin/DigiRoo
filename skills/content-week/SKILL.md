@@ -8,6 +8,7 @@ description: Turn Antonia's brain dump (or nothing at all) into a complete 5–7
 **Promise:** 20-minute brain dump in → a week she could hand to a stranger to film. Runs in one pass. Asks at most 2 questions, and only if the answer changes the plan.
 
 ## Read first (every run)
+0. `skills/content-week/references/video-rules.md` — the ten rules every post must pass (title in frame one, problem before product, one kid/one place/≤3 cuts, before→lift→after in one framing, 10–30 s, one text system, true credentials, save/share + question, sound rule, reply-to-comment). Default shot recipe: the slouch-to-lift.
 1. `DIGIROO-brief.md` — pillars (§6), voice (§4), claims (§5), hook/CTA/hashtag banks (§7–9), settings (§12).
 2. `format-library.md` — pick formats; open the chosen `formats/*.md` for the skeletons.
 3. `lessons-learned.md` — last entry's "3 changes for next week" are hard constraints this week.
@@ -33,7 +34,7 @@ Otherwise assume brief defaults and go.
 3. **Balance to the default mix:** 2×A, 1×B, 1×C, 1×D (+ optional E on Saturday). If her ideas overflow a pillar, keep the best, park the rest in `media/<week>/parked-ideas.md`.
 4. **Apply lessons.** If `lessons-learned.md` says a format/hook/time underperformed, don't use it. If it says something won, include one variation.
 5. **Write each post card** using `templates/post-card.md`. Every card must have:
-   - Hook: spoken + on-screen text + first visual, ≤1.5 s. Pull from §7 or write a new one in the same register.
+   - Title in frame one (6–12 words + credential, e.g. "how we fixed the iPad slouch (mom + inventor)"), then the spoken hook. First visual = the problem (kid hunched, side-on), never the product.
    - Script: 20–35 s, ≤85 spoken words, spoken English, says "DigiRoo" once and ≥2 keywords from brief §10.
    - Shot list: 3–5 shots, phone only, framing + what happens + seconds. A stranger could film it.
    - On-screen text lines, in order.
@@ -41,7 +42,7 @@ Otherwise assume brief defaults and go.
    - Hashtags from the bank (§9) + up to 3 niche/seasonal.
    - CTA from §8 (rotate; never repeat within the week).
    - Review flag if the post quotes/voices a clinician or states a number.
-6. **Claims pass.** Re-read every script against brief §5. Rewrite anything that promises an outcome into habit/comfort language.
+6. **Rules pass.** Every card is checked against `references/video-rules.md` (checklist at the bottom). A card that fails is rewritten to the slouch-to-lift recipe or swapped for a listed exception (07, 15, 16). Then the **claims pass**: Re-read every script against brief §5. Rewrite anything that promises an outcome into habit/comfort language.
 7. **Write `media/<week>/weekly-calendar.md`** from `templates/weekly-calendar.md`: day, time (spread inside the posting window, alternate midday/evening), platforms, pillar, format, hook, card link, status `scripted`.
 8. **Hand off:** tell her (a) what's in the week in 5 lines, (b) which posts need the kid, (c) "say `shoot day` and I'll group the shots into one session."
 

@@ -8,6 +8,7 @@ description: Turn the week's raw phone clips plus a post card into a finished, c
 **Promise:** raw clips in → post-ready mp4 + .srt per post, no timeline editing by her. Two modes; always deliver one of them.
 
 ## Read first
+- `skills/content-week/references/video-rules.md` → the script prints the pre-publish checklist; a cut that fails it goes back to the card, not to the queue. Defaults: persistent `title` in the upper third, plain white lower-middle captions, no overlay over burned-in text.
 - The post card(s) for the week (`media/<week>/post-cards/*.md`): script lines, on-screen text, hook, shot order, "Edit notes".
 - `DIGIROO-brief.md` §4 (voice) for any caption rewording, §5 (claims).
 - Clips: `media/raw/<week>/<post-id>/` (one folder per post; file order = shot order), or whatever she uploaded.

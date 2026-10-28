@@ -33,6 +33,8 @@ Borrowed authority without medical claims; keyword-dense (tech neck, pediatric c
 Always flag for review. Never name a clinician who hasn't agreed. Reuse as the first post in the affiliate content pack.
 
 ## Proof (add links as you save them)
-- [ ] reference 1: (paste saved reel/TikTok link + views)
+- [x] @kelseymcdonald.pt hips explainer with a prop: https://www.tiktok.com/@kelseymcdonald.pt/video/7506325169527426335 — 644K, title top-left "from a pediatric physical therapist"
+- [x] @drjoshpt "This muscle fixes 80% of back pain": https://www.tiktok.com/@drjoshpt/video/7577574842027887927 — 2.8M, title in frame one, one static shot
+- [ ] reference: (paste saved reel/TikTok link + views)
 - [ ] reference 2:
 - Teardown notes from `tools/ingest_videos.py` go in `research/teardowns/`.

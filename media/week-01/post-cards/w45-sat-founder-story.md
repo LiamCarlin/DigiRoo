@@ -11,9 +11,9 @@
 | **Review flag** | numbers on screen must match reality: 1,200 units; Fast Company 2022 Honourable Mention; patent granted (confirm wording) |
 
 ## Hook (first 1.5 s)
+- **Title (frame one, stays):** `I made this for my daughter. 1,200 families later.`
+- **Visual (frame one):** 2 s of her daughter hunched over the iPad in 2020-style (reuse Mon shot 1), then Antonia to camera. Problem first, even in the founder story.
 - **Spoken:** "I made this for my daughter. Then about twelve hundred other families bought it."
-- **On screen:** `I made this for my daughter.`
-- **Visual:** Antonia holding the unit, Bermuda light
 
 ## Script
 ```

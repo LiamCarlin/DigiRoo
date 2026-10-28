@@ -11,9 +11,9 @@
 | **Review flag** | **[REVIEW: clinician]** — the "pediatric chiropractor told me" line needs a real conversation behind it (use the affiliate who's onboarded, or change to "a posture pro"). No numbers. |
 
 ## Hook (first 1.5 s)
-- **Spoken:** "A pediatric chiropractor told me the one thing she wishes parents knew about tablets."
-- **On screen:** `the one thing a pediatric chiro wishes parents knew`
-- **Visual:** Antonia selfie, close, mid-sentence energy
+- **Title (frame one, stays):** `it's not the screen time, it's the screen height (mom + inventor)`
+- **Visual (frame one):** Mon shot 1, the slouch, side-on. Antonia's face comes second.
+- **Spoken (from shot 2):** "A pediatric chiropractor told me the one thing she wishes parents knew about tablets."
 
 ## Script
 ```
@@ -28,8 +28,8 @@ Keywords hit: pediatric chiropractor, screen time, tech neck (on screen), eye le
 ## Shot list (phone only)
 | # | Shot | Framing | What happens | ~sec |
 |---|---|---|---|---|
-| 1 | Hook | Selfie, window light, phone at eye level | Lines 1–2 to camera | 7 |
-| 2 | Profile slouch | Reuse Mon shot 1 (side-on) | Head down over flat iPad | 4 |
+| 1 | Profile slouch | Reuse Mon shot 1 (side-on) | Head down over flat iPad; title on | 4 |
+| 2 | Hook | Selfie, window light, phone at eye level | Lines 1–2 to camera | 7 |
 | 3 | Gesture | Selfie | Antonia tilts her own head down then up with "comes with it" | 4 |
 | 4 | Lift | Reuse Mon shot 3 | Stand up, screen rises | 5 |
 | 5 | CTA | Selfie | Last line | 4 |

@@ -1,0 +1,36 @@
+{
+  "output": "/home/user/digiroo/media/week-01/edits/../../cuts/w45-wed-ugc-recut.mp4",
+  "duration_sec": 26.5,
+  "clips": [
+    {
+      "clip": "20241224_DD8RSF3RgPI.mp4",
+      "trim_mode": "manual",
+      "start": 0,
+      "end": 3.2,
+      "duration": 3.2
+    },
+    {
+      "clip": "20250913_DOha-rwjFFU.mp4",
+      "trim_mode": "manual",
+      "start": 0,
+      "end": 9.0,
+      "duration": 9.0
+    },
+    {
+      "clip": "20241224_DD8RSF3RgPI.mp4",
+      "trim_mode": "manual",
+      "start": 14.3,
+      "end": 23.3,
+      "duration": 9.0
+    },
+    {
+      "clip": "20251105_DQrp3q9kUuN.mp4",
+      "trim_mode": "manual",
+      "start": 12.0,
+      "end": 14.8,
+      "duration": 2.8
+    }
+  ],
+  "captions": 0,
+  "hook": "other parents on the iPad slouch:"
+}

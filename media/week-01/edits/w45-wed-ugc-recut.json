@@ -9,26 +9,40 @@
   "caption": {
     "words_per_cue": 3
   },
+  "_note": "Source reels already carry burned-in captions, so text='' (no new bottom captions); creator audio kept. Segments with retired claims skipped: Christmas 3.2-14.3 ('preventing'), car after 9 s ('neck strain').",
   "clips": [
     {
-      "file": "../../raw/week-01/w45-wed-ugc-recut/CLIP1_slouch_to_lift.mp4",
-      "text": "(creator's words, from Whisper)",
-      "trim": "auto"
+      "file": "../../raw/kidsdigitalwellness/20241224_DD8RSF3RgPI.mp4",
+      "text": "",
+      "trim": [
+        0.0,
+        3.2
+      ]
     },
     {
-      "file": "../../raw/week-01/w45-wed-ugc-recut/CLIP2_kid_reaction.mp4",
+      "file": "../../raw/kidsdigitalwellness/20250913_DOha-rwjFFU.mp4",
       "text": "",
-      "trim": "auto",
+      "trim": [
+        0.0,
+        9.0
+      ],
       "overlay": "DigiRoo \u00b7 screen at eye level"
     },
     {
-      "file": "../../raw/week-01/w45-wed-ugc-recut/CLIP3_product_closeup.mp4",
+      "file": "../../raw/kidsdigitalwellness/20241224_DD8RSF3RgPI.mp4",
       "text": "",
       "trim": [
-        0,
-        4
-      ],
-      "mute": true
+        14.3,
+        23.3
+      ]
+    },
+    {
+      "file": "../../raw/kidsdigitalwellness/20251105_DQrp3q9kUuN.mp4",
+      "text": "",
+      "trim": [
+        12.0,
+        14.8
+      ]
     }
   ]
 }
