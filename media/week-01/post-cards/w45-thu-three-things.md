@@ -43,7 +43,7 @@ Keywords hit: kids (posture on screen), screen time (on screen), DigiRoo
 ## Captions
 **TikTok**
 ```
-three things nobody told me about kids and iPads (number 3 is why I started a company) #momlife #parentsoftiktok #screentime #kidsposture #digiroo
+three things nobody told me about kids and iPads (number 3 is why I started a company) What's number 4? Tell me the thing nobody told you. 👇 #momlife #parentsoftiktok #screentime #kidsposture #digiroo
 ```
 **Instagram Reels**
 ```
@@ -54,6 +54,8 @@ Three things nobody told me about kids and tablets:
 
 Number 3 is the reason DigiRoo exists. A kids' iPad case with a stand that lifts the screen to eye level. 🦘 Bio.
 
+What's number 4? Tell me the thing nobody told you. 👇
+
 #momlife #parentinghacks #screentime #kidsposture #techneck #ipadkids #digiroo #screentimeelevated
 ```
 **Facebook**
@@ -63,6 +65,7 @@ Three things nobody told me about kids and iPads. Number 3 is why I started a co
 
 ## CTA
 "It's in my bio." (vary: "Follow for the next one, posture stuff, no lectures.")
+Comment prompt (every post, per baseline lesson): "What's number 4? Tell me the thing nobody told you. 👇"
 
 ## Platform notes
 - Cover frame: three fingers up + text 1
