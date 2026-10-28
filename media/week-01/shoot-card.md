@@ -1,6 +1,6 @@
 # Shoot card — week of 2026-11-02
 
-**Total estimate:** 80 min · **Posts covered:** Mon, Tue, Thu, Fri, Sat + 5 photos for Sun's carousel (Wed is a re-cut, nothing to film) · **Kid needed:** Block 2 only (15 min)
+**Total estimate:** 85 min · **Posts covered:** Mon, Tue, Thu, Fri, Sat + 5 photos for Sun's carousel (Wed is a re-cut, nothing to film) · **Kid needed:** Block 2 only (15 min)
 
 ## Before you start (5 min)
 - [ ] Phone charged, ≥5 GB free, lens wiped
@@ -21,13 +21,14 @@
 | Tue | 5 | CTA line | selfie | "That's the whole reason I made DigiRoo. Link's in the bio." | 2 |
 | Fri | VO | Record the Fri script as audio only (voice memo is fine) | — | Fri script | 2 |
 
-## Block 2 — Couch, with daughter 👧, phone leaning on a mug on the coffee table, side-on at her head height (15 min)
+## Block 2 — Couch, with daughter 👧, phone leaning on a mug on the coffee table, side-on at her head height (20 min)
+This block is the whole week. Set the phone once and DON'T move it: before (slouch) → lift → after, in that order, for Monday; then change her top and repeat the same three shots for Wednesday (plus 1 s of a phone timer in frame). Side-on means you can see her neck angle; that's the proof.
 | Post | Shot | What to film | Framing | Say | ~min |
 |---|---|---|---|---|---|
 | Mon | 1 | She watches with the iPad flat on her lap; hold 8 s (don't coach the slouch, it'll happen) | side-on, DON'T move the phone after this | — | 4 |
 | Mon | 3 | Your hand pops the stand up; let her settle | same | — | 3 |
 | Mon | 4 | She watches upright; hold 6 s | same | — | 2 |
-| Mon | 2 | Your reaction from the other end of the couch | selfie | — | 2 |
+| Wed | 1–3 | Same three shots again after a top change; show a phone timer in shot 3 | same side-on | — | 5 |
 | Sat | 4 | (reuse Mon 4) | | | 0 |
 | bonus | B-roll | Her hand flipping the stand herself | same side-on | — | 2 |
 Shots Mon 1/3/4 are reused by Tue, Thu and Sat, so get these clean.

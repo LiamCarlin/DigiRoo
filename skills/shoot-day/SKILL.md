@@ -8,6 +8,7 @@ description: Take the week's post cards and turn every shot into one ordered fil
 **Promise:** one phone session, in order, no re-setting up, done in ≤90 minutes.
 
 ## Read first
+- `skills/content-week/references/video-rules.md` → default setup is the slouch-to-lift: phone leaning on a mug at the kid's head height, side-on, don't move it between before and after.
 - `DIGIROO-brief.md` §12 (settings) and §3 P3 (her constraints).
 - All `media/<week>/post-cards/*.md` for the week (or the cards she pastes).
 - `templates/shoot-card.md`.

@@ -31,6 +31,7 @@ Numbered structure holds attention; two non-product beats earn the third.
 Keep points 1–2 funny and universal; point 3 is always the product.
 
 ## Proof (add links as you save them)
-- [ ] reference 1: (paste saved reel/TikTok link + views)
+- [x] @biglittlefeelings "How to get your toddler to listen the first time": https://www.tiktok.com/@biglittlefeelings/video/7137702998284799275 — 1.2M, static title for the whole video, white wall, scripted jump cuts
+- [ ] reference: (paste saved reel/TikTok link + views)
 - [ ] reference 2:
 - Teardown notes from `tools/ingest_videos.py` go in `research/teardowns/`.

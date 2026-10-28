@@ -11,9 +11,9 @@
 | **Review flag** | none |
 
 ## Hook (first 1.5 s)
+- **Title (frame one, stays for the whole video, format 07 = scripted explainer exception to the 30-s rule):** `3 things nobody told me about kids + iPads (mom + inventor)`
 - **Spoken:** "Three things nobody told me about kids and tablets."
-- **On screen:** `3 things nobody told me about kids + iPads`
-- **Visual:** Antonia holding up three fingers, kitchen, daytime
+- **Visual:** Antonia to camera against a plain wall (the @biglittlefeelings shape), three fingers up
 
 ## Script
 ```

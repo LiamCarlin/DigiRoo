@@ -11,9 +11,9 @@
 | **Review flag** | none (calendar: gift-guide season Nov; Black Friday Nov 27 tease, no price promise yet) |
 
 ## Hook (first 1.5 s)
+- **Title (frame one, stays):** `if there's an iPad under the tree, read this first (mom + inventor)`
+- **Visual (frame one):** the before shot: kid hunched over a bare iPad on the couch, side-on (reuse Mon shot 1). The box comes third, not first.
 - **Spoken:** "If there's an iPad under the tree this year, put this with it."
-- **On screen:** `the iPad gift that comes with a posture plan`
-- **Visual:** DigiRoo box sliding into frame next to wrapping paper
 
 ## Script
 ```
@@ -28,9 +28,9 @@ Keywords hit: iPad case, kids (posture on screen), DigiRoo
 ## Shot list (phone only)
 | # | Shot | Framing | What happens | ~sec |
 |---|---|---|---|---|
-| 1 | Box reveal | Top-down on table, wrapping paper | Box slides in, hand taps it | 3 |
-| 2 | Before | Side-on | iPad flat, kid's (or doll's/your own) head down | 3 |
-| 3 | After | Same framing | DigiRoo raised, head level | 3 |
+| 1 | Before | Side-on (reuse Mon shot 1) | iPad flat, head down; title on | 3 |
+| 2 | After | Same framing (reuse Mon shot 3) | DigiRoo raised, head level | 3 |
+| 3 | Box | Top-down on table, wrapping paper | Box slides in next to the paper | 3 |
 | 4 | Colours | Top-down | Pink + blue units side by side, stand up | 4 |
 | 5 | CTA | Hands close the box | | 3 |
 

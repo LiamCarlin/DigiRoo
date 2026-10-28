@@ -4,16 +4,16 @@
 |---|---|
 | **Day / slot** | Mon Nov 2 · 12:00 PM ET |
 | **Pillar** | A — parent-POV lifestyle |
-| **Format** | [01 · POV: mom spots the slouch](../../../formats/01-pov-slouch-spot.md) |
-| **Length** | 15 s |
+| **Format** | [01 · POV: mom spots the slouch](../../../formats/01-pov-slouch-spot.md) → slouch-to-lift recipe (`skills/content-week/references/video-rules.md`) |
+| **Length** | 15 s, 3 cuts |
 | **Talent / props** | Daughter 👧 + Antonia's hands · blue unit, iPad, couch |
 | **Status** | scripted |
 | **Review flag** | none |
 
-## Hook (first 1.5 s)
-- **Spoken:** (none, text + sound)
-- **On screen:** `POV: you look over and see this`
-- **Visual:** daughter folded over the iPad on the couch, phone static at waist height
+## Hook (frame one, per video-rules)
+- **Title (stays on screen):** `how we fixed the iPad slouch (mom + inventor)`
+- **Spoken:** (none until shot 3)
+- **Visual:** daughter folded over the iPad flat on her lap, side-on, phone leaning on a mug at her head height. The problem is the first thing anyone sees.
 
 ## Script
 ```
@@ -27,14 +27,17 @@ Keywords hit: sit up, screen (time), DigiRoo
 ## Shot list (phone only)
 | # | Shot | Framing | What happens | ~sec |
 |---|---|---|---|---|
-| 1 | Slouch | Phone leaning on a mug on the coffee table, side-on, kid-head height | Kid hunched over iPad flat on lap, 5 s hold | 5 |
-| 2 | Reaction | Selfie, Antonia on the other end of the couch | Dead stare at camera, slow blink | 3 |
-| 3 | Lift | Same as shot 1, don't move the phone | Hand pops the DigiRoo stand up, screen rises, kid sits up on her own | 5 |
-| 4 | After | Same as shot 1 | Kid upright, watching, 4 s hold | 4 |
+| 1 | Slouch (before) | Phone leaning on a mug on the coffee table, side-on, at her head height | Kid hunched over iPad flat on lap, 4 s hold, title on screen | 4 |
+| 2 | Lift | Same framing, don't touch the phone | Hand pops the DigiRoo stand up, screen rises, kid sits up on her own | 4 |
+| 3 | After | Same framing | Kid upright, watching, hold | 5 |
+| 4 | Freeze + question | Same framing, freeze last frame | text only | 2 |
+(≤3 cuts, one kid, one place, 15 s. Antonia's reaction shot dropped: it broke the single framing.)
 
 ## On-screen text (in order)
-1. `POV: you look over and see this`
-2. `and now I don't have to say "sit up"`
+1. title (persistent): `how we fixed the iPad slouch (mom + inventor)`
+2. shot 2: `watch her neck`
+3. shot 3: `eye level, no nagging`
+4. shot 4: `what's the one word you say more than "sit up"? 👇 save this for tonight`
 
 ## Captions
 **TikTok**
@@ -68,4 +71,4 @@ Comment prompt (every post, per baseline lesson): "What's the one word you say m
 - Cross-post: TikTok → Reels → FB mirror
 
 ## Edit notes for `edit-cuts`
-clips: shot1.mov, shot2.mov, shot3.mov, shot4.mov (mute all; text-only post) · caption style: default · end card: yes
+clips: shot1.mov, shot2.mov, shot3.mov (mute all; soft trending sound added in-app) · `title` set, plain white lower-middle overlays · end card line2 = the question
