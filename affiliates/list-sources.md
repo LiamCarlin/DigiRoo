@@ -52,3 +52,6 @@ Rows with a known IG/TikTok handle: 26 (Bermuda 4; NY 3; FL 5; TX 7; CA 7; other
 - Eden Chiropractic (FL) and The PT Parent: city not shown in snippet, left blank.
 - Physio First Bermuda site says "temporarily closed".
 - Fit 5 was given only where a page/blog explicitly ties pediatric care to tech neck / screens / device posture.
+
+## Google Sheet mirror
+https://docs.google.com/spreadsheets/d/19PT0OrWsCpwaCnSpZxLmAhDeJtkuu9f-kQtF4aKJs2w (owner: Liam; share with Antonia). The CSV is the source of truth; re-upload after edits.
