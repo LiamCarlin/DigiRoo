@@ -43,7 +43,7 @@ Keywords hit: iPad case, kids (posture on screen), DigiRoo
 ## Captions
 **TikTok**
 ```
-if an iPad is on the list this year, this goes with it 🎁 (yes it fits the 10th gen) #giftsforkids #kidsipadcase #momfinds #techneck #digiroo
+if an iPad is on the list this year, this goes with it 🎁 (yes it fits the 10th gen) Is an iPad on your kid's list this year? Yes or no 👇 #giftsforkids #kidsipadcase #momfinds #techneck #digiroo
 ```
 **Instagram Reels**
 ```
@@ -52,6 +52,8 @@ Gift-guide season, parents. If there's an iPad on the list, put this with it.
 DigiRoo: a kids' iPad case with a stand that lifts the screen to eye level, so the new iPad doesn't come with a new slouch. Pink or blue. Fits iPad 10.2" (7th–9th gen) and there's a 10th-gen version.
 
 Gift guide + shop in bio. Something's coming for Black Friday. 🦘
+
+Is an iPad on your kid's list this year? Yes or no 👇
 
 #giftsforkids #holidaygiftguide #kidsipadcase #ipadstand #momfinds #techneck #digiroo #screentimeelevated
 ```
@@ -62,6 +64,7 @@ If there's an iPad under the tree this year, put a DigiRoo with it. Pink or blue
 
 ## CTA
 "Gift guides in my bio." (+ soft Black Friday tease)
+Comment prompt (every post, per baseline lesson): "Is an iPad on your kid's list this year? Yes or no 👇"
 
 ## Platform notes
 - Cover frame: box + text 1

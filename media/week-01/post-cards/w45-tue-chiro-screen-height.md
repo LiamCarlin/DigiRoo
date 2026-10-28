@@ -43,7 +43,7 @@ Keywords hit: pediatric chiropractor, screen time, tech neck (on screen), eye le
 ## Captions
 **TikTok**
 ```
-it's not the screen time, it's the screen height. a pediatric chiro changed how I see the iPad slouch #techneck #pediatricchiropractor #kidsposture #screentime #digiroo
+it's not the screen time, it's the screen height. a pediatric chiro changed how I see the iPad slouch What has a chiro or physio told you about kids and screens? 👇 #techneck #pediatricchiropractor #kidsposture #screentime #digiroo
 ```
 **Instagram Reels**
 ```
@@ -55,6 +55,8 @@ That one idea is the whole reason DigiRoo exists: a kids' iPad case with a heigh
 
 Not medical advice, just the habit that worked at our house. Tag a chiro or physio who should see this. 🦘
 
+What has a chiro or physio told you about kids and screens? 👇
+
 #techneck #pediatricchiropractor #pediatricphysicaltherapy #kidsposture #screentime #spinehealth #digiroo #screentimeelevated
 ```
 **Facebook**
@@ -64,6 +66,7 @@ It's not the screen time, it's the screen height. The one idea behind DigiRoo, e
 
 ## CTA
 "Tag a chiro who should see this." + "Link's in the bio."
+Comment prompt (every post, per baseline lesson): "What has a chiro or physio told you about kids and screens? 👇"
 
 ## Platform notes
 - Cover frame: Antonia mid-sentence with text line 1

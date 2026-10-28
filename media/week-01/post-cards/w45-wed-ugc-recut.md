@@ -39,7 +39,7 @@ Keywords hit: whatever they said; add "DigiRoo" + "screen time" on screen
 ## Captions
 **TikTok**
 ```
-not me, other parents 🙋‍♀️ what the iPad slouch looks like before and after a stand that actually goes up #ipadkids #techneck #momfinds #kidsipadcase #digiroo
+not me, other parents 🙋‍♀️ what the iPad slouch looks like before and after a stand that actually goes up Where does your kid do most of their iPad time: couch, car or floor? 👇 #ipadkids #techneck #momfinds #kidsipadcase #digiroo
 ```
 **Instagram Reels**
 ```
@@ -48,6 +48,8 @@ Don't take it from me. Here's what other families said about the iPad slouch, an
 DigiRoo: a kids' iPad case with a height-adjustable stand built in. Fits iPad 10.2" (7th/8th/9th gen); 10th-gen version too.
 
 🦘 In the bio.
+
+Where does your kid do most of their iPad time: couch, car or floor? 👇
 
 #kidsipadcase #ipadstand #techneck #ipadkids #momfinds #parentinghacks #digiroo #screentimeelevated
 ```
@@ -58,6 +60,7 @@ Don't take it from me. Other families on the iPad slouch, before and after DigiR
 
 ## CTA
 "🦘 In the bio."
+Comment prompt (every post, per baseline lesson): "Where does your kid do most of their iPad time: couch, car or floor? 👇"
 
 ## Platform notes
 - Cover frame: the kid-reaction frame
