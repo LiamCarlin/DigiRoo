@@ -9,7 +9,9 @@ Each `weekly-review` run appends one entry. `content-week` reads the latest entr
 - **H4** Antonia produces a full week (plan + shoot + cuts + queue) in ≤2 hours using the system. Status: not yet tested (time her on Week 02).
 
 ## Baseline (before the system) — week of 2026-10-19
-**Posted:** manual, inconsistent (~0–2/wk) · **Typical views:** ~500 per post (TikTok) · **Orders:** ~3/month DTC · **Affiliates:** 1–2 onboarded, 0 sales
+**Posted:** manual, bursty (5 posts in the last 5 weeks after a 4-month gap) · **TikTok (last 10 posts, pulled 2026-10-28):** median 305 views, mean 364, 1 of 10 above 600, 2 comments total, 6 shares, 5 saves · **Account:** 42 followers, 176 likes, 30 videos · **Orders:** ~3/month DTC · **Affiliates:** 1–2 onboarded, 0 sales · Detail: `research/baseline-tiktok.md`
+**Best:** World Spine Day chiro stat (620), '3 ages, 1 case' (574), Bermuda sunset affirmation (561, 37 likes). **Worst:** product-text post (146), sideline-opening montage (160).
+**Baseline lessons applied to Week 01:** kid in frame one; stat/hook in the first 1.5 s; every caption asks for a comment or a share; one founder/Bermuda post a week.
 **Antonia's gut:** "Time to get media, time to edit, time to post" are the roadblocks. Ideas aren't.
 
 ## Objections / comments heard (running list, feeds format 12)

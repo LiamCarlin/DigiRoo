@@ -23,6 +23,7 @@
 | Recognition | Fast Company Innovation by Design 2022, Honourable Mention (Wellness); patent granted; Inspired Internet Pledge signatory (2025) | Royal Gazette, Bernews, inspiredinternet.org |
 | Where to buy | kidsdigitalwellness.com (Shopify, DTC); Walmart.com; Amazon; Bermuda retail (A.F. Smith, Gibbons) | listings |
 | Traction | ~1,200 units lifetime, mostly Bermuda retail; now ~3 units/month DTC | Antonia, Oct call |
+| TikTok today | 42 followers, 30 videos, median 305 views on the last 10 posts (best 620: World Spine Day chiro stat) | pulled 2026-10-28, `research/baseline-tiktok.md` |
 | Ships to | ⚠️ US, Canada, Bermuda, UK (default) | |
 
 **Product name on camera:** say "DigiRoo" (DIJ-ee-roo) out loud once per video. Spell "DigiRoo" with capital D and R in text.
@@ -63,6 +64,8 @@
 | "Designed with input from parents and posture pros." | "Doctor-recommended" / "clinically proven" (unless we have a named clinician on record). |
 | "Looking down at a screen puts a lot of extra load on a kid's neck." | Specific numbers like "40 lb of pressure" unless cited on screen to a source (e.g., Hansraj 2014 estimate for adults — note it's adults). |
 | "Pediatric chiropractors use it in their clinics." (once ≥1 affiliate confirms) | Any clinician endorsement before they've agreed in writing. |
+
+⚠️ Already live and worth tidying: TikTok bio says "prevent Tech Neck"; one caption says "reduces Tech Neck". Suggested bio: "The kids' iPad case that lifts the screen to eye level. Screen Time, Elevated."
 
 Every clinician-facing or clinician-voiced post gets flagged **[REVIEW: clinician]** in the post card so Antonia checks it.
 
