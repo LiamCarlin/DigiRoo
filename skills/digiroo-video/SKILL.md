@@ -170,4 +170,4 @@ references/              video-rules · filming-guide · edit-craft · qc-and-re
 templates/               shoot-card.md · edit.json · video-notes.md · trends.md
 fonts/                   Poppins (SIL OFL 1.1), so text looks the same on a Mac and in the sandbox
 ```
-Setup on a Mac (once): `brew install ffmpeg && pip3 install pillow`. Optional: `pip3 install faster-whisper` for word-exact captions. The scripts need no libass, drawtext or zscale; all the text is drawn with Pillow.
+Setup on a Mac (once): `brew install ffmpeg pillow` (Homebrew's Python refuses `pip3 install`). Optional, for word-exact captions: faster-whisper in a virtual environment (`dist/SETUP.md` §C). In a chat sandbox, `pip install pillow` if it's missing. The scripts need no libass, drawtext or zscale; all the text is drawn with Pillow.

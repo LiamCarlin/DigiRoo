@@ -17,8 +17,9 @@ If "Upload skill" isn't available on the plan, skip this: the Project instructio
 ## C. On a Mac, for the video pipeline (Liam now; Antonia later if she wants)
 ```
 brew install ffmpeg
-pip3 install pillow
-pip3 install faster-whisper      # optional: word-exact captions and best-take picking
+brew install pillow              # Homebrew's Python refuses pip3 install (PEP 668)
+# optional, word-exact captions and best-take picking (then run the scripts with ~/.digiroo-py/bin/python3):
+python3 -m venv --system-site-packages ~/.digiroo-py && ~/.digiroo-py/bin/pip install faster-whisper
 git clone https://github.com/LiamCarlin/DigiRoo ~/digiroo
 ```
 The plain Homebrew ffmpeg is enough. The scripts draw all text with Pillow, so they need no libass, drawtext or zscale.

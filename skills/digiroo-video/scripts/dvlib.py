@@ -37,7 +37,7 @@ BANNED = ["elevate", "elevates", "elevating", "game-changer", "game changer", "r
 try:
     import PIL  # noqa: F401  (all text, end cards and sheets are drawn with Pillow)
 except ImportError:
-    raise SystemExit("Pillow is missing. On a Mac: pip3 install pillow")
+    raise SystemExit("Pillow is missing. On a Mac: brew install pillow (elsewhere: pip install pillow)")
 
 
 # ---------- running things ----------
