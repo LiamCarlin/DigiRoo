@@ -1,0 +1,37 @@
+{
+  "output": "media/cuts/w45-wed-ugc-recut-drive.mp4",
+  "duration_sec": 17.17,
+  "clips": [
+    {
+      "clip": "ciera-ugc.mov",
+      "trim_mode": "whisper",
+      "start": 2.7,
+      "end": 6.77,
+      "duration": 4.07
+    },
+    {
+      "clip": "ciera-ugc.mov",
+      "trim_mode": "whisper",
+      "start": 12.27,
+      "end": 14.5,
+      "duration": 2.23
+    },
+    {
+      "clip": "che-ugc.mp4",
+      "trim_mode": "whisper",
+      "start": 10.74,
+      "end": 15.24,
+      "duration": 4.5
+    },
+    {
+      "clip": "che-ugc.mp4",
+      "trim_mode": "whisper",
+      "start": 15.08,
+      "end": 18.94,
+      "duration": 3.87
+    }
+  ],
+  "captions": 21,
+  "hook": "other parents on the iPad slouch:",
+  "dead_air": []
+}

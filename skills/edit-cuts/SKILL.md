@@ -14,27 +14,28 @@ description: Turn the week's raw phone clips plus a post card into a finished, c
 - Clips: `media/raw/<week>/<post-id>/` (one folder per post; file order = shot order), or whatever she uploaded.
 
 ## Mode A — automatic (`edit_cuts.py`)
-Runs anywhere with ffmpeg + Python 3.10+. Whisper (faster-whisper) is optional and improves caption timing; without it the script still ships a finished cut with script-timed captions.
+Runs anywhere with Python 3.10+ and an ffmpeg built with libass (on a Mac that's `ffmpeg-full`; plain `ffmpeg` can't burn captions, and the script stops at once with a message saying so — use Mode B then). Whisper (faster-whisper, Python 3.10–3.13) is optional and improves caption timing; without it the script still ships a finished cut with script-timed captions.
 
 1. **Map clips to shots.** List the clip files in order; pair each with the matching script line and on-screen text from the card. If the count doesn't match, pair by watching the first frame (`ffmpeg -ss 1 -frames:v 1`) and ask one question only if it's genuinely ambiguous.
 2. **Write `media/<week>/edits/<post-id>.json`** in the schema at the top of `edit_cuts.py`:
    - `hook` = the card's on-screen hook text.
    - per clip: `text` = that shot's spoken line; `overlay` = that shot's on-screen text; `trim` = `"auto"` (default), `[start,end]` if she said "use 0:04–0:09", or `null` for B-roll; `mute: true` for B-roll under VO.
-   - `end_card` default on; `music` only if she dropped a bed file.
+   - `end_card` default on (the last clip's sound fades out under it; `"audio": "silent"` to turn that off); `music` only if she dropped a bed file.
    - `vo` = a separately recorded voice memo (m4a) to lay over muted clips; `intro` = a clip to prepend untouched (used by the affiliate pack for the clinic's 5-second selfie line; the hook banner then starts after it).
-3. **Run:** `python3 skills/edit-cuts/edit_cuts.py --edit media/<week>/edits/<post-id>.json`
+   - Muted B-roll with no `vo` and no music bed is dead air. With UGC, prefer a moment where the creator is talking over the product shot.
+3. **Run:** `python3 skills/edit-cuts/edit_cuts.py --edit media/<week>/edits/<post-id>.json` (on a Mac set up as below, `~/.digiroo/bin/python` so Whisper is found)
    - Whisper present → each clip is trimmed to the spoken segment that matches its script line, captions are word-timed.
    - Whisper absent/blocked → `--no-whisper` behaviour: leading/trailing silence trimmed, captions spread across the clip by word length. Still post-ready.
    - A precomputed transcript (`--transcripts dir/` with `<clip>.words.json`) also works; useful when Liam runs Whisper once on his Mac.
 4. **QC** (report honestly):
    - Hook visible in the first 2 s, above the safe zone; captions clear of the bottom 430 px (TikTok UI).
-   - Total ≤ 45 s unless the card says otherwise; no dead air > 0.7 s.
+   - Total ≤ 45 s unless the card says otherwise; no dead air > 0.7 s (the run prints `dead_air` spans before the end card; empty = pass, or the card is a text + sound post).
    - Audio levels consistent (loudnorm is applied per clip).
    - Product name appears on screen at least once (end card does this).
    - Grab 3 frames (start, middle, end) and look at them.
 5. **Deliver:** `media/cuts/<post-id>.mp4` + `.srt` + `.edit.json`. Update the calendar row status to `cut`. Send the files to her.
 
-Setup on a Mac (once): `brew install ffmpeg && pip3 install faster-whisper pillow` (the Whisper model downloads on first run, ~150 MB for `base`).
+Setup on a Mac (once): `brew install ffmpeg-full python@3.12 && python3.12 -m venv ~/.digiroo && ~/.digiroo/bin/pip install faster-whisper` (the Whisper model downloads on first run, ~150 MB for `base`). `ffmpeg-full` is keg-only; the script finds it without changing PATH.
 
 ## Mode B — cut sheet for CapCut / Canva (when A can't run)
 Produce `media/<week>/cut-sheets/<post-id>.md`:

@@ -12,7 +12,8 @@ Everything runs inside Claude. Five sentences, one shoot, posts scheduled.
 | **Wed, 5 min** | `cut the week` | Finished, captioned 9:16 videos for every post (or a CapCut cut sheet if you'd rather assemble). |
 | **Wed, 5 min** | `schedule the week` → read the queue → reply **go** | Posts scheduled in Meta Business Suite (Reels + Facebook) and TikTok Studio. Nothing posts until you say go. |
 | **Friday, 10 min** | `do outreach` → approve the 10 messages → send | Ten personalised clinic DMs/emails, logged, with follow-ups drafted on day 5. |
-| **Next Monday, 10 min** | screenshots of TikTok Studio + IG Insights + Shopify, then `review the week` | What worked, what didn't, three changes. Next week's plan already knows them. |
+| **Next Monday, 10 min** | a screenshot of each post's TikTok Studio analytics and Instagram insights, plus Shopify's "Sales by discount" report, then `review the week` | What worked, what didn't, three changes. Next week's plan already knows them. |
+| **First Monday of the month, 10 min** | Shopify's "Sales by discount" report for last month, then `commissions` | What each clinic earned, with a short note to each. You pay and send; Claude never moves money. |
 
 If you have no ideas on a Monday, just say `plan my week`. Claude proposes from the pillars and the calendar.
 
@@ -36,7 +37,7 @@ research/               competitors, benchmarks, awareness calendar, personas, m
 1. **Claude Project** "DigiRoo Content Studio": paste `project-instructions.md` as the instructions; upload `DIGIROO-brief.md`, `format-library.md`, `formats/`, `lessons-learned.md`, `templates/`, the current week's folder.
 2. **Skills:** upload each folder in `skills/` as a zip under Settings → Capabilities → Skills (needs code execution on; available on Pro per Anthropic's help centre, confirm on her account). If skills aren't available on her plan, the Project instructions alone run the same steps.
 3. **Clips in:** either add the shared Drive folder to *My Drive* (right-click → "Add shortcut to Drive") so Claude's Drive connector can see it, or AirDrop clips into `media/raw/week-NN/<post-id>/`.
-4. **Video cutting:** on a Mac, `brew install ffmpeg` then `pip3 install faster-whisper pillow`. Without this, `cut the week` gives a CapCut cut sheet instead.
+4. **Video cutting:** on a Mac, `brew install ffmpeg-full python@3.12` (plain `ffmpeg` can't burn in captions), then `python3.12 -m venv ~/.digiroo && ~/.digiroo/bin/pip install faster-whisper` (faster-whisper doesn't install on Python 3.14+ yet). Without this, `cut the week` gives a CapCut cut sheet instead.
 5. **Scheduling:** TikTok account switched to a Business/Creator account (for TikTok Studio scheduling, up to 10 days ahead). Meta Business Suite already connected to the Facebook page + Instagram. Claude in Chrome installed.
 6. **Affiliate codes:** one Shopify discount code per clinic, 10% off, named `DR<LASTNAME>10`.
 

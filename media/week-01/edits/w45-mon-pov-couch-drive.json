@@ -1,0 +1,18 @@
+{
+  "output": "../../cuts/w45-mon-pov-couch-drive.mp4",
+  "hook": "POV: you look over and see this",
+  "end_card": {
+    "line1": "Screen Time, Elevated.",
+    "line2": "DigiRoo · link in bio",
+    "seconds": 2.5
+  },
+  "caption": {
+    "words_per_cue": 3
+  },
+  "clips": [
+    {"file": "../../raw/drive/raw-videos/20251026_174839_1.mp4", "text": "Every parent has seen this.", "trim": [0.0, 2.6], "mute": true},
+    {"file": "../../raw/drive/raw-videos/20251026_174839_1.mp4", "text": "Nobody wants to say sit up fifteen times a night.", "trim": [3.6, 7.6], "mute": true},
+    {"file": "../../raw/drive/raw-videos/20251026_174839_1.mp4", "text": "So the screen comes up instead.", "trim": [7.6, 11.2], "mute": true, "overlay": "and now I don't have to say \"sit up\""},
+    {"file": "../../raw/drive/raw-videos/20251026_174839_1.mp4", "text": "DigiRoo. It's in my bio.", "trim": [11.2, 15.2], "mute": true}
+  ]
+}

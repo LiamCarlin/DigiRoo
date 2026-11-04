@@ -8,4 +8,4 @@ Hi {{first_name}}, just floating this back up — happy to send a DigiRoo for yo
 
 ---
 **If they reply yes (send one-pager + ask for address + handle):**
-Amazing! Which colour, pink or blue, and where should I ship it? I'll also send three ready-to-post posture posts you can use, plus a 10%-off code for your families (you earn 15% on anything it sells). Here's the one-pager: {{link}}
+Amazing! Which colour, pink or blue, and where should I ship it? I'll also send three ready-to-post posture posts you can use, plus a 10%-off code for your families (you earn 15% on anything it sells). What's the best email for the one-page overview?
