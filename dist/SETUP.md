@@ -3,14 +3,14 @@
 ## A. The Claude Project (works on any paid plan)
 1. claude.ai → Projects → **New project** → name it **DigiRoo Content Studio**.
 2. **Instructions** → paste the whole of `project-knowledge/project-instructions.md`.
-3. **Knowledge** → upload every file in `project-knowledge/` (13 files, ~260 KB):
+3. **Context** → Add → Upload from device → every file in `project-knowledge/` (13 files, ~130 KB):
    `DIGIROO-brief.md`, `format-library.md`, `formats-all.md`, `video-rules.md`, `video-notes.md`, `trends.md`, `lessons-learned.md`, `templates-all.md`, `awareness-calendar.md`, `week-01-calendar-and-shoot.md`, `week-01-post-cards.md`, `questions-for-antonia.md`, `project-instructions.md`.
    Already set up? Replace `project-instructions.md` (paste it into Instructions again), `video-rules.md` and `templates-all.md`, and add `video-notes.md` and `trends.md`.
-   **Every Monday** after the trend pull (C below), replace `trends.md`; it goes stale after 7 days.
+   **Every Monday** after the review and the trend pull (C below), replace `trends.md` (stale after 7 days) and `lessons-learned.md`, plus `video-notes.md` if she gave notes. The Project's files don't update themselves.
 4. Open a chat in the Project and type: **plan my week** followed by two lines of brain dump. You should get a calendar table and seven post cards without being asked anything.
 
 ## B. The skills (optional; needs code execution on)
-Settings → Capabilities → turn on **Code execution**. Then Settings → Capabilities → **Skills** → **Upload skill** → each zip in `skills/` (five uploads: `content-week`, `digiroo-video`, `schedule-posts`, `weekly-review`, `affiliate-outreach`). After that, the same commands work in any chat, not only inside the Project, and `digiroo-video` can check and cut clips when they're attached.
+Settings → Capabilities → turn on **Create and edit files** (code execution; skills need it). Then Customize → Skills → **Add** → **Upload skill** → drop in all five zips from `skills/` at once (`content-week`, `digiroo-video`, `schedule-posts`, `weekly-review`, `affiliate-outreach`) → **Upload 5 skills**. Each one shows as on in the list. After that, the same commands work in any chat, not only inside the Project, and `digiroo-video` can check and cut clips when they're attached.
 **Already uploaded the old ones?** Delete `edit-cuts` and `shoot-day` first (`digiroo-video` replaces both; two skills answering "cut the week" fight), then re-upload `content-week`, `schedule-posts`, `weekly-review` and `affiliate-outreach`, which point at the new skill.
 If "Upload skill" isn't available on the plan, skip this: the Project instructions carry the same steps.
 
