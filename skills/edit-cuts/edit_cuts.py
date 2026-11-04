@@ -12,18 +12,23 @@ Pipeline
   3. normalise to 1080x1920 30fps, concatenate in shot-list order
   4. burn captions (word-timed if whisper, script-timed otherwise), big sans, safe zone
   5. hook text on top for the first 2 s, optional end card
-  6. export <out>.mp4 + <out>.srt + <out>.edit.json (what was done)
+  6. export <out>.mp4 + <out>.srt + <out>.edit.json (what was done, plus any dead air > 0.7 s before the end card)
+
+Needs an ffmpeg built with libass (captions). Homebrew's plain `ffmpeg` doesn't have it; install
+`ffmpeg-full` (keg-only, found automatically) or point FFMPEG_DIR at a folder with one. The script
+checks this before doing any work.
 
 Whisper is optional. With --no-whisper (or when faster_whisper/model download isn't available)
 the script still produces a finished cut using script-timed captions; that is the mode
-used for the Friday demo in the sandbox. On a Mac with faster-whisper installed, word-level
-timing kicks in automatically.
+used for the Friday demo in the sandbox. On a Mac with faster-whisper installed (Python 3.10–3.13),
+word-level timing kicks in automatically.
 
 edit.json schema
 {
   "output": "media/cuts/w45-mon-pov-couch.mp4",
   "hook": "POV: you look over and see this",        # top overlay, first 2 s (optional)
-  "end_card": {"line1": "Screen Time, Elevated.", "line2": "DigiRoo · link in bio", "seconds": 2.5},
+  "end_card": {"line1": "Screen Time, Elevated.", "line2": "DigiRoo · link in bio", "seconds": 2.5,
+               "audio": "tail"},                    # tail = last clip's sound fades out under the card | silent
   "caption": {"words_per_cue": 3, "uppercase": false, "size": 72, "margin_v": 430},
   "music": {"file": "bed.mp3", "volume": 0.15},     # optional
   "clips": [
@@ -41,9 +46,31 @@ import argparse, json, os, re, shlex, subprocess, sys, tempfile, shutil
 from difflib import SequenceMatcher
 
 W, H, FPS = 1080, 1920, 30
-FONT_CANDIDATES = ["Poppins", "Montserrat", "Inter", "Liberation Sans", "DejaVu Sans"]
+# brand fonts if installed, then fonts every Mac ships with, then Linux. Not Avenir Next: libass picks its italic face.
+FONT_CANDIDATES = ["Poppins", "Montserrat", "Inter", "Helvetica Neue", "Arial", "Liberation Sans", "DejaVu Sans"]
+END_BG = "0x141826"
+WHISPER_PROMPT = "DigiRoo kids iPad case. Eye level stand."  # without it Whisper hears "didgeroo", "i level"
+FFMPEG_DIRS = [os.environ.get("FFMPEG_DIR", ""), "/opt/homebrew/opt/ffmpeg-full/bin", "/usr/local/opt/ffmpeg-full/bin"]
 
 # ---------- helpers ----------
+def find_tool(name):
+    for d in FFMPEG_DIRS:
+        if d and os.access(os.path.join(d, name), os.X_OK):
+            return os.path.join(d, name)
+    return shutil.which(name) or name
+
+FFMPEG, FFPROBE = find_tool("ffmpeg"), find_tool("ffprobe")
+
+def check_ffmpeg():
+    """Fail before any work if ffmpeg can't burn captions (Homebrew's plain `ffmpeg` has no libass)."""
+    try:
+        out = subprocess.run([FFMPEG, "-hide_banner", "-filters"], capture_output=True, text=True).stdout
+    except FileNotFoundError:
+        raise SystemExit("ffmpeg not found. On a Mac: brew install ffmpeg-full")
+    if not re.search(r"^\s*\S+\s+ass\s", out, re.M):
+        raise SystemExit(f"{FFMPEG} can't burn captions (built without libass). On a Mac: brew install ffmpeg-full "
+                         "(found automatically). Until then, use the CapCut cut sheet (Mode B).")
+
 def run(cmd, check=True):
     p = subprocess.run(cmd, capture_output=True, text=True)
     if check and p.returncode != 0:
@@ -52,14 +79,17 @@ def run(cmd, check=True):
     return p
 
 def duration(path):
-    return float(run(["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "default=nw=1:nk=1", path]).stdout.strip() or 0)
+    return float(run([FFPROBE, "-v", "error", "-show_entries", "format=duration", "-of", "default=nw=1:nk=1", path]).stdout.strip() or 0)
 
 def has_audio(path):
-    return bool(run(["ffprobe", "-v", "error", "-select_streams", "a", "-show_entries", "stream=index", "-of", "csv=p=0", path]).stdout.strip())
+    return bool(run([FFPROBE, "-v", "error", "-select_streams", "a", "-show_entries", "stream=index", "-of", "csv=p=0", path]).stdout.strip())
 
 def pick_font():
     for name in FONT_CANDIDATES:
-        out = subprocess.run(["fc-match", name], capture_output=True, text=True).stdout
+        try:
+            out = subprocess.run(["fc-match", name], capture_output=True, text=True).stdout
+        except FileNotFoundError:  # no fontconfig: name a Mac font and let libass resolve it
+            return "Helvetica Neue"
         if name.split()[0].lower() in out.lower():
             return name
     return "DejaVu Sans"
@@ -84,7 +114,7 @@ def transcribe(path, model_name="base"):
         return None
     try:
         model = WhisperModel(model_name, device="cpu", compute_type="int8")
-        segs, _ = model.transcribe(path, word_timestamps=True, vad_filter=True, language="en")
+        segs, _ = model.transcribe(path, word_timestamps=True, vad_filter=True, language="en", initial_prompt=WHISPER_PROMPT)
         words = []
         for seg in segs:
             for w in (seg.words or []):
@@ -113,7 +143,10 @@ def locate_script_in_words(script, words, pad=0.25):
     if best < 0.45:
         return None
     span = words[best_i:best_j]
-    return max(span[0]["s"] - pad, 0), span[-1]["e"] + pad, span
+    # pad, but never into the neighbouring words (no "neck, s-" fragments or repeated words between clips)
+    lo = words[best_i - 1]["e"] if best_i > 0 else 0
+    hi = words[best_j]["s"] if best_j < len(words) else span[-1]["e"] + pad
+    return max(span[0]["s"] - pad, lo), min(span[-1]["e"] + pad, hi), span
 
 # ---------- step 2: trimming ----------
 def silence_trim(path, noise="-30dB", min_sil=0.35, pad=0.2):
@@ -121,7 +154,7 @@ def silence_trim(path, noise="-30dB", min_sil=0.35, pad=0.2):
     dur = duration(path)
     if not has_audio(path):
         return 0.0, dur
-    p = run(["ffmpeg", "-hide_banner", "-i", path, "-af", f"silencedetect=noise={noise}:d={min_sil}", "-f", "null", "-"], check=False)
+    p = run([FFMPEG, "-hide_banner", "-i", path, "-af", f"silencedetect=noise={noise}:d={min_sil}", "-f", "null", "-"], check=False)
     starts = [float(x) for x in re.findall(r"silence_start: ([\d.]+)", p.stderr)]
     ends = [float(x) for x in re.findall(r"silence_end: ([\d.]+)", p.stderr)]
     s, e = 0.0, dur
@@ -137,7 +170,7 @@ def silence_trim(path, noise="-30dB", min_sil=0.35, pad=0.2):
 # ---------- step 3: normalise ----------
 def normalise(src, dst, start=None, end=None, mute=False):
     vf = (f"scale={W}:{H}:force_original_aspect_ratio=increase,crop={W}:{H},setsar=1,fps={FPS}")
-    cmd = ["ffmpeg", "-y", "-hide_banner", "-loglevel", "error"]
+    cmd = [FFMPEG, "-y", "-hide_banner", "-loglevel", "error"]
     if start: cmd += ["-ss", f"{start:.3f}"]
     cmd += ["-i", src]
     if end: cmd += ["-to", f"{max(end - (start or 0), 0.3):.3f}"]
@@ -150,27 +183,27 @@ def normalise(src, dst, start=None, end=None, mute=False):
     run(cmd)
     return duration(dst)
 
-def end_card(dst, line1, line2, seconds):
-    from PIL import Image, ImageDraw, ImageFont
-    img = Image.new("RGB", (W, H), (20, 24, 38))
-    d = ImageDraw.Draw(img)
-    fp = subprocess.run(["fc-match", "-f", "%{file}", pick_font() + ":bold"], capture_output=True, text=True).stdout.strip()
-    f1 = ImageFont.truetype(fp, 96); f2 = ImageFont.truetype(fp, 56)
-    for txt, f, y in ((line1, f1, H * 0.42), (line2, f2, H * 0.52)):
-        bw = d.textlength(txt, font=f)
-        d.text(((W - bw) / 2, y), txt, font=f, fill=(255, 255, 255))
-    png = dst + ".png"; img.save(png)
-    run(["ffmpeg", "-y", "-hide_banner", "-loglevel", "error", "-loop", "1", "-i", png,
-         "-f", "lavfi", "-i", "anullsrc=channel_layout=stereo:sample_rate=48000", "-t", str(seconds),
-         "-vf", f"fps={FPS},format=yuv420p", "-c:v", "libx264", "-preset", "veryfast", "-c:a", "aac", "-shortest", dst])
+def end_card(dst, seconds, tail=None):
+    """End card background; its text is burned in with the captions so it wraps instead of clipping.
+    tail=(src, t): carry the last clip's own sound on from t, fading out, so the post doesn't drop to silence."""
+    cmd = [FFMPEG, "-y", "-hide_banner", "-loglevel", "error", "-f", "lavfi", "-i", f"color=c={END_BG}:s={W}x{H}:r={FPS}"]
+    if tail:
+        cmd += ["-ss", f"{tail[1]:.3f}", "-i", tail[0], "-map", "0:v", "-map", "1:a:0",
+                "-af", f"loudnorm=I=-16:TP=-1.5:LRA=11,afade=t=out:d={seconds},apad"]
+    else:
+        cmd += ["-f", "lavfi", "-i", "anullsrc=channel_layout=stereo:sample_rate=48000"]
+    cmd += ["-t", f"{seconds:.3f}", "-c:v", "libx264", "-preset", "veryfast", "-pix_fmt", "yuv420p",
+            "-c:a", "aac", "-b:a", "160k", "-ar", "48000", "-ac", "2", dst]
+    run(cmd)
     return seconds
 
 # ---------- step 4: captions ----------
 def cues_from_words(words, offset, per_cue):
     out = []
     for i in range(0, len(words), per_cue):
-        grp = words[i:i + per_cue]
-        out.append((offset + grp[0]["s"], offset + grp[-1]["e"] + 0.05, " ".join(w["w"] for w in grp)))
+        grp = words[i:i + per_cue]; e = grp[-1]["e"] + 0.05
+        if i + per_cue < len(words): e = min(e, words[i + per_cue]["s"])  # never two cues on screen at once
+        out.append((offset + grp[0]["s"], offset + e, re.sub(r"\bi\b", "I", " ".join(w["w"] for w in grp))))
     return out
 
 def cues_from_text(text, offset, dur, per_cue):
@@ -184,13 +217,13 @@ def cues_from_text(text, offset, dur, per_cue):
         out.append((t, t + seg, " ".join(g))); t += seg
     return out
 
-def build_ass(cues, overlays, hook, cfg, total):
+def build_ass(cues, overlays, hook, cfg, total, end=None):
     font = pick_font(); size = int(cfg.get("size", 72)); mv = int(cfg.get("margin_v", 430)); up = cfg.get("uppercase", False)
     head = f"""[Script Info]
 ScriptType: v4.00+
 PlayResX: {W}
 PlayResY: {H}
-WrapStyle: 2
+WrapStyle: 0
 ScaledBorderAndShadow: yes
 
 [V4+ Styles]
@@ -198,6 +231,7 @@ Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour,
 Style: Cap,{font},{size},&H00FFFFFF,&H000000FF,&H00000000,&H80000000,-1,0,0,0,100,100,0,0,1,6,1,2,80,80,{mv},1
 Style: Hook,{font},{int(size*1.15)},&H00FFFFFF,&H000000FF,&H00000000,&H9A000000,-1,0,0,0,100,100,0,0,3,10,0,8,70,70,300,1
 Style: Over,{font},{int(size*0.95)},&H0000FFFF,&H000000FF,&H00000000,&H80000000,-1,0,0,0,100,100,0,0,1,6,1,5,90,90,0,1
+Style: End,{font},96,&H00FFFFFF,&H000000FF,&H00000000,&H00000000,-1,0,0,0,100,100,0,0,1,0,0,5,90,90,0,1
 
 [Events]
 Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
@@ -209,12 +243,23 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
         ev.append(f"Dialogue: 1,{ass_t(s)},{ass_t(e)},Over,,0,0,0,,{{\\fad(120,120)}}{esc(txt)}")
     for s, e, txt in cues:
         ev.append(f"Dialogue: 0,{ass_t(s)},{ass_t(e)},Cap,,0,0,0,,{{\\fad(40,40)}}{esc(txt.upper() if up else txt)}")
+    if end:
+        s, e, line1, line2 = end
+        ev.append(f"Dialogue: 2,{ass_t(s)},{ass_t(e)},End,,0,0,0,,{{\\pos({W // 2},{int(H * 0.44)})\\fad(150,0)}}{esc(line1)}")
+        ev.append(f"Dialogue: 2,{ass_t(s)},{ass_t(e)},End,,0,0,0,,{{\\pos({W // 2},{int(H * 0.55)})\\fs56\\fad(150,0)}}{esc(line2)}")
     return head + "\n".join(ev) + "\n"
 
 def write_srt(cues, path):
     with open(path, "w", encoding="utf-8") as f:
         for i, (s, e, t) in enumerate(cues, 1):
             f.write(f"{i}\n{srt_t(s)} --> {srt_t(e)}\n{t}\n\n")
+
+def dead_air(path, until, min_gap=0.7):
+    """Silent stretches longer than min_gap before `until` (where the end card starts), for the QC report."""
+    p = run([FFMPEG, "-hide_banner", "-t", f"{until:.3f}", "-i", path, "-af", f"silencedetect=noise=-35dB:d={min_gap}", "-f", "null", "-"], check=False)
+    starts = [float(x) for x in re.findall(r"silence_start: ([\d.]+)", p.stderr)]
+    ends = [float(x) for x in re.findall(r"silence_end: ([\d.]+)", p.stderr)] + [until]
+    return [[round(s, 2), round(min(e, until), 2)] for s, e in zip(starts, ends)]
 
 # ---------- post card → edit.json ----------
 def card_to_edit(card_path, clips_dir, out):
@@ -244,10 +289,11 @@ def main():
         cfg = card_to_edit(a.card, a.clips, a.out or "cut.mp4"); base = os.getcwd()
     else:
         ap.error("give --edit edit.json or --card card.md --clips dir --out file.mp4")
+    check_ffmpeg()
     out = cfg.get("output", a.out or "cut.mp4")
     if not os.path.isabs(out): out = os.path.join(base, out)
     os.makedirs(os.path.dirname(out) or ".", exist_ok=True)
-    tmp = tempfile.mkdtemp(prefix="cuts_"); parts = []; cues = []; overlays = []; offset = 0.0; log = []
+    tmp = tempfile.mkdtemp(prefix="cuts_"); parts = []; cues = []; overlays = []; offset = 0.0; log = []; tail = None
     per_cue = int(cfg.get("caption", {}).get("words_per_cue", 3))
 
     for i, clip in enumerate(cfg["clips"]):
@@ -277,18 +323,22 @@ def main():
             overlays.append((offset + 0.1, offset + d - 0.1, clip["overlay"]))
         log.append({"clip": os.path.basename(src), "trim_mode": mode, "start": round(start or 0, 2), "end": round(end or 0, 2), "duration": round(d, 2)})
         parts.append(dst); offset += d
+        # the end card can carry on this clip's sound if there's more of it after the cut
+        tail = (src, end) if (end and not clip.get("mute") and has_audio(src) and end < duration(src) - 0.5) else None
 
-    ec = cfg.get("end_card")
+    ec = cfg.get("end_card"); end_ev = None; body = offset
     if ec:
-        dst = os.path.join(tmp, "end.mp4"); offset += end_card(dst, ec.get("line1", "Screen Time, Elevated."), ec.get("line2", "DigiRoo · link in bio"), float(ec.get("seconds", 2.5))); parts.append(dst)
+        secs = float(ec.get("seconds", 2.5))
+        end_ev = (offset, offset + secs, ec.get("line1", "Screen Time, Elevated."), ec.get("line2", "DigiRoo · link in bio"))
+        dst = os.path.join(tmp, "end.mp4"); offset += end_card(dst, secs, tail if ec.get("audio", "tail") == "tail" else None); parts.append(dst)
     total = offset
 
     lst = os.path.join(tmp, "list.txt"); open(lst, "w").write("".join(f"file '{p}'\n" for p in parts))
     joined = os.path.join(tmp, "joined.mp4")
-    run(["ffmpeg", "-y", "-hide_banner", "-loglevel", "error", "-f", "concat", "-safe", "0", "-i", lst, "-c", "copy", joined])
-    ass = os.path.join(tmp, "caps.ass"); open(ass, "w", encoding="utf-8").write(build_ass(cues, overlays, cfg.get("hook"), cfg.get("caption", {}), total))
+    run([FFMPEG, "-y", "-hide_banner", "-loglevel", "error", "-f", "concat", "-safe", "0", "-i", lst, "-c", "copy", joined])
+    ass = os.path.join(tmp, "caps.ass"); open(ass, "w", encoding="utf-8").write(build_ass(cues, overlays, cfg.get("hook"), cfg.get("caption", {}), total, end_ev))
 
-    cmd = ["ffmpeg", "-y", "-hide_banner", "-loglevel", "error", "-i", joined]
+    cmd = [FFMPEG, "-y", "-hide_banner", "-loglevel", "error", "-i", joined]
     music = cfg.get("music")
     if music and music.get("file"):
         mp = music["file"] if os.path.isabs(music["file"]) else os.path.join(base, music["file"])
@@ -301,10 +351,11 @@ def main():
             "-c:a", "aac", "-b:a", "160k", "-movflags", "+faststart", out]
     run(cmd)
     srt = os.path.splitext(out)[0] + ".srt"; write_srt(cues, srt)
-    json.dump({"output": out, "duration_sec": round(total, 2), "clips": log, "captions": len(cues), "hook": cfg.get("hook")},
+    gaps = dead_air(out, body)
+    json.dump({"output": out, "duration_sec": round(total, 2), "clips": log, "captions": len(cues), "hook": cfg.get("hook"), "dead_air": gaps},
               open(os.path.splitext(out)[0] + ".edit.json", "w"), indent=2)
     shutil.rmtree(tmp, ignore_errors=True)
-    print(json.dumps({"output": out, "srt": srt, "duration_sec": round(total, 2), "clips": log, "captions": len(cues)}, indent=2))
+    print(json.dumps({"output": out, "srt": srt, "duration_sec": round(total, 2), "clips": log, "captions": len(cues), "dead_air": gaps}, indent=2))
 
 if __name__ == "__main__":
     main()

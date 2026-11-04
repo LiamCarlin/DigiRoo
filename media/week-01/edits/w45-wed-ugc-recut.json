@@ -3,7 +3,7 @@
   "hook": "other parents on the iPad slouch:",
   "end_card": {
     "line1": "Screen Time, Elevated.",
-    "line2": "DigiRoo \u00b7 link in bio",
+    "line2": "DigiRoo · link in bio",
     "seconds": 2.5
   },
   "caption": {
@@ -11,24 +11,25 @@
   },
   "clips": [
     {
-      "file": "../../raw/week-01/w45-wed-ugc-recut/CLIP1_slouch_to_lift.mp4",
-      "text": "(creator's words, from Whisper)",
+      "file": "../../raw/drive/ugc/ciera-ugc.mov",
+      "text": "there was one thing about the way that he was using it that I never really thought about, it was his neck",
       "trim": "auto"
     },
     {
-      "file": "../../raw/week-01/w45-wed-ugc-recut/CLIP2_kid_reaction.mp4",
-      "text": "",
-      "trim": "auto",
-      "overlay": "DigiRoo \u00b7 screen at eye level"
+      "file": "../../raw/drive/ugc/ciera-ugc.mov",
+      "text": "it raises his iPad closer to eye level",
+      "trim": "auto"
     },
     {
-      "file": "../../raw/week-01/w45-wed-ugc-recut/CLIP3_product_closeup.mp4",
-      "text": "",
-      "trim": [
-        0,
-        4
-      ],
-      "mute": true
+      "file": "../../raw/drive/ugc/che-ugc.mp4",
+      "text": "I love that DigiRoo folds flat, adjusts, and has over 25 different viewing angles",
+      "trim": "auto",
+      "overlay": "DigiRoo · screen at eye level"
+    },
+    {
+      "file": "../../raw/drive/ugc/che-ugc.mp4",
+      "text": "So he can use his iPad for learning or entertainment while I'm handling my work",
+      "trim": "auto"
     }
   ]
 }
