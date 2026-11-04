@@ -11,7 +11,7 @@
 
 ## B. The skills (optional; needs code execution on)
 Settings → Capabilities → turn on **Code execution**. Then Settings → Capabilities → **Skills** → **Upload skill** → each zip in `skills/` (five uploads: `content-week`, `digiroo-video`, `schedule-posts`, `weekly-review`, `affiliate-outreach`). After that, the same commands work in any chat, not only inside the Project, and `digiroo-video` can check and cut clips when they're attached.
-**Already uploaded the old ones?** Delete `edit-cuts` and `shoot-day` first (`digiroo-video` replaces both; two skills answering "cut the week" fight), then re-upload `content-week`, `schedule-posts` and `affiliate-outreach`, which point at the new skill.
+**Already uploaded the old ones?** Delete `edit-cuts` and `shoot-day` first (`digiroo-video` replaces both; two skills answering "cut the week" fight), then re-upload `content-week`, `schedule-posts`, `weekly-review` and `affiliate-outreach`, which point at the new skill.
 If "Upload skill" isn't available on the plan, skip this: the Project instructions carry the same steps.
 
 ## C. On a Mac, for the video pipeline (Liam now; Antonia later if she wants)
