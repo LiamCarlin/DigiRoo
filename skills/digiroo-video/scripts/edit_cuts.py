@@ -35,14 +35,17 @@ edit.json — every key is optional except "clips"
   "intro": "clinic-intro.mov",           # prepended untouched (affiliate pack: the clinic's 5-s selfie line)
   "vo": "vo.m4a", "vo_text": "...",      # voice memo laid over muted clips; clips follow the voice
   "clips": [
-    {"file": "IMG_0412.MOV", "trim": "lift", "lift": {"before": 3.5, "after": 4.5}},
+    {"file": "IMG_0412.MOV", "trim": "lift", "lift": {"before": 3.5, "after": 4.5}},   # + "at": 8.1 when the auto pop is wrong
     {"takes": ["IMG_0415.MOV", "IMG_0416.MOV"], "text": "That's it. That's the whole fix.", "tighten": true},
     {"file": "IMG_0418.MOV", "trim": [0.5, 4.0], "mute": true, "overlay": "eye level, no nagging", "push": 1.05}
   ]
 }
 Per clip: "trim" = "auto" | "lift" | [start, end] | null · "text" = what is said (script line) · "overlay" = on-screen
 line for a clip with no speech · "mute" · "tighten" · "max_pause" (0.4) · "punch" (1.0, 1.1 or "auto") ·
-"push" (slow push-in, ≤1.08) · "focus" [x, y] crop centre 0–1 · "fit" "crop" | "blur" (landscape footage).
+"push" (slow push-in, ≤1.08) · "focus" [x, y] crop centre 0–1 · "fit" "crop" | "blur" (landscape footage) ·
+"clean": false (UGC with music already under the voice: level it, skip the denoiser; don't tighten it either, the music would jump).
+"lift": {"before", "after", "at"} · "at" = the second the stand goes up in the raw clip, when the auto pop is wrong.
+"music": {"file", "license", "source", "start", "under_voice_db", "dip_before_lift", "carve"} · license + source are required by qc.
 """
 import argparse, json, os, re, shutil, subprocess, sys, tempfile
 from difflib import SequenceMatcher
@@ -84,6 +87,17 @@ def transcribe(path, model_name="base"):
         warn(f"whisper unavailable ({e.__class__.__name__}); captions follow detected speech instead")
         return None
 
+def join_tokens(words):
+    """Whisper splits some words into tokens ("built" + "-in", "Mm" + "-hmm"); a caption shows them as one word."""
+    out = []
+    for w in words or []:
+        t = w["w"]
+        if out and len(t) > 1 and (t[0] in "-'’" or t.lower() == "n't"):
+            out[-1] = {"w": out[-1]["w"] + t, "s": out[-1]["s"], "e": w["e"]}
+        else:
+            out.append(dict(w))
+    return out
+
 def norm(s):
     return re.sub(r"[^a-z0-9' ]", "", s.lower()).split()
 
@@ -119,14 +133,19 @@ def pick_take(takes, text, get_words):
 
 
 # ---------- 2. trimming ----------
-def lift_span(src, info, before, after):
-    found = L.find_lift(src)
+def lift_span(src, info, before, after, at=None):
+    found = L.find_lift(src, at=at)
     if not found:
         warn(f"{os.path.basename(src)}: no clear stand-pop found; trimmed to speech/whole clip instead")
         return None
     a, pk, b = found
     s, e = max(0.0, a - before), min(info["duration"], b + after)
-    decide(f"{os.path.basename(src)}: stand-pop at {pk:.1f}s; kept {s:.1f}-{e:.1f}s ({before}s slouch before, {after}s upright after)")
+    how = f"set by lift.at {float(at):.1f}s" if at is not None else "strongest motion"
+    decide(f"{os.path.basename(src)}: stand-pop at {pk:.1f}s ({how}); kept {s:.1f}-{e:.1f}s ({before}s slouch before, {after}s upright after)")
+    others = [x[1] for x in L.lift_bursts(src) if abs(x[1] - pk) > 1.0]
+    if others and at is None:  # a parent walking in or a kid flailing can out-move the stand: say so, so the eye check looks
+        decide(f"{os.path.basename(src)}: other motion at {', '.join(f'{t:.1f}s' for t in others)}; if stills.jpg shows the wrong "
+               f"moment at the pop, set \"lift\": {{\"at\": <seconds into the raw clip>}}")
     return s, e, pk
 
 def speech_trim(src, info, text, words):
@@ -193,7 +212,10 @@ def encode_part(src, dst, s, e, info, clip, punch=1.0, voice=True, hold=0.0):
                 "-filter_complex", f"[0:v]{vf}[v]", "-map", "[v]", "-map", "1:a"]
     else:
         g = L.gain_to(src, -18.0 if voice else -26.0, s, dur)
-        chain = (f"volume={g:.1f}dB," + L.VOICE_CHAIN) if voice else f"highpass=f=60,volume={g:.1f}dB"
+        if voice and clip.get("clean") is False:  # UGC with music baked under the voice: the denoiser would smear the music
+            chain = f"highpass=f=60,volume={g:.1f}dB"
+        else:
+            chain = (f"volume={g:.1f}dB," + L.VOICE_CHAIN) if voice else f"highpass=f=60,volume={g:.1f}dB"
         chain += ",alimiter=limit=0.89:level=false,aresample=48000,aformat=channel_layouts=stereo"
         chain += f",afade=t=in:d=0.008,afade=t=out:st={max(dur - 0.03, 0):.3f}:d=0.03"
         if hold > 0:
@@ -257,6 +279,28 @@ def cues_over_spans(text, spans, per_cue):
         share = total * w / wt
         out.append([at(acc), at(acc + share), clean_cue(g)]); acc += share
     return out
+
+def merge_flashes(cues, min_dur=0.7, max_words=5, max_chars=32):
+    """A fast talker (4+ words/s) turns 3-word cues into 0.3 s flashes nobody can read. Fold a cue shorter than
+    min_dur into the neighbour it belongs with (the next one, unless it ends a phrase) while the pair still fits two
+    caption lines. The words still land with her voice; there are just fewer, longer reads."""
+    cues = [list(c) for c in sorted(cues)]
+    i = 0
+    while i < len(cues):
+        c = cues[i]
+        if c[1] - c[0] < min_dur:
+            for j in ((i - 1, i + 1) if re.search(r"[,.!?;:]$", c[2]) else (i + 1, i - 1)):
+                if not 0 <= j < len(cues):
+                    continue
+                a, b = sorted((i, j)); txt = cues[a][2] + " " + cues[b][2]
+                if len(txt.split()) <= max_words and len(txt) <= max_chars and cues[b][0] - cues[a][1] < 0.6:
+                    cues[a] = [cues[a][0], cues[b][1], txt]; del cues[b]
+                    i = max(a - 1, 0); break
+            else:
+                i += 1
+            continue
+        i += 1
+    return cues
 
 def settle_cues(cues, min_len=0.6):
     """Minimum time on screen (explainroo/video-director hold rules); stretch into the gap after, never overlap."""
@@ -429,7 +473,7 @@ def main():
             w = json.load(open(tp)) if os.path.exists(tp) else None
         elif not a.no_whisper:
             w = transcribe(src, a.whisper_model)
-        words_cache[src] = w; return w
+        words_cache[src] = join_tokens(w) if w else w; return words_cache[src]
 
     clips = [dict(c) for c in cfg["clips"]]
     if cfg.get("intro"):
@@ -500,7 +544,7 @@ def main():
             mode = "manual"
         elif trim == "lift":
             lp = clip.get("lift", {})
-            got = lift_span(src, info, float(lp.get("before", 3.5)), float(lp.get("after", 4.5)))
+            got = lift_span(src, info, float(lp.get("before", 3.5)), float(lp.get("after", 4.5)), lp.get("at"))
             if got: s, e, pk = got; mode = "lift"
             else: s, e, mode = speech_trim(src, info, text, words)
         elif trim == "auto" and speaks:
@@ -548,7 +592,8 @@ def main():
             if at == "lift" and lift_out: w0, w1 = lift_out - 1.6, lift_out + 0.6
             elif at == "after" and lift_out: w0, w1 = lift_out + 0.8, offset
             elif at == "before": w0, w1 = clip_start + 0.6, (lift_out - 0.2 if lift_out else offset)
-            elif isinstance(at, (int, float)): w0 = clip_start + at; w1 = w0 + max(1.5, 1.0 + 0.3 * len(txt.split()))
+            elif isinstance(at, (int, float)):  # + 0.15 s: placement keeps 0.05 s clear at each end, so size for that
+                w0 = clip_start + at; w1 = w0 + max(1.5, 1.0 + 0.3 * len(txt.split())) + 0.15
             else: warn(f"{name}: overlay '{txt}' at '{at}' skipped (no stand-pop found)"); continue
             overlays.append({"name": name, "text": txt, "s": max(w0, clip_start), "e": min(w1, offset), "with_caps": o.get("with_captions")})
         clip_log.append({"clip": name, "trim_mode": mode, "start": round(s, 2), "end": round(e, 2), "parts": len(spans),
@@ -573,6 +618,8 @@ def main():
         offset += end_card_part(parts[-1] if parts else None, dst, ec, tmp); parts.append(dst)
     total = offset
 
+    n0 = len(cues); cues = merge_flashes(cues)
+    if len(cues) < n0: decide(f"folded {n0 - len(cues)} caption flash(es) under 0.7 s into their neighbours (fast speech)")
     cues = settle_cues([[max(c[0] - 0.08, 0), c[1], c[2]] for c in cues if c[0] < body_end])  # land just ahead of the word
     if title:
         events.insert(0, {"slot": "title", "text": title, "s": intro_dur, "e": body_end, "enter": 0 if intro_dur == 0 else 8})
@@ -617,13 +664,20 @@ def main():
         fc.append(f"[{n_in}:a]adelay={d_ms}|{d_ms}[vo]"); n_in += 1
         voice.append("[vo]")
     fc.insert(2, f"[0:a]apad=whole_dur={total:.3f}[base]"); voice[0] = "[base]"
-    fc.append(("".join(voice) + f"amix=inputs={len(voice)}:duration=first:normalize=0," if len(voice) > 1 else "[base]") + "asplit=2[voice][key]")
+    fc.append(("".join(voice) + f"amix=inputs={len(voice)}:duration=first:normalize=0," if len(voice) > 1 else "[base]") + "asplit=3[voice][key][vstem]")
     bus = ["[voice]"]
     mu = cfg.get("music")
+    stems = None
     if mu and mu.get("file"):
         under = float(mu.get("under_voice_db", 12))
-        mu_wav = prerender(rel(mu["file"]), f"atrim=0:{total:.3f},volume={L.gain_to(rel(mu['file']), -18 - under):.1f}dB", os.path.join(tmp, "music.wav"),
-                           pre=("-stream_loop", "-1", "-t", f"{total + 1:.3f}"))
+        talks = bool(vo) or any((c.get("text") or "").strip() and not c.get("mute") for c in clips)
+        # carve a little room for her voice: the bed loses 4 dB around 2.5 kHz, where consonants live (earshot mixing)
+        carve = ",equalizer=f=2500:t=q:w=1.0:g=-4" if talks and mu.get("carve", True) else ""
+        m_at = float(mu.get("start", 0.0))  # skip a track's intro: "start": 6.5
+        mu_wav = prerender(rel(mu["file"]), f"atrim=0:{total:.3f},volume={L.gain_to(rel(mu['file']), -18 - under, m_at or None, total):.1f}dB{carve}",
+                           os.path.join(tmp, "music.wav"), pre=(("-ss", f"{m_at:.3f}") if m_at else ()) + ("-stream_loop", "-1", "-t", f"{total + 1:.3f}"))
+        if not (mu.get("license") and mu.get("source")):
+            warn("music has no licence recorded: add \"license\" and \"source\" (the track's own page) to edit.json; QC fails it until then")
         ins += ["-i", mu_wav]
         m = f"[{n_in}:a]aformat=channel_layouts=stereo,atrim=0:{total:.3f}"
         if lift_at and mu.get("dip_before_lift", True):  # earshot: pull the bed down 0.3–0.5 s before the hit, back on the hit
@@ -631,10 +685,12 @@ def main():
             decide(f"music dips for 0.45 s before the stand-pop at {lift_at:.1f}s")
         m += f",afade=t=out:st={max(total - 1.5, 0):.3f}:d=1.5[mraw]"
         fc.append(m); n_in += 1
-        fc.append("[mraw][key]sidechaincompress=threshold=0.03:ratio=6:attack=40:release=280:makeup=1[music]")
+        fc.append("[mraw][key]sidechaincompress=threshold=0.03:ratio=6:attack=40:release=280:makeup=1,asplit=2[music][mstem]")
         bus.append("[music]")
+        # stems for the balance check (qc: "music under voice", "music in the gaps"): measured, not guessed
+        stems = (os.path.join(tmp, "stem_voice.wav"), os.path.join(tmp, "stem_music.wav"))
     else:
-        fc.append("[key]anullsink")
+        fc.append("[key]anullsink"); fc.append("[vstem]anullsink")
     for k, sfx in enumerate(cfg.get("sfx") or []):
         at = lift_at if sfx.get("at") == "lift" else float(sfx.get("at", 0))
         if at is None: warn("sfx at 'lift' skipped: no stand-pop found"); continue
@@ -645,27 +701,40 @@ def main():
     mixed = os.path.join(tmp, "mixed.mkv")
     if a.keep: open(os.path.join(tmp, "mix.txt"), "w").write(" ".join(ins) + "\n" + ";\n".join(fc) + "\n")
     run(["ffmpeg", "-y", "-hide_banner", "-loglevel", "error"] + ins + ["-filter_complex", ";".join(fc), "-map", "[v]", "-map", "[a]",
-         "-t", f"{total:.3f}"] + L.X264 + ["-c:a", "pcm_s16le", "-ar", "48000", mixed])
+         "-t", f"{total:.3f}"] + L.X264 + ["-c:a", "pcm_s16le", "-ar", "48000", mixed]
+        + ([a for st, lab in zip(stems, ("[vstem]", "[mstem]")) for a in ("-map", lab, "-t", f"{total:.3f}", "-c:a", "pcm_s16le", "-ar", "48000", st)] if stems else []))
+    balance = L.mix_balance(stems[0], stems[1], body_end, [(c[0], c[1]) for c in cues]) if stems else None
+    if balance:
+        decide("music balance: " + ", ".join(f"{k} {v}" for k, v in balance.items()))
 
     # ---- loudness: one measured static gain + a limiter at -2 dBFS so AAC still lands under -1 dBTP (earshot master.py).
     # Not dynamic loudnorm: it falls back to pumping whenever a transient (the stand's click) would overshoot.
     target = float(cfg.get("loudness", L.LUFS))
     meas = L.loudness(mixed)["lufs"]
     af = []
-    if meas is not None and meas > -60:
-        gain = target - meas
-        for _ in range(3):  # the limiter eats a little level on peaky mixes; measure and correct (audio only, fast)
-            chain = f"volume={gain:.2f}dB,alimiter=limit=0.79:attack=4:release=60:level=false,aresample=48000"
+    def master(limit):
+        gain, chain = target - meas, None
+        for _ in range(4):  # the limiter eats a little level on peaky mixes; measure and correct (audio only, fast)
+            chain = f"volume={gain:.2f}dB,alimiter=limit={limit}:attack=4:release=60:level=false,aresample=48000"
             probe_wav = os.path.join(tmp, "master.wav")
             run(["ffmpeg", "-y", "-hide_banner", "-loglevel", "error", "-i", mixed, "-vn", "-af", chain, "-c:a", "pcm_s16le", probe_wav])
             got = L.loudness(probe_wav)["lufs"]
             if got is None or abs(got - target) <= 0.3: break
             gain += min(target - got, 4.0)
-        af = ["-af", chain]
+        run(["ffmpeg", "-y", "-hide_banner", "-loglevel", "error", "-i", mixed, "-map", "0:v", "-map", "0:a", "-c:v", "copy", "-af", chain] + L.AAC +
+            ["-video_track_timescale", "90000", "-movflags", "+faststart", out])
+        return L.loudness(out)
+    if meas is not None and meas > -60:
+        got = master(0.79)
+        if got["tp"] is not None and got["tp"] > -1.0:  # AAC overshoot on a peaky mix: one retry with 1 dB more headroom
+            decide(f"true peak {got['tp']} dBTP after AAC; re-mastered with the limiter at -3 dBFS")
+            got = master(0.70)
+        if got["lufs"] is not None and abs(got["lufs"] - target) > 1.0:
+            warn(f"master reached {got['lufs']} LUFS, not {target}: the mix is too peaky or too quiet to lift cleanly; add a sound plan (a bed)")
     else:
         warn("the cut is silent or near-silent; loudness not set")
-    run(["ffmpeg", "-y", "-hide_banner", "-loglevel", "error", "-i", mixed, "-map", "0:v", "-map", "0:a", "-c:v", "copy"] + af + L.AAC +
-        ["-video_track_timescale", "90000", "-movflags", "+faststart", out])
+        run(["ffmpeg", "-y", "-hide_banner", "-loglevel", "error", "-i", mixed, "-map", "0:v", "-map", "0:a", "-c:v", "copy"] + L.AAC +
+            ["-video_track_timescale", "90000", "-movflags", "+faststart", out])
 
     stem = os.path.splitext(out)[0]
     srt = stem + ".srt"; write_srt(cues, srt)
@@ -673,6 +742,8 @@ def main():
     log = {"output": out, "duration_sec": round(total, 2), "body_end": round(body_end, 2), "title": title,
            "recipe": cfg.get("recipe"), "length_target": cfg.get("length_target"), "clips": clip_log, "cuts": cuts, "lift_at": round(lift_at, 2) if lift_at else None,
            "captions": len(cues), "text": boxes, "end_question": (ec or {}).get("question") or (ec or {}).get("line1") if ec else None, "music": bool(mu and mu.get("file")), "vo": bool(vo),
+           "music_info": ({"file": os.path.basename(mu["file"]), "license": mu.get("license"), "source": mu.get("source"),
+                           "under_voice_db": mu.get("under_voice_db", 12), "balance": balance} if mu and mu.get("file") else None),
            "decisions": LOG["decisions"], "warnings": LOG["warnings"]}
     json.dump(log, open(stem + ".edit.json", "w"), indent=2)
     if a.keep: print("working files kept in " + tmp)

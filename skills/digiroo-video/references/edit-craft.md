@@ -82,6 +82,10 @@ Why static gain, not loudnorm: dynamic loudnorm lifts the hiss between lines and
 - **The default is no music in the export.** For text-narrated transformations she adds a soft trending sound in-app at post time, from the Commercial Music Library because DigiRoo is a business account (video-rules 9).
 - How-tos and talking heads keep original sound.
 - If a bed is used: calm acoustic or folk at 80–110 BPM, warm and family. No techno, trap, or drums under a voice [huashu music.md].
+- **Vet it first:** `python3 <this skill>/scripts/vet_music.py bed.mp3` reports length, level swings, how busy the track is in the 1–4 kHz voice range, how long its intro takes (`"start"`), and whether Whisper hears singing in it (a sung bed never goes under a voice).
+- **Record the licence in edit.json:** `"music": {"file", "license", "source", "start", "under_voice_db"}`. `qc.py` fails a bed with no licence and source, and measures the bed against her voice on separate stems (`music under voice`, `music in the gaps`). Under a voice the bed also loses 4 dB around 2.5 kHz (`"carve": false` turns that off).
+- On Pixabay, skip tracks with the "Content ID Registered" badge: they can be auto-claimed or muted on Reels even when used legally. Mixkit's free licence forbids Content ID registration.
+- **UGC that already has music under the voice** (the gaps between her words sit within ~15 dB of her voice): add no bed, set `"clean": false` (level it, skip the denoiser, which smears music), and don't `tighten` it (every cut makes the music jump). The creator's track is unlicensed for the brand until the creator names it; ask, or ask for the clean voice-over.
 
 **Silence.**
 - With the sound off, the video must still make sense; that's the hook-sheet test.

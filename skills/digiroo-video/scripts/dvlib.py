@@ -129,24 +129,61 @@ def motion_events(series, fps=15):
                 ev[-1] = (series[i][0], vals[i])
     return ev
 
-def find_lift(path, fps=15):
+_BURSTS = {}
+def lift_bursts(path, fps=15, share=0.4):
+    """Every clear burst of motion in a static take, strongest first: [(start, peak, end, strength)] in seconds.
+    A burst counts when its 0.5 s average clears max(0.008, 2.5x the take's median) and `share` of the strongest;
+    peaks closer than 1 s are one burst. In a skit the strongest burst is often NOT the stand-pop: a parent walking
+    in close to the lens or a kid flailing moves more pixels than a stand rising (seen on real footage, 2026-11)."""
+    key = (path, fps)
+    if key not in _BURSTS:
+        s = motion_series(path, fps=fps)
+        if len(s) < fps * 2:
+            _BURSTS[key] = ([], [], 0.0)
+        else:
+            win = max(3, fps // 2)  # 0.5 s moving average
+            vals = [v for _, v in s]
+            sm = [sum(vals[max(0, i - win // 2): i + win // 2 + 1]) / len(vals[max(0, i - win // 2): i + win // 2 + 1]) for i in range(len(vals))]
+            _BURSTS[key] = (s, sm, _median(sm))
+    s, sm, base = _BURSTS[key]
+    if not sm:
+        return []
+    floor = max(0.008, base * 2.5)
+    if max(sm) < floor:
+        return []
+    need = max(floor, share * max(sm))
+    peaks = []
+    for i in range(len(sm)):
+        if sm[i] < need or (i and sm[i] < sm[i - 1]) or (i < len(sm) - 1 and sm[i] < sm[i + 1]):
+            continue
+        if peaks and s[i][0] - s[peaks[-1]][0] < 1.0:
+            if sm[i] > sm[peaks[-1]]: peaks[-1] = i
+        else:
+            peaks.append(i)
+    out = []
+    for pk in peaks:
+        thr = base + 0.3 * (sm[pk] - base)
+        a = pk
+        while a > 0 and sm[a - 1] > thr: a -= 1
+        b = pk
+        while b < len(sm) - 1 and sm[b + 1] > thr: b += 1
+        out.append((s[a][0], s[pk][0], s[b][0], sm[pk]))
+    return sorted(out, key=lambda x: -x[3])
+
+def find_lift(path, fps=15, at=None):
     """The stand-pop: the strongest sustained burst of motion in a static, side-on take.
+    `at` (seconds into the clip, from her note or from a reviewer who looked at the frames) picks the burst nearest
+    that moment instead; with no burst within 1.5 s it trusts the number and keeps a short span around it.
     Returns (start, peak, end) of the burst in seconds, or None when the take has no clear burst."""
-    s = motion_series(path, fps=fps)
-    if len(s) < fps * 2:
-        return None
-    win = max(3, fps // 2)  # 0.5 s moving average
-    vals = [v for _, v in s]
-    sm = [sum(vals[max(0, i - win // 2): i + win // 2 + 1]) / len(vals[max(0, i - win // 2): i + win // 2 + 1]) for i in range(len(vals))]
-    base = _median(sm); pk = max(range(len(sm)), key=lambda i: sm[i])
-    if sm[pk] < max(0.008, base * 2.5):
-        return None
-    thr = base + 0.3 * (sm[pk] - base)
-    a = pk
-    while a > 0 and sm[a - 1] > thr: a -= 1
-    b = pk
-    while b < len(sm) - 1 and sm[b + 1] > thr: b += 1
-    return s[a][0], s[pk][0], s[b][0]
+    if at is not None:
+        near = [x for x in lift_bursts(path, fps, share=0.0) if abs(x[1] - float(at)) <= 1.5]
+        if near:
+            a, pk, b, _ = min(near, key=lambda x: abs(x[1] - float(at)))
+            return a, pk, b
+        at = float(at)
+        return max(0.0, at - 0.3), at, at + 0.5
+    bursts = lift_bursts(path, fps)
+    return bursts[0][:3] if bursts else None
 
 def brightness(path, fps=2):
     """Mean luma (0-255) sampled twice a second, plus 10th/90th percentile, on an 8-bit grey copy."""
@@ -178,19 +215,59 @@ def gain_to(path, target, start=None, dur=None, most=20.0):
     m = loudness(path, start, dur)["lufs"]
     return 0.0 if m is None or m < -70 else max(-most, min(most, target - m))
 
-def level_series(path, start=None, end=None, win=0.05):
-    """RMS level (dBFS) per 50 ms window, using astats; no numpy needed."""
+def level_series(path, start=None, end=None, win=0.05, pre=None):
+    """RMS level (dBFS) per 50 ms window, using astats; no numpy needed. `pre` is an optional filter run first
+    (e.g. a band-pass to measure only the speech band)."""
     cmd = ["ffmpeg", "-hide_banner", "-nostats"]
     if start: cmd += ["-ss", f"{start:.3f}"]
     cmd += ["-i", path]
     if end: cmd += ["-t", f"{end - (start or 0):.3f}"]
     n = int(16000 * win)
-    p = run(cmd + ["-vn", "-af", f"aformat=channel_layouts=mono,aresample=16000,asetnsamples=n={n}:p=0,"
+    p = run(cmd + ["-vn", "-af", (pre + "," if pre else "") + f"aformat=channel_layouts=mono,aresample=16000,asetnsamples=n={n}:p=0,"
                    "astats=metadata=1:reset=1,ametadata=print:key=lavfi.astats.Overall.RMS_level", "-f", "null", "-"], check=False)
     lv = []
     for x in re.findall(r"RMS_level=(-?[\d.]+|-inf)", p.stderr):
         lv.append(-120.0 if x == "-inf" else float(x))
     return [((start or 0) + i * win, v) for i, v in enumerate(lv)]
+
+def _power_mean(dbs):
+    dbs = [d for d in dbs if d > -110]
+    return round(10 * math.log10(sum(10 ** (d / 10) for d in dbs) / len(dbs)), 1) if dbs else None
+
+SPEECH_BAND = "highpass=f=1000,lowpass=f=4000"
+def mix_balance(voice_wav, music_wav, body_end=None, talk_spans=None):
+    """How the music bed sits against her voice, from the two stems the editor writes (before the master gain,
+    which moves both equally). Talking windows come from `talk_spans` (the cut's caption timings) when given; an
+    empty list means nobody talks, so a kid's groan or the stand's click is never mistaken for a voice. Without it,
+    talking windows are 50 ms frames where the voice stem is within 20 dB of its own 95th percentile. Returns:
+      speech_band_margin_db  voice minus music in the 1-4 kHz band while she talks (intelligibility; ≥15 is clear)
+      gaps_under_voice_db    how far the bed sits under her talking level when she isn't talking (8-24 = audible, not loud)
+      talk_share             share of the body where someone is talking
+    The margin is None when nobody talks (a text-story cut): then the bed IS the sound and loudness alone judges it."""
+    end = body_end
+    v = [x for x in level_series(voice_wav, end=end)]
+    m = [x for x in level_series(music_wav, end=end)]
+    vb = level_series(voice_wav, end=end, pre=SPEECH_BAND)
+    mb = level_series(music_wav, end=end, pre=SPEECH_BAND)
+    n = min(len(v), len(m), len(vb), len(mb))
+    if not n:
+        return None
+    vals = sorted(x[1] for x in v[:n])
+    p95 = vals[min(n - 1, int(n * 0.95))]
+    if talk_spans is not None:
+        talk = [i for i in range(n) if any(a <= v[i][0] <= b for a, b in talk_spans)]
+    else:
+        talk = [i for i in range(n) if v[i][1] > max(p95 - 20, -50) and p95 > -45]
+    quiet = [i for i in range(n) if i not in set(talk)]
+    out = {"talk_share": round(len(talk) / n, 2)}
+    if len(talk) >= 10:  # half a second of talking at least
+        out["speech_band_margin_db"] = round(_power_mean([vb[i][1] for i in talk]) - _power_mean([mb[i][1] for i in talk]), 1)
+        voice_lvl = _power_mean([v[i][1] for i in talk]); bed = _power_mean([m[i][1] for i in quiet]) if quiet else None
+        out["gaps_under_voice_db"] = round(voice_lvl - bed, 1) if bed is not None else None
+    else:
+        out["speech_band_margin_db"] = None; out["gaps_under_voice_db"] = None
+    out["music_level_db"] = _power_mean([x[1] for x in m[:n]])
+    return out
 
 _LEVELS = {}
 def speech_spans(path, start=None, end=None, below_p95_db=30.0, merge_gap=0.12, min_len=0.12):

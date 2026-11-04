@@ -85,7 +85,8 @@ If it's her first shoot, send the 5-line phone setup once and say it's a one-tim
    - `overlays` with `"at": "lift"` / `"after"`
    - `end_card.question`
    - `length_target` and `lift.before` from a current `trends.md` (edit-craft §1, "This week's band")
-   - optional `music`, which must be licensed or her own (see edit-craft → Sound)
+   - optional `music`, which must be licensed or her own, with `license` and `source` recorded; vet it with `scripts/vet_music.py` first (see edit-craft → Sound)
+   - for a slouch-to-lift take, check the pop: the editor names any other motion it saw; if the pop still shows the wrong moment, set `lift.at`
    - every key is optional except `clips`
 2. **Run** `python3 <this skill>/scripts/edit_cuts.py --edit media/<week>/edits/<post-id>.json`. Add `--no-whisper` if the model can't download. In a chat sandbox, write the output to the sandbox and send her the files.
 3. **Read what it printed.**
@@ -165,6 +166,7 @@ scripts/edit_cuts.py     raw clips + edit.json (or a post card) → finished cut
 scripts/check_clips.py   keep/redo for raw clips, with plain-English fixes
 scripts/qc.py            numbers + frame sheets for a finished cut; --reference to compare timing
 scripts/trends.py        the weekly trend check: niche videos (or saved reels) → trends.md with this week's targets
+scripts/vet_music.py     check a music track before it goes under a cut: level, voice-range busyness, intro, singing
 scripts/dvlib.py         shared helpers (probe, motion, speech, loudness, text drawing)
 references/              video-rules · filming-guide · edit-craft · qc-and-review · sources
 templates/               shoot-card.md · edit.json · video-notes.md · trends.md

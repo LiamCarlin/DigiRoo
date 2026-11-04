@@ -35,7 +35,11 @@ Three layers, in this order [video-director quality.md:3-6]:
 | text over text | no two text boxes overlap in time and space | one read at a time | video-rules 6 |
 | claim words | none of the banned words | brief §4/§5 | brief |
 | cuts between shots | ≤3 | video-rules 3 | segment analysis |
-| lift found | the slouch-to-lift recipe found the stand-pop | the transformation is the video | video-rules 4 |
+| lift found | the slouch-to-lift recipe found the stand-pop, 25–60 % in | the transformation is the video; **look at the pop still**: the strongest motion can be a parent walking in, not the stand | video-rules 4 |
+| music licence | edit.json `music` has `license` and `source` (the track's own page) | an unlicensed or unknown bed gets a post muted or claimed | earshot licences.md |
+| music under voice | the bed sits ≥15 dB under her voice in the 1–4 kHz speech band while she talks (WARN 10–15, FAIL <10) | a bed that crowds her consonants loses the words on a phone speaker | measured on the voice and music stems |
+| music in the gaps | between lines the bed sits 8–24 dB under her talking level | quieter is a dead gap; louder is a bed that takes over | measured on the stems |
+| music present | no-talking cuts: the bed is there (>-45 dBFS before the master) | then the bed is the sound | measured on the music stem |
 | ends on a question | the end card question has "?" | video-rules 8 | segment analysis |
 
 FAIL means fix before she sees it. WARN means fix it, or tell her in one line why it stays. **Never loosen a threshold to pass** [earshot fixer.md:46]. A deliberate exception gets written into the delivery note as `qa_ok: <reason>` so the next round doesn't re-argue it.
@@ -71,6 +75,10 @@ Its scores run 0.5–1.5 above the maker's [take-one reviewer-brief.md:48]. Fold
 |---|---|
 | Hook unclear muted | Rewrite `title` (6–12 words: the promise + who's saying it); make sure the slouch is visible in frame one (`lift.before` up, or `focus` the crop) |
 | Pop is too early or too late | `lift.before` / `lift.after`; the pop should sit 25–60% in |
+| Pop is the wrong moment (the pop still shows a parent walking in or a kid waving, not the stand rising) | `"lift": {"at": <second the stand goes up in the raw clip>}`; the editor's DECISION line and `clips-check.jpg` list the other motion it saw |
+| Music crowds her voice (`music under voice` WARN/FAIL) | `under_voice_db` up 3 dB at a time; if it still fails, a sparser track (`vet_music.py` shows how busy a track is in the voice range) |
+| Music lost in the gaps / too loud between lines | `under_voice_db` down (lost) or up (too loud) |
+| Captions too fast on a fast talker (UGC at 4+ words/s) | `caption.words_per_cue` 4; the editor already folds sub-0.7 s flashes into neighbours. If it still WARNs, the speech is the pace: write `qa_ok: creator speaks at N words/s` in the note rather than drifting captions off her voice |
 | Feels slow after the pop | `lift.after` down to 4; drop an overlay |
 | Feels rushed | `lift.after` up; `end_card.seconds` 3.5; fewer overlays |
 | Captions too fast | `caption.words_per_cue` 2; or tighten less (`max_pause` 0.6) so the words breathe |
