@@ -3,9 +3,13 @@
 tiktok_public_pull.py — study what works in a niche using only TikTok's public pages.
 
     python3 tools/tiktok_public_pull.py --handles kidsonlychiropractic pedsdoctalk --out research/segment --download 3
+    python3 tools/tiktok_public_pull.py --handles-file research/trend-accounts.txt --out research/trends/2026-11-04 \
+        --media media/raw/trends/2026-11-04 --download 3 --since-days 21   # the weekly trend check (then trends.py)
 
 For each handle: the public profile page (follower/video counts) and the public profile
-embed (/embed/@handle: the 10 most recent videos with play counts and direct video URLs).
+embed (/embed/@handle: up to 3 pinned videos plus the 10 most recent, with play counts and direct video URLs;
+every video is dated from its id). --since-days drops anything older, pinned all-time hits included, so the
+top N are this month's best, not the account's greatest hits.
 Then, for the top N by plays, the public video page (likes, comments, shares, saves,
 duration, sound, hashtags), the mp4, a 6-frame contact sheet, and a teardown stub.
 Plain curl, no login, no spoofing, 2 s between requests. Public data only.
@@ -17,6 +21,11 @@ def get(url, out):
     r = subprocess.run(["curl", "-g", "-sS", "-L", "--max-time", "40", "-o", out, "-w", "%{http_code}", url], capture_output=True, text=True)
     time.sleep(2)
     return r.stdout.strip()
+
+def posted(vid):
+    """A TikTok video id carries its upload time in the top 32 bits."""
+    try: return datetime.datetime.fromtimestamp(int(vid) >> 32, datetime.UTC).strftime("%Y-%m-%d")
+    except (ValueError, OverflowError, OSError): return ""
 
 def json_blobs(html):
     out = []
@@ -75,17 +84,27 @@ def contact_sheet(mp4, out_jpg):
     return d
 
 def main():
-    ap = argparse.ArgumentParser(); ap.add_argument("--handles", nargs="+", required=True); ap.add_argument("--out", default="research/segment")
+    ap = argparse.ArgumentParser(); ap.add_argument("--handles", nargs="+", default=[]); ap.add_argument("--out", default="research/segment")
+    ap.add_argument("--handles-file", help="one handle per line; # starts a comment")
+    ap.add_argument("--since-days", type=int, help="keep only videos posted in the last N days (drops pinned old hits)")
     ap.add_argument("--download", type=int, default=0, help="download the top N videos per handle by plays"); ap.add_argument("--media", default="media/raw/segment")
-    a = ap.parse_args(); os.makedirs(a.out, exist_ok=True); os.makedirs(f"{a.out}/montage", exist_ok=True); tmp = f"{a.out}/.pages"; os.makedirs(tmp, exist_ok=True)
+    a = ap.parse_args()
+    if a.handles_file:
+        a.handles += [l.split("#")[0].strip().lstrip("@") for l in open(a.handles_file, encoding="utf-8") if l.split("#")[0].strip()]
+    if not a.handles: ap.error("give --handles or --handles-file")
+    os.makedirs(a.out, exist_ok=True); os.makedirs(f"{a.out}/montage", exist_ok=True); tmp = f"{a.out}/.pages"; os.makedirs(tmp, exist_ok=True)
     rows, profiles = [], []
     for h in a.handles:
         p = profile(h, tmp); items = embed_items(h, tmp)
         print(f"@{h}: followers={p.get('followerCount')} videos={p.get('videoCount')} embed_items={len(items)}", flush=True)
         if p: profiles.append(p)
+        if a.since_days:
+            since = (datetime.date.today() - datetime.timedelta(days=a.since_days)).isoformat()
+            kept = [i for i in items if posted(i["id"]) >= since]
+            print(f"   {len(kept)} posted since {since} ({len(items) - len(kept)} older or pinned dropped)", flush=True); items = kept
         items.sort(key=lambda i: -(i.get("play") or 0))
         for rank, i in enumerate(items):
-            row = {"handle": h, "followers": p.get("followerCount"), "id": i["id"], "plays_embed": i.get("play"), "url": f"https://www.tiktok.com/@{h}/video/{i['id']}", "desc": (i.get("desc") or "")[:200]}
+            row = {"handle": h, "followers": p.get("followerCount"), "id": i["id"], "plays_embed": i.get("play"), "date": posted(i["id"]), "url": f"https://www.tiktok.com/@{h}/video/{i['id']}", "desc": (i.get("desc") or "")[:200]}
             if rank < a.download and i.get("playAddr"):
                 row.update(video_stats(h, i["id"], tmp))
                 mdir = f"{a.media}/{h}"; os.makedirs(mdir, exist_ok=True); mp4 = f"{mdir}/{i['id']}.mp4"

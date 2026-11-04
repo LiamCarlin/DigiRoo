@@ -1,6 +1,6 @@
 ---
 name: weekly-review
-description: Turn last week's TikTok/Instagram/Facebook numbers (screenshots, CSV, or Metricool export) and Antonia's gut notes into a short review — what worked, what didn't and why, affiliate funnel, three concrete changes — appended to lessons-learned.md so next week's plan uses them. Use when she says "review the week", "how did we do", "the 2 L's", pastes insights screenshots, or on Monday before content-week.
+description: Turn last week's TikTok/Instagram/Facebook numbers (screenshots, CSV, or Metricool export) and Antonia's gut notes into a short review — what worked, what didn't and why, affiliate funnel, three concrete changes — appended to lessons-learned.md so next week's plan uses them, with each post's length and watch time logged so the weekly trend check can fit next week's length to her own viewers. Use when she says "review the week", "how did we do", "the 2 L's", pastes insights screenshots, or on Monday before content-week.
 ---
 
 # weekly-review (the 2 L's: what we Learned, what we'll do with it)
@@ -28,7 +28,9 @@ If a number is missing, leave the cell blank; don't estimate.
 5. **Three changes for next week.** Concrete and small: "lead with the side profile in every A post", "move the education post to Tuesday 19:30", "retry format 04 with the pink unit". These become constraints in the next `content-week` run.
 6. **Objections & comments log:** copy any recurring question/objection into the `Objections` section (feeds format 12).
 7. **Append** to `lessons-learned.md` using the entry template below. Never edit old entries.
-8. Tell her in 5 lines: median views, best post and why, worst post and why, the three changes, and "say `plan my week` when you're ready."
+8. **Append one row per post to `research/own-posts.csv`** (post_id, platform, date, seconds, views, avg_watch in seconds, retention %, likes, comments, shares, saves, format, hook, notes). The length comes from the cut's `.edit.json` (`duration_sec`) or the platform. Leave blanks blank. The weekly trend check reads this file to see which lengths hold *her* viewers, so the length band follows her retention, not only the niche's.
+9. **Refresh the trends note.** On a Mac (or in Claude Code), run the Trends move from `digiroo-video` (pull + `trends.py --own research/own-posts.csv`). In a chat, if `trends.md` is past its "good until" date, ask her for 3–6 reels she saved this week and run `trends.py` on them. A refresh that can't run is named in the 5-line summary, not skipped silently.
+10. Tell her in 5 lines: median views, best post and why, worst post and why, the three changes, and "say `plan my week` when you're ready."
 
 ## Entry template (append to lessons-learned.md)
 ```

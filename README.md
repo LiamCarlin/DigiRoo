@@ -14,6 +14,7 @@ Everything runs inside Claude. Five sentences, one shoot, posts scheduled.
 | **Wed, 5 min** | `schedule the week` → read the queue → reply **go** | Posts scheduled in Meta Business Suite (Reels + Facebook) and TikTok Studio. Nothing posts until you say go. |
 | **Friday, 10 min** | `do outreach` → approve the 10 messages → send | Ten personalised clinic DMs/emails, logged, with follow-ups drafted on day 5. |
 | **Next Monday, 10 min** | screenshots of TikTok Studio + IG Insights + Shopify, then `review the week` | What worked, what didn't, three changes. Next week's plan already knows them. |
+| **Monday, with the review** | `what's trending` (or attach 3–6 reels you saved) | What's breaking out in the niche this week, measured: the length to aim for, the hook shape worth borrowing, any sound shared by several accounts. `plan my week` and `cut the week` use it. |
 
 If you have no ideas on a Monday, just say `plan my week`. Claude proposes from the pillars and the calendar.
 
@@ -30,17 +31,18 @@ DIGIROO-brief.md        who we are, who we talk to, what we can say, hashtags   
 format-library.md       16 short-form formats (formats/ has the scripts)
 lessons-learned.md      what worked, week by week (Claude appends; you read)
 video-notes.md          your taste in edits + filming notes (Claude adds a line when you give a note)
+trends.md               this week's trend check: length band, hooks, shared sounds (refreshed Mondays, good for 7 days)
 media/week-NN/          calendar, post cards, shoot card, cuts for each week
 affiliates/             clinic list (127, mirrored to Google Sheet: https://docs.google.com/spreadsheets/d/19PT0OrWsCpwaCnSpZxLmAhDeJtkuu9f-kQtF4aKJs2w), tracker, templates, one-pager, content-pack (3 videos + handout + code card per clinic)
-skills/                 plan (content-week) · video (digiroo-video: shoot, coach, check, cut) · schedule · review · affiliate outreach
-research/               competitors, benchmarks, awareness calendar, personas, metrics
+skills/                 plan (content-week) · video (digiroo-video: shoot, coach, check, cut, trends) · schedule · review · affiliate outreach
+research/               competitors, benchmarks, awareness calendar, personas, metrics; trend-accounts.txt (who the trend check follows), own-posts.csv (your posts' length + watch time), trends/ (each week's pull)
 ```
 
 ## Setup (once, with Liam)
 1. **Claude Project** "DigiRoo Content Studio": paste `project-instructions.md` as the instructions; upload `DIGIROO-brief.md`, `format-library.md`, `formats/`, `lessons-learned.md`, `templates/`, the current week's folder.
 2. **Skills:** upload each folder in `skills/` as a zip under Settings → Capabilities → Skills (needs code execution on; available on Pro per Anthropic's help centre, confirm on her account). If skills aren't available on her plan, the Project instructions alone run the same steps.
 3. **Clips in:** either add the shared Drive folder to *My Drive* (right-click → "Add shortcut to Drive") so Claude's Drive connector can see it, or AirDrop clips into `media/raw/week-NN/<post-id>/`.
-4. **Video cutting:** on a Mac, `brew install ffmpeg` then `pip3 install pillow` (and `pip3 install faster-whisper` for word-exact captions). Without this, `cut the week` gives a CapCut cut sheet instead.
+4. **Video cutting:** on a Mac, `brew install ffmpeg` then `pip3 install pillow` (and `pip3 install faster-whisper` for word-exact captions). Without this, `cut the week` gives a CapCut cut sheet instead. The same Mac runs the Monday trend pull (TikTok blocks Claude's chat sandbox); after it, replace `trends.md` in the Project knowledge.
 5. **Phone, once:** Settings → Camera → Record Video → 1080p HD at 30 fps, HDR Video off, Lock White Balance on; Camera → Grid on. Instagram → Settings → Data usage and media quality → Upload at highest quality on.
 6. **Scheduling:** TikTok account switched to a Business/Creator account (for TikTok Studio scheduling, up to 10 days ahead). Meta Business Suite already connected to the Facebook page + Instagram. Claude in Chrome installed.
 7. **Affiliate codes:** one Shopify discount code per clinic, 10% off, named `DR<LASTNAME>10`.

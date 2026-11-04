@@ -14,6 +14,7 @@ description: Turn Antonia's brain dump (or nothing at all) into a complete 5–7
 3. `lessons-learned.md` — last entry's "3 changes for next week" are hard constraints this week.
 4. `research/awareness-calendar.md` — any hook inside the week ±3 days.
 5. `media/raw/` listing (if present) — which clips already exist; prefer posts that can be cut from them.
+6. `trends.md` (repo root / Project knowledge), if today is on or before its "good until" date — this week's length band, the hook shapes that broke out, caption openers, hashtags and sounds shared by 2+ niche accounts. Past that date it's stale: plan without it and say "trends note is stale; say **what's trending** to refresh it."
 
 ## Inputs (all optional)
 - **Brain dump:** free text, voice-note transcript, bullet list. Can be 1 line.
@@ -33,6 +34,13 @@ Otherwise assume brief defaults and go.
 2. **Calendar check.** Add one D-pillar post if an awareness day or season lands in the week. Mention the date in the hook.
 3. **Balance to the default mix:** 2×A, 1×B, 1×C, 1×D (+ optional E on Saturday). If her ideas overflow a pillar, keep the best, park the rest in `media/<week>/parked-ideas.md`.
 4. **Apply lessons.** If `lessons-learned.md` says a format/hook/time underperformed, don't use it. If it says something won, include one variation.
+4b. **Apply this week's trends** (only from a current `trends.md`, and only inside the video rules):
+   - Every card's **Length** sits in the week's band. If the band starts above 15 s, a slouch-to-lift card adds the selfie line so the cut can reach it without padding.
+   - Borrow the **shape** of the best breakout hook (from its Eye check line) for one or two titles, in her words. Never their words.
+   - Use a breakout caption opener (question, "how to", a number) for at least one TikTok first line.
+   - Add at most 2 of the shared hashtags, and only if they fit the post.
+   - **Sound note** on a text-narrated transformation card: the shared sound, "if it's in the Commercial Music Library". Every how-to stays original sound (rule 9).
+   - A trend that breaks a rule (product first, more than 3 cuts, a claim) is skipped; say so in one line in the hand-off.
 5. **Write each post card** using `templates/post-card.md`. Every card must have:
    - Title in frame one (6–12 words + credential, e.g. "how we fixed the iPad slouch (mom + inventor)"), then the spoken hook. First visual = the problem (kid hunched, side-on), never the product.
    - Script: 20–35 s, ≤85 spoken words, spoken English, says "DigiRoo" once and ≥2 keywords from brief §10.

@@ -8,7 +8,7 @@ package_skills.py — sync shared files and rebuild dist/ (skill zips + Project 
    skills/content-week/references/ and dist/project-knowledge/, and the shoot-card template into templates/,
    so each uploaded skill zip is self-contained.
 2. Rebuilds dist/project-knowledge/templates-all.md from templates/*.md and refreshes the instruction,
-   rules and notes files there.
+   rules, notes and trends files there.
 3. Zips every skills/<name>/ into dist/skills/<name>.zip and removes zips of skills that no longer exist.
 Run it after changing anything under skills/ or templates/.
 """
@@ -30,7 +30,7 @@ def sync():
         if name.endswith(".md"):
             parts.append(f"\n\n---\n# templates/{name}\n\n" + open(J("templates", name), encoding="utf-8").read())
     open(J("dist", "project-knowledge", "templates-all.md"), "w", encoding="utf-8").write("".join(parts))
-    for f in ("project-instructions.md", "video-notes.md", "format-library.md"):
+    for f in ("project-instructions.md", "video-notes.md", "trends.md", "format-library.md"):
         if os.path.exists(J(f)):
             shutil.copyfile(J(f), J("dist", "project-knowledge", f))
 

@@ -74,8 +74,11 @@ def beats(path):
     s = diffs(path); info = L.probe(path)
     g = glitches(s, [], info["duration"] + 1)
     burst = L.find_lift(path)
-    shots = [0.0] + g["cuts"] + [info["duration"]]
-    return {"duration": round(info["duration"], 2), "cuts": g["cuts"],
+    cuts = []  # a dissolve or whip in someone else's reel spans a few frames: count it once
+    for i, c in enumerate(g["cuts"]):
+        if not i or c - g["cuts"][i - 1] > 3.5 / FPS: cuts.append(c)
+    shots = [0.0] + cuts + [info["duration"]]
+    return {"duration": round(info["duration"], 2), "cuts": cuts,
             "shot_lengths": [round(b - a, 2) for a, b in zip(shots, shots[1:])],
             "biggest_move": round(burst[1], 2) if burst else None, "loudness": L.loudness(path)}
 
@@ -114,6 +117,9 @@ def run_qc(path, log=None, reference=None):
     add("fast start", "PASS" if fast else "WARN", " > ".join(order[:4]), "moov before mdat, so it plays while uploading")
     dur = info["duration"]; long_ok = log.get("recipe") in ("talking-head",)
     add("length", "PASS" if 10 <= dur <= (60 if long_ok else 30.5) else "WARN", f"{dur:.1f}s", "10–30 s (scripted talking head up to 60)")
+    lt = log.get("length_target")
+    if lt and len(lt) == 2:
+        add("length vs. this week", "PASS" if lt[0] - 0.5 <= dur <= lt[1] + 0.5 else "WARN", f"{dur:.1f}s", f"{lt[0]}–{lt[1]} s (trends.md)")
 
     # --- sound ---
     ld = L.loudness(path)

@@ -25,6 +25,7 @@ edit.json — every key is optional except "clips"
 {
   "output": "media/cuts/w46-mon-couch-every-night.mp4",
   "recipe": "slouch-to-lift",            # slouch-to-lift | talking-head | voiceover | text-story (sets defaults)
+  "length_target": [18, 26],             # this week's band from trends.md; qc.py warns outside it (rule 5 still applies)
   "title": "every night, same couch, same slouch (mom + inventor)",   # frame one, upper third, whole video
   "end_card": {"question": "what's your house rule?", "save": "save this for the next iPad session",
                "brand": "DigiRoo · link in bio", "seconds": 3, "style": "freeze"},   # or false
@@ -670,7 +671,7 @@ def main():
     srt = stem + ".srt"; write_srt(cues, srt)
     L.grab(out, 0.0, stem + ".cover.jpg")
     log = {"output": out, "duration_sec": round(total, 2), "body_end": round(body_end, 2), "title": title,
-           "recipe": cfg.get("recipe"), "clips": clip_log, "cuts": cuts, "lift_at": round(lift_at, 2) if lift_at else None,
+           "recipe": cfg.get("recipe"), "length_target": cfg.get("length_target"), "clips": clip_log, "cuts": cuts, "lift_at": round(lift_at, 2) if lift_at else None,
            "captions": len(cues), "text": boxes, "end_question": (ec or {}).get("question") or (ec or {}).get("line1") if ec else None, "music": bool(mu and mu.get("file")), "vo": bool(vo),
            "decisions": LOG["decisions"], "warnings": LOG["warnings"]}
     json.dump(log, open(stem + ".edit.json", "w"), indent=2)

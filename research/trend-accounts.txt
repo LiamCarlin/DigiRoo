@@ -1,0 +1,20 @@
+# Accounts for the weekly trend check (tools/tiktok_public_pull.py --handles-file).
+# Public TikTok accounts in DigiRoo's niche whose public embed returned videos on 2026-10-28
+# (research/segment-analysis.md). One handle per line. Add a creator she watches; drop one that goes quiet.
+# Hashtag pages (#techneck, #ipadkids) can't be read without logging in, so the check follows accounts.
+
+# pediatric chiro / PT / pediatrician
+kidsonlychiropractic
+kelseymcdonald.pt
+ptandparenthood
+theptmama
+pedsdoctalk
+# posture / adult PT
+drjoshpt
+# katie.blake.fit   (nothing posted since 2024 as of 2026-11-04; uncomment if she's back)
+# parenting and moms
+biglittlefeelings
+kayla23ma
+# mom-tech and screen time (closest to DigiRoo; small accounts, often nothing in the last 21 days)
+momtestedfinds            # embed returned no videos on 2026-11-04, did on 2026-10-28
+thescreentimeconsultant

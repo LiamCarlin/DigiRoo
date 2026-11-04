@@ -15,6 +15,8 @@ Read this before writing an edit.json. `edit_cuts.py` already enforces most of t
 
 Total is 11–15 s. Add a 4–5 s selfie line and it's 15–20 s. That sits inside rule 5 (10–30 s).
 
+**This week's band.** When `trends.md` is current (today is on or before its "good until" date), copy its length band into edit.json as `"length_target"` and its slouch-before into `lift.before`. `qc.py` then warns when a cut lands outside the band. Reach the band with content (the selfie line, the card's second clip), never by stretching holds or adding cuts. A band only ever narrows rule 5; for a scripted talking head, leave `length_target` out. A stale `trends.md` is ignored and named as stale in the note to her.
+
 **Hero placement.** The pop sits 25–60% in. The loudest moment is the pop or her line, never the end card [video-director, earshot].
 
 **Something new every 2–4 s.** Never a fully dead second outside a designed hold [video-director craft.md:81]. In a one-take, the overlay ("watch her neck") and the captions supply the new thing. Don't add cuts for that.

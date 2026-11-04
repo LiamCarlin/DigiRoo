@@ -7,4 +7,5 @@ __pycache__/
 .DS_Store
 !media/week-01/demo-cut/*.mp4
 research/segment/.pages/
+research/trends/*/.pages/
 media/raw/segment/

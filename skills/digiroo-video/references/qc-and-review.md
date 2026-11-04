@@ -15,6 +15,7 @@ Three layers, in this order [video-director quality.md:3-6]:
 | frame rate / codec | 30 fps, h264 yuv420p, AAC | compatibility | argo export |
 | fast start | `moov` before `mdat` | plays while it uploads or streams | earshot mux |
 | length | 10–30 s (talking head ≤60) | video-rules 5 | segment analysis |
+| length vs. this week | inside edit.json `length_target` ±0.5 s (only when it's set) | trends.md, the weekly trend check | `trends.py` |
 | loudness | −14 LUFS ±1, on the delivered MP4 | platform normalisation; too quiet loses the scroll | take-one, earshot, video-director |
 | true peak | ≤ −1 dBTP after AAC | AAC overshoot clips | earshot |
 | dead air | no silence ≥1 s before the end card | dead second = scroll (fine if the in-app sound covers it) | video-director craft.md:81 |
@@ -79,6 +80,7 @@ Its scores run 0.5–1.5 above the maker's [take-one reviewer-brief.md:48]. Fold
 | Dark | Nothing in the edit beyond the auto-lift. Ask for a reshoot with the window behind the phone. |
 | Loudness off | Re-run; if it's still off, the mix is nearly silent, so add a sound plan |
 | Silence ≥1 s | Fine if she's adding the in-app sound (say so); otherwise a licensed bed or `sfx` on the pop |
+| Outside this week's length | Shorter: `lift.after` down to 4, `end_card.seconds` 2.5. Longer: add the selfie line or the second clip from the card. Never pad a hold to reach it; a one-take that lands short stays short, and the note says so. |
 | Undeclared jump | Look at the sheet at that timestamp. A fast hand is fine; a glitch means re-cut that clip with a manual `trim`. |
 
 ## 4. The delivery note (per post, ≤6 lines)
