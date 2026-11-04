@@ -3,24 +3,37 @@
 ## A. The Claude Project (works on any paid plan)
 1. claude.ai → Projects → **New project** → name it **DigiRoo Content Studio**.
 2. **Instructions** → paste the whole of `project-knowledge/project-instructions.md`.
-3. **Knowledge** → upload every file in `project-knowledge/` (11 files, ~250 KB):
-   `DIGIROO-brief.md`, `format-library.md`, `formats-all.md`, `video-rules.md`, `lessons-learned.md`, `templates-all.md`, `awareness-calendar.md`, `week-01-calendar-and-shoot.md`, `week-01-post-cards.md`, `questions-for-antonia.md`, `project-instructions.md`.
+3. **Knowledge** → upload every file in `project-knowledge/` (13 files, ~260 KB):
+   `DIGIROO-brief.md`, `format-library.md`, `formats-all.md`, `video-rules.md`, `video-notes.md`, `trends.md`, `lessons-learned.md`, `templates-all.md`, `awareness-calendar.md`, `week-01-calendar-and-shoot.md`, `week-01-post-cards.md`, `questions-for-antonia.md`, `project-instructions.md`.
+   Already set up? Replace `project-instructions.md` (paste it into Instructions again), `video-rules.md` and `templates-all.md`, and add `video-notes.md` and `trends.md`.
+   **Every Monday** after the trend pull (C below), replace `trends.md`; it goes stale after 7 days.
 4. Open a chat in the Project and type: **plan my week** followed by two lines of brain dump. You should get a calendar table and seven post cards without being asked anything.
 
 ## B. The skills (optional; needs code execution on)
-Settings → Capabilities → turn on **Code execution**. Then Settings → Capabilities → **Skills** → **Upload skill** → each zip in `skills/` (six uploads). After that, the same commands work in any chat, not only inside the Project, and `edit-cuts` can run its Python when clips are attached.
+Settings → Capabilities → turn on **Code execution**. Then Settings → Capabilities → **Skills** → **Upload skill** → each zip in `skills/` (five uploads: `content-week`, `digiroo-video`, `schedule-posts`, `weekly-review`, `affiliate-outreach`). After that, the same commands work in any chat, not only inside the Project, and `digiroo-video` can check and cut clips when they're attached.
+**Already uploaded the old ones?** Delete `edit-cuts` and `shoot-day` first (`digiroo-video` replaces both; two skills answering "cut the week" fight), then re-upload `content-week`, `schedule-posts`, `weekly-review` and `affiliate-outreach`, which point at the new skill.
 If "Upload skill" isn't available on the plan, skip this: the Project instructions carry the same steps.
 
 ## C. On a Mac, for the video pipeline (Liam now; Antonia later if she wants)
 ```
 brew install ffmpeg
-pip3 install faster-whisper pillow
+brew install pillow              # Homebrew's Python refuses pip3 install (PEP 668)
+# optional, word-exact captions and best-take picking (then run the scripts with ~/.digiroo-py/bin/python3):
+python3 -m venv --system-site-packages ~/.digiroo-py && ~/.digiroo-py/bin/pip install faster-whisper
 git clone https://github.com/LiamCarlin/DigiRoo ~/digiroo
 ```
-Then `python3 skills/edit-cuts/edit_cuts.py --edit media/week-01/edits/<post-id>.json` after clips are in `media/raw/week-01/<post-id>/`.
+The plain Homebrew ffmpeg is enough. The scripts draw all text with Pillow, so they need no libass, drawtext or zscale.
+- Check clips: `python3 skills/digiroo-video/scripts/check_clips.py media/raw/week-02/<post-id> --kind slouch-to-lift`
+- Cut: `python3 skills/digiroo-video/scripts/edit_cuts.py --edit media/week-02/edits/<post-id>.json` (or `--card <post card> --clips <folder> --out media/cuts/<post-id>.mp4`)
+- QC on its own: `python3 skills/digiroo-video/scripts/qc.py media/cuts/<post-id>.mp4 [--reference saved-reel.mp4]`
+- Trend check, Mondays (~5 min, public pages only):
+  `python3 tools/tiktok_public_pull.py --handles-file research/trend-accounts.txt --out research/trends/<date> --media media/raw/trends/<date> --download 3 --since-days 21`
+  `python3 skills/digiroo-video/scripts/trends.py research/trends/<date> --own research/own-posts.csv --out trends.md`
+  then `python3 tools/package_skills.py` and replace `trends.md` in the Project.
+- After editing anything in `skills/` or `templates/`: `python3 tools/package_skills.py` rebuilds these zips and the knowledge files.
 
 ## D. The five sentences Antonia says each week
-`plan my week` · `shoot day` · `cut the week` · `schedule the week` (then **go**) · `review the week` — plus `do outreach` on Fridays.
+`plan my week` · `shoot day` · `check my clips` · `cut the week` · `schedule the week` (then **go**) · `review the week` — plus `do outreach` on Fridays and `what's trending` on Mondays. Any time: `how do I film this?`
 
 ## E. Before Friday's demo, check
 - [ ] Project answers `plan my week` with a calendar in under two minutes

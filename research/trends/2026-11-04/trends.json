@@ -1,0 +1,234 @@
+{
+  "checked": "2026-11-04",
+  "valid_until": "2026-11-11",
+  "source": "research/trends/2026-11-04",
+  "window": "posted since 2026-10-14 (21 days)",
+  "length_target": [
+    10,
+    30
+  ],
+  "length_why": [
+    "rule 5: 10–30 s",
+    "niche breakouts' middle half (69–154 s) barely overlaps 10–30 s, so not adopted"
+  ],
+  "lift_before": 3.5,
+  "lift_why": "fewer than 3 breakouts have a big move in their first 10 s, so the default stands",
+  "breakouts": [
+    {
+      "handle": "pedsdoctalk",
+      "id": "7701750727810567438",
+      "ratio": 1313.8,
+      "url": "https://www.tiktok.com/@pedsdoctalk/video/7701750727810567438",
+      "duration": 240.28,
+      "cuts": [
+        14.97,
+        27.73,
+        83.23,
+        105.17,
+        107.7,
+        122.07,
+        124.87,
+        132.97,
+        145.97,
+        151.3,
+        157.77,
+        167.73,
+        169.5,
+        179.17,
+        183.93,
+        188.13,
+        192.7,
+        196.4,
+        208.47,
+        213.77,
+        224.83,
+        228.9,
+        230.87
+      ],
+      "biggest_move": 146.07
+    },
+    {
+      "handle": "kidsonlychiropractic",
+      "id": "7702574415707426078",
+      "ratio": 44.8,
+      "url": "https://www.tiktok.com/@kidsonlychiropractic/video/7702574415707426078",
+      "duration": 134.53,
+      "cuts": [
+        7.2,
+        21.87,
+        25.63,
+        32.6,
+        38.63,
+        46.57,
+        56.07,
+        68.1,
+        74.1,
+        84.03,
+        89.9,
+        108.47,
+        114.47,
+        119.67,
+        121.23
+      ],
+      "biggest_move": 2.6
+    },
+    {
+      "handle": "kayla23ma",
+      "id": "7697758876292222222",
+      "ratio": 39.0,
+      "url": "https://www.tiktok.com/@kayla23ma/video/7697758876292222222",
+      "duration": 97.27,
+      "cuts": [
+        6.47,
+        10.37,
+        18.4,
+        21.8,
+        23.5,
+        27.53,
+        35.23,
+        36.7,
+        42.4,
+        47.93,
+        52.93,
+        56.9,
+        58.17,
+        78.1,
+        83.3,
+        84.5,
+        94.2
+      ],
+      "biggest_move": 18.6
+    },
+    {
+      "handle": "kidsonlychiropractic",
+      "id": "7701398982672649502",
+      "ratio": 8.5,
+      "url": "https://www.tiktok.com/@kidsonlychiropractic/video/7701398982672649502",
+      "duration": 185.97,
+      "cuts": [
+        9.43,
+        16.37,
+        30.33,
+        37.27,
+        42.97,
+        46.47,
+        61.73,
+        69.77,
+        83.63,
+        98.57,
+        102.17,
+        108.63,
+        140.37,
+        141.17,
+        151.37,
+        159.0,
+        172.63
+      ],
+      "biggest_move": 91.33
+    },
+    {
+      "handle": "drjoshpt",
+      "id": "7704115360357715214",
+      "ratio": 6.2,
+      "url": "https://www.tiktok.com/@drjoshpt/video/7704115360357715214",
+      "duration": 58.93,
+      "cuts": [
+        28.7,
+        44.73
+      ],
+      "biggest_move": 28.8
+    },
+    {
+      "handle": "theptmama",
+      "id": "7703211128372989214",
+      "ratio": 6.0,
+      "url": "https://www.tiktok.com/@theptmama/video/7703211128372989214",
+      "duration": 72.38,
+      "cuts": [
+        1.5,
+        6.9,
+        13.83,
+        21.07,
+        25.73,
+        33.47,
+        42.7
+      ],
+      "biggest_move": 72.33
+    },
+    {
+      "handle": "drjoshpt",
+      "id": "7703744356317941005",
+      "ratio": 4.8,
+      "url": "https://www.tiktok.com/@drjoshpt/video/7703744356317941005",
+      "duration": 38.87,
+      "cuts": [],
+      "biggest_move": null
+    },
+    {
+      "handle": "kidsonlychiropractic",
+      "id": "7703974743468166430",
+      "ratio": 4.8,
+      "url": "https://www.tiktok.com/@kidsonlychiropractic/video/7703974743468166430",
+      "duration": 143.6,
+      "cuts": [
+        5.1,
+        12.6,
+        18.93,
+        31.07,
+        37.77,
+        42.73,
+        49.73,
+        56.9,
+        71.03,
+        82.73,
+        88.83,
+        96.53,
+        102.13,
+        106.93,
+        109.2,
+        118.23,
+        129.43,
+        134.07
+      ],
+      "biggest_move": 12.2
+    }
+  ],
+  "shared_sounds": [],
+  "shared_hashtags": [],
+  "summary": {
+    "breakouts": {
+      "n": 8,
+      "length": 115.9,
+      "length_mid": [
+        69,
+        154
+      ],
+      "cuts": 16.0,
+      "zero_cut": "12%",
+      "first_cut": 7.2,
+      "move": 2.6,
+      "move_n": 1,
+      "lufs": -30.0,
+      "original": "100%",
+      "saves": "1%",
+      "shares": "0%"
+    },
+    "rest": {
+      "n": 15,
+      "length": 62.6,
+      "length_mid": [
+        30,
+        82
+      ],
+      "cuts": 5,
+      "zero_cut": "20%",
+      "first_cut": 3.5,
+      "move": 5.2,
+      "move_n": 6,
+      "lufs": -16.4,
+      "original": "80%",
+      "saves": "3%",
+      "shares": "1%"
+    }
+  }
+}

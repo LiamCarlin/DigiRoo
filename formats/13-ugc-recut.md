@@ -22,7 +22,7 @@ hook over first 2 s / creator's words as captions / 'Screen Time, Elevated.' end
 Other parents' voices beat the brand's; re-cutting with a new hook makes old clips feel new.
 
 ## How DigiRoo uses it
-Run edit-cuts on 2–3 Drive clips per month. Get written permission from each creator to repost (log in media/raw/permissions.md).
+Run the `digiroo-video` cut on 2–3 raw, uncaptioned Drive clips per month. Get written permission from each creator to repost (log in media/raw/permissions.md).
 
 ## Proof (add links as you save them)
 - Rule change 2026-10-28: only raw, uncaptioned clips. Wednesday v1 (three captioned reels stitched) broke rules 2, 3 and 6; see `media/week-01/wed-preview/v1-critique.md`.

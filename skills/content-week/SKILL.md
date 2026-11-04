@@ -8,12 +8,13 @@ description: Turn Antonia's brain dump (or nothing at all) into a complete 5–7
 **Promise:** 20-minute brain dump in → a week she could hand to a stranger to film. Runs in one pass. Asks at most 2 questions, and only if the answer changes the plan.
 
 ## Read first (every run)
-0. `skills/content-week/references/video-rules.md` — the ten rules every post must pass (title in frame one, problem before product, one kid/one place/≤3 cuts, before→lift→after in one framing, 10–30 s, one text system, true credentials, save/share + question, sound rule, reply-to-comment). Default shot recipe: the slouch-to-lift.
+0. `references/video-rules.md` (a synced copy of `skills/digiroo-video/references/video-rules.md`; edit that one) — the ten rules every post must pass (title in frame one, problem before product, one kid/one place/≤3 cuts, before→lift→after in one framing, 10–30 s, one text system, true credentials, save/share + question, sound rule, reply-to-comment). Default shot recipe: the slouch-to-lift.
 1. `DIGIROO-brief.md` — pillars (§6), voice (§4), claims (§5), hook/CTA/hashtag banks (§7–9), settings (§12).
 2. `format-library.md` — pick formats; open the chosen `formats/*.md` for the skeletons.
 3. `lessons-learned.md` — last entry's "3 changes for next week" are hard constraints this week.
 4. `research/awareness-calendar.md` — any hook inside the week ±3 days.
 5. `media/raw/` listing (if present) — which clips already exist; prefer posts that can be cut from them.
+6. `trends.md` (repo root / Project knowledge), if today is on or before its "good until" date — this week's length band, the hook shapes that broke out, caption openers, hashtags and sounds shared by 2+ niche accounts. Past that date it's stale: plan without it and say "trends note is stale; say **what's trending** to refresh it."
 
 ## Inputs (all optional)
 - **Brain dump:** free text, voice-note transcript, bullet list. Can be 1 line.
@@ -33,6 +34,13 @@ Otherwise assume brief defaults and go.
 2. **Calendar check.** Add one D-pillar post if an awareness day or season lands in the week. Mention the date in the hook.
 3. **Balance to the default mix:** 2×A, 1×B, 1×C, 1×D (+ optional E on Saturday). If her ideas overflow a pillar, keep the best, park the rest in `media/<week>/parked-ideas.md`.
 4. **Apply lessons.** If `lessons-learned.md` says a format/hook/time underperformed, don't use it. If it says something won, include one variation.
+4b. **Apply this week's trends** (only from a current `trends.md`, and only inside the video rules):
+   - Every card's **Length** sits in the week's band. If the band starts above 15 s, a slouch-to-lift card adds the selfie line so the cut can reach it without padding.
+   - Borrow the **shape** of the best breakout hook (from its Eye check line) for one or two titles, in her words. Never their words.
+   - Use a breakout caption opener (question, "how to", a number) for at least one TikTok first line.
+   - Add at most 2 of the shared hashtags, and only if they fit the post.
+   - **Sound note** on a text-narrated transformation card: the shared sound, "if it's in the Commercial Music Library". Every how-to stays original sound (rule 9).
+   - A trend that breaks a rule (product first, more than 3 cuts, a claim) is skipped; say so in one line in the hand-off.
 5. **Write each post card** using `templates/post-card.md`. Every card must have:
    - Title in frame one (6–12 words + credential, e.g. "how we fixed the iPad slouch (mom + inventor)"), then the spoken hook. First visual = the problem (kid hunched, side-on), never the product.
    - Script: 20–35 s, ≤85 spoken words, spoken English, says "DigiRoo" once and ≥2 keywords from brief §10.
@@ -44,7 +52,7 @@ Otherwise assume brief defaults and go.
    - Review flag if the post quotes/voices a clinician or states a number.
 6. **Rules pass.** Every card is checked against `references/video-rules.md` (checklist at the bottom). A card that fails is rewritten to the slouch-to-lift recipe or swapped for a listed exception (07, 15, 16). Then the **claims pass**: Re-read every script against brief §5. Rewrite anything that promises an outcome into habit/comfort language.
 7. **Write `media/<week>/weekly-calendar.md`** from `templates/weekly-calendar.md`: day, time (spread inside the posting window, alternate midday/evening), platforms, pillar, format, hook, card link, status `scripted`.
-8. **Hand off:** tell her (a) what's in the week in 5 lines, (b) which posts need the kid, (c) "say `shoot day` and I'll group the shots into one session."
+8. **Hand off:** tell her (a) what's in the week in 5 lines, (b) which posts need the kid, (c) "say `shoot day` and I'll turn this into one coached filming session." (`digiroo-video` takes it from there: shoot card → clip check → cut → QC.)
 
 ## Output files
 ```

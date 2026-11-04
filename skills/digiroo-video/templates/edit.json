@@ -1,0 +1,20 @@
+{
+  "output": "../../cuts/w46-mon-couch-every-night.mp4",
+  "recipe": "slouch-to-lift",
+  "title": "every night, same couch, same slouch (mom + inventor)",
+  "end_card": {
+    "question": "what's the one thing you say every night?",
+    "save": "save this for tonight",
+    "brand": "DigiRoo · link in bio",
+    "seconds": 3
+  },
+  "clips": [
+    {
+      "file": "../../raw/week-02/w46-mon-couch-every-night/IMG_0412.MOV",
+      "text": "That's it. That's the whole fix.",
+      "trim": "lift",
+      "lift": {"before": 3.5, "after": 5.0},
+      "overlays": [{"text": "watch her neck", "at": "lift"}]
+    }
+  ]
+}

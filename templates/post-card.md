@@ -54,5 +54,5 @@ Keywords hit: {{keywords}}
 - Sound: {{sound_note}} (add trending sound in-app at post time if it fits)
 - Cross-post: TikTok → Reels → FB mirror
 
-## Edit notes for `edit-cuts`
+## Edit notes for `digiroo-video`
 clips: {{clip_files}} · caption style: default · end card: {{yes/no}}
