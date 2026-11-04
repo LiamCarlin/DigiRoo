@@ -27,6 +27,7 @@ edit.json — every key is optional except "clips"
   "recipe": "slouch-to-lift",            # slouch-to-lift | talking-head | voiceover | text-story (sets defaults)
   "length_target": [18, 26],             # this week's band from trends.md; qc.py warns outside it (rule 5 still applies)
   "title": "every night, same couch, same slouch (mom + inventor)",   # frame one, upper third, whole video
+  "title_until": "first_cut",            # or seconds: end the title early when it would mislabel a later shot or cover a face
   "end_card": {"question": "what's your house rule?", "save": "save this for the next iPad session",
                "brand": "DigiRoo · link in bio", "seconds": 3, "style": "freeze"},   # or false
   "caption": {"words_per_cue": 3, "size": 80},
@@ -43,7 +44,8 @@ edit.json — every key is optional except "clips"
 Per clip: "trim" = "auto" | "lift" | [start, end] | null · "text" = what is said (script line) · "overlay" = on-screen
 line for a clip with no speech · "mute" · "tighten" · "max_pause" (0.4) · "punch" (1.0, 1.1 or "auto") ·
 "push" (slow push-in, ≤1.08) · "focus" [x, y] crop centre 0–1 · "fit" "crop" | "blur" (landscape footage) ·
-"clean": false (UGC with music already under the voice: level it, skip the denoiser; don't tighten it either, the music would jump).
+"clean": false (UGC with music already under the voice: level it, skip the denoiser; don't tighten it either, the music would jump) ·
+"captions": false (her line is already on screen as the title; keeps the voice processing, skips the captions).
 "lift": {"before", "after", "at"} · "at" = the second the stand goes up in the raw clip, when the auto pop is wrong.
 "music": {"file", "license", "source", "start", "under_voice_db", "dip_before_lift", "carve"} · license + source are required by qc.
 """
@@ -228,6 +230,9 @@ def encode_part(src, dst, s, e, info, clip, punch=1.0, voice=True, hold=0.0):
 
 
 # ---------- 5. text ----------
+WEAK = {"a", "an", "the", "i", "i'm", "my", "his", "her", "their", "our", "your", "of", "to", "for", "and", "or", "but",
+        "in", "on", "at", "with", "that", "so", "if", "as", "while", "when", "he", "she", "we", "it's", "is", "was"}
+
 def chunk(words_txt, per_cue=3, max_chars=28):
     """Cues of 2–5 words that break at a phrase end (explainroo captions.js: ≤28 characters, break at a sentence
     end or pause). A phrase too long for one cue is split into even pieces, so no word is left on its own."""
@@ -237,14 +242,27 @@ def chunk(words_txt, per_cue=3, max_chars=28):
         if re.search(r"[.!?,;:]$", w):
             phrases.append(cur); cur = []
     if cur: phrases.append(cur)
+    def weak_end(g):
+        return not re.search(r"[.!?,;:]$", g[-1]) and g[-1].lower() in WEAK
+    def split(ph):
+        """Best split of a long phrase into 1-5-word cues ≤ max_chars: cues near per_cue + 0.5 words, no cue ending
+        on "the" / "I" / "of" unless nothing else fits, no lone words (a small dynamic programme; phrases are short)."""
+        best = [(0.0, [])] + [(float("inf"), None)] * len(ph)
+        for j in range(1, len(ph) + 1):
+            for k in range(1, min(per_cue + 2, j) + 1):
+                g = ph[j - k:j]
+                if k > 1 and len(" ".join(g)) > max_chars:
+                    continue
+                c = best[j - k][0] + (k - per_cue - 0.5) ** 2 + (8 if j < len(ph) and weak_end(g) else 0) + (6 if k == 1 else 0)
+                if c < best[j][0]:
+                    best[j] = (c, best[j - k][1] + [g])
+        return best[len(ph)][1]
     groups = []
     for ph in phrases:
         if len(ph) <= per_cue + 2 and len(" ".join(ph)) <= max_chars:
-            groups.append(ph); continue
-        n = max(2, -(-len(ph) // (per_cue + 1)))
-        while n < len(ph) and any(len(" ".join(ph[i * len(ph) // n:(i + 1) * len(ph) // n])) > max_chars for i in range(n)):
-            n += 1
-        groups += [ph[i * len(ph) // n:(i + 1) * len(ph) // n] for i in range(n)]
+            groups.append(ph)
+        else:
+            groups += split(ph)
     out = []
     for g in groups:  # fold a lone word into its neighbour when the pair still fits
         if out and len(g) == 1 and len(out[-1]) < per_cue + 2 and len(" ".join(out[-1] + g)) <= max_chars:
@@ -577,7 +595,7 @@ def main():
         if pk is not None: lift_at = clip_start + (pk - s)
         if clip.get("_intro"): intro_dur = cd
         # captions for this clip
-        if speaks and not vo:
+        if speaks and not vo and clip.get("captions", True):  # "captions": false when the title already shows the line
             if words:
                 cues += cues_from_words(heard, per_cue)
             else:
@@ -622,8 +640,17 @@ def main():
     if len(cues) < n0: decide(f"folded {n0 - len(cues)} caption flash(es) under 0.7 s into their neighbours (fast speech)")
     cues = settle_cues([[max(c[0] - 0.08, 0), c[1], c[2]] for c in cues if c[0] < body_end])  # land just ahead of the word
     if title:
-        events.insert(0, {"slot": "title", "text": title, "s": intro_dur, "e": body_end, "enter": 0 if intro_dur == 0 else 8})
-    events += [{"slot": "cap", "text": t, "s": s, "e": min(e, body_end)} for s, e, t in cues]
+        t_end = body_end
+        tu = cfg.get("title_until")  # multi-shot cuts: a "before" title ("same slouch") must not label the after shot
+        if tu == "first_cut":
+            t_end = next((c for c in cuts if c > intro_dur + 0.5), body_end)
+        elif isinstance(tu, (int, float)):
+            t_end = min(body_end, intro_dur + float(tu))
+        if t_end < body_end:
+            decide(f"title off at {t_end:.1f}s (title_until {tu}); captions and overlays carry the rest")
+        events.insert(0, {"slot": "title", "text": title, "s": intro_dur, "e": t_end, "enter": 0 if intro_dur == 0 else 8})
+    # frame one is the cover: a caption already on screen at 0 s arrives finished, like the title
+    events += [{"slot": "cap", "text": t, "s": s, "e": min(e, body_end), **({"enter": 0} if s < 1.0 / FPS else {})} for s, e, t in cues]
     # overlays go only where no caption is showing: one read at a time, never text over text
     for ov in overlays:
         need = max(1.5, 1.0 + 0.3 * len(ov["text"].split()))

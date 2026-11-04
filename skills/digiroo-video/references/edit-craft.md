@@ -33,11 +33,11 @@ Total is 11–15 s. Add a 4–5 s selfie line and it's 15–20 s. That sits insi
 
 | Element | Rule | Source |
 |---|---|---|
-| Title | Frame one, finished. Never fades in at 0 s, because frame one is also the cover. | video-director S:155, explainroo A:777 |
+| Title | Frame one, finished. Never fades in at 0 s, because frame one is also the cover (a caption on screen at 0 s doesn't fade in either). On multi-shot cuts, `"title_until": "first_cut"` keeps a "before" title off the after shot and off faces. | video-director S:155, explainroo A:777 |
 | Title copy | 6–12 words + the credential ("(mom + inventor)") | video-rules 1 |
 | Title size and length | 84 px, up to 4 lines. "The headline gets a second line, not a smaller size." Only past 4 lines does it drop to 76. | video-director ≥84 px by 3 s; take-one vertical.md:39 |
 | Title position | Top at y 300. Inside the 4:5 feed-preview crop (y ≥ 285) and the IG grid's middle 3:4. | take-one vertical.md:41,76 |
-| Captions | 2–5 words. Break at a phrase end, ≤28 characters, no full stop on screen. | take-one words.md:22-23, explainroo captions.js |
+| Captions | 2–5 words. Break at a phrase end, ≤28 characters, no full stop on screen, never end a cue on "the", "I", "of" (the editor picks the split). A line already on screen as the title gets `"captions": false`. | take-one words.md:22-23, explainroo captions.js |
 | Caption position | Lower-middle; block bottom at y 1340, width ≤760 px centred, clear of the button rail (x > 940 below y 880) | take-one, explainroo safe areas |
 | Caption timing | Lands 0.08 s ahead of the word and eases in over 4 frames. ≤3.5 words/s. | huashu craft.md:33, video-director |
 | Overlays | Same style, same slot as captions, only where no caption is showing. Never the same words as the captions. Held for max(1.5 s, 1 s + 0.3 s a word). | explainroo A:774, video-director craft.md:51 |

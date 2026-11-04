@@ -83,6 +83,7 @@ Its scores run 0.5–1.5 above the maker's [take-one reviewer-brief.md:48]. Fold
 | Feels rushed | `lift.after` up; `end_card.seconds` 3.5; fewer overlays |
 | Captions too fast | `caption.words_per_cue` 2; or tighten less (`max_pause` 0.6) so the words breathe |
 | Text over her face | `focus` y down (0.5–0.55) to move her lower; or a shorter title (fewer lines) |
+| Title mislabels a later shot (a "same slouch" title over the upright payoff) or covers a face on a multi-shot cut | `"title_until": "first_cut"` (or seconds); frame one keeps the title, the payoff gets the frame to itself |
 | Overlay dropped | Shorten it to 2–4 words, or move it (`"at": "before"`) |
 | Jump cuts too visible | `"punch": "auto"` (alternating 1.1×); or `max_pause` 0.6 |
 | Dark | Nothing in the edit beyond the auto-lift. Ask for a reshoot with the window behind the phone. |
