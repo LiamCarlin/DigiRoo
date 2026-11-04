@@ -372,7 +372,8 @@ def main():
     run(cmd)
     srt = os.path.splitext(out)[0] + ".srt"; write_srt(cues, srt)
     gaps = dead_air(out, body)
-    json.dump({"output": out, "duration_sec": round(total, 2), "clips": log, "captions": len(cues), "hook": cfg.get("hook"), "dead_air": gaps},
+    rel = os.path.relpath(out)  # no machine paths in the committed report
+    json.dump({"output": out if rel.startswith("..") else rel, "duration_sec": round(total, 2), "clips": log, "captions": len(cues), "hook": cfg.get("hook"), "dead_air": gaps},
               open(os.path.splitext(out)[0] + ".edit.json", "w"), indent=2)
     shutil.rmtree(tmp, ignore_errors=True)
     print(json.dumps({"output": out, "srt": srt, "duration_sec": round(total, 2), "clips": log, "captions": len(cues), "dead_air": gaps}, indent=2))

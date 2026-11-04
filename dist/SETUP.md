@@ -13,14 +13,14 @@ If "Upload skill" isn't available on the plan, skip this: the Project instructio
 
 ## C. On a Mac, for the video pipeline (Liam now; Antonia later if she wants)
 ```
-brew install ffmpeg
-pip3 install faster-whisper pillow
+brew install ffmpeg-full python@3.12
+python3.12 -m venv ~/.digiroo && ~/.digiroo/bin/pip install faster-whisper
 git clone https://github.com/LiamCarlin/DigiRoo ~/digiroo
 ```
-Then `python3 skills/edit-cuts/edit_cuts.py --edit media/week-01/edits/<post-id>.json` after clips are in `media/raw/week-01/<post-id>/`.
+Plain `ffmpeg` can't burn in captions (the script stops early and says so); faster-whisper doesn't install on Python 3.14+ yet. Then `~/.digiroo/bin/python skills/edit-cuts/edit_cuts.py --edit media/week-01/edits/<post-id>.json` after clips are in `media/raw/week-01/<post-id>/`.
 
 ## D. The five sentences Antonia says each week
-`plan my week` · `shoot day` · `cut the week` · `schedule the week` (then **go**) · `review the week` — plus `do outreach` on Fridays.
+`plan my week` · `shoot day` · `cut the week` · `schedule the week` (then **go**) · `review the week` — plus `do outreach` on Fridays and `commissions` on the first Monday of the month.
 
 ## E. Before Friday's demo, check
 - [ ] Project answers `plan my week` with a calendar in under two minutes
