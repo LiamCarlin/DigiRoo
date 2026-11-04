@@ -1,0 +1,35 @@
+{
+  "output": "../../cuts/w45-wed-ugc-recut-drive.mp4",
+  "hook": "other parents on the iPad slouch:",
+  "end_card": {
+    "line1": "Screen Time, Elevated.",
+    "line2": "DigiRoo · link in bio",
+    "seconds": 2.5
+  },
+  "caption": {
+    "words_per_cue": 3
+  },
+  "clips": [
+    {
+      "file": "../../raw/drive/ugc/ciera-ugc.mov",
+      "text": "there was one thing about the way that he was using it that I never really thought about, it was his neck",
+      "trim": "auto"
+    },
+    {
+      "file": "../../raw/drive/ugc/ciera-ugc.mov",
+      "text": "it raises his iPad closer to eye level",
+      "trim": "auto"
+    },
+    {
+      "file": "../../raw/drive/ugc/che-ugc.mp4",
+      "text": "I love that DigiRoo folds flat, adjusts, and has over 25 different viewing angles",
+      "trim": "auto",
+      "overlay": "DigiRoo · screen at eye level"
+    },
+    {
+      "file": "../../raw/drive/ugc/che-ugc.mp4",
+      "text": "So he can use his iPad for learning or entertainment while I'm handling my work",
+      "trim": "auto"
+    }
+  ]
+}

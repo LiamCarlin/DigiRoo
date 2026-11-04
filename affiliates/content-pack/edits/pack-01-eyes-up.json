@@ -1,0 +1,43 @@
+{
+  "output": "../../../media/cuts/pack-01-eyes-up.mp4",
+  "hook": "eyes up, not screen down 👀",
+  "end_card": {
+    "line1": "{{HANDLE}} · code {{CODE}}",
+    "line2": "10% off at kidsdigitalwellness.com · not medical advice",
+    "seconds": 3
+  },
+  "caption": {
+    "words_per_cue": 3
+  },
+  "clips": [
+    {
+      "file": "../../media/raw/week-01/w45-mon-pov-couch/shot1.mov",
+      "text": "One screen habit worth building at home.",
+      "trim": "auto",
+      "mute": true,
+      "overlay": "eyes down to the screen ❌"
+    },
+    {
+      "file": "../../media/raw/week-01/w45-tue-chiro-screen-height/gesture.mov",
+      "text": "Bring the screen up to the eyes, not the eyes down to the screen.",
+      "trim": "auto",
+      "overlay": "screen up to the eyes ✅"
+    },
+    {
+      "file": "../../media/raw/week-01/w45-mon-pov-couch/shot3.mov",
+      "text": "When the iPad's in their lap, the head goes down and stays down. Lift it to eye level and the neck comes with it.",
+      "trim": "auto",
+      "mute": true,
+      "overlay": "eye level = neck comes with it"
+    },
+    {
+      "file": "../../media/raw/week-01/w45-mon-pov-couch/shot4.mov",
+      "text": "A case with the stand built in makes it automatic. This one's DigiRoo. Code {{CODE}} gets your family ten percent off.",
+      "trim": "auto",
+      "mute": true,
+      "overlay": "kids posture · screen time · tech neck"
+    }
+  ],
+  "vo": "../../media/raw/week-01/pack/vo-01.m4a",
+  "_note": "VO recorded separately by Antonia (script in post-01). Prepend intro clip with \"intro\": path when the clinic sends one."
+}

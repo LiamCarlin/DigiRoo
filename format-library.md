@@ -16,7 +16,7 @@ Pick one per post. Each file has a script skeleton, shot list and the pillar it 
 | 10 | [Awareness-day hook (World Spine Day etc.)](formats/10-calendar-hook.md) | D | 15–30 s | An awareness day or season is within 3 days: World Spine Day (Oct 16), back-to-school, Screen-Free Week, gift guides, road-trip season. |
 | 11 | [Trending sound + slouch-to-lift reveal](formats/11-trend-sound-reveal.md) | D | 7–15 s | A sound is trending with a 'transition' or 'reveal' beat and you have 10 minutes. |
 | 12 | ['But will my kid actually use it?' (objection kill)](formats/12-objection-kill.md) | C | 20–30 s | Comments or DMs raise the same doubt (durability, will they use it, does it fit, is it worth $50). |
-| 13 | [UGC re-cut (from the Drive folder)](formats/13-ugc-recut.md) | C | 15–30 s | You have customer or influencer clips in the Drive folder and no time to shoot. |
+| 13 | [UGC re-cut (from the Drive folder)](formats/13-ugc-recut.md) | C | 15–30 s | Only with raw, uncaptioned clips (customer/influencer originals). Never re-cut an already-captioned post. |
 | 14 | [Clinic post (for affiliates to repost)](formats/14-affiliate-clinic-post.md) | B | 15–25 s | Building the affiliate content pack; clinic-voiced, parent-friendly, no claims. |
 | 15 | [Stance carousel (opinion, photo post)](formats/15-stance-carousel.md) | A | 5–7 slides | You have a parenting opinion you'd defend at dinner and no kid to film. Her best TikTok ever (2,184 views) was one. Still testing. |
 | 16 | [Collab reel (co-posted with a partner)](formats/16-collab-reel.md) | D | 15–45 s | A school, clinic, event partner or parent creator will co-post. Her two biggest Instagram reels (84K, 24.5K) were collabs. One a month. |
@@ -29,6 +29,9 @@ Pick one per post. Each file has a script skeleton, shot list and the pillar it 
 - E founder: 08
 
 Baselines behind 15 and 16: `research/baseline-tiktok.md`, `research/baseline-instagram.md`. Teardowns of all her own videos are in `research/teardowns/`.
+
+## Every post passes the video rules
+`skills/content-week/references/video-rules.md`: title in frame one, problem before product, one kid/one place/≤3 cuts, before→lift→after in one framing, 10–30 s, one text system. Format 13 (re-cut) only with raw, uncaptioned clips.
 
 ## Rotation rule
 Don't repeat a format within 2 weeks except 01 (the banker). `content-week` checks `lessons-learned.md` and prefers formats that beat the view-jail threshold last time.

@@ -11,9 +11,9 @@
 | **Review flag** | numbers on screen must match reality: 1,200 units; Fast Company 2022 Honourable Mention; patent granted (confirm wording) |
 
 ## Hook (first 1.5 s)
+- **Title (frame one, stays):** `I made this for my daughter. 1,200 families later.`
+- **Visual (frame one):** 2 s of her daughter hunched over the iPad in 2020-style (reuse Mon shot 1), then Antonia to camera. Problem first, even in the founder story.
 - **Spoken:** "I made this for my daughter. Then about twelve hundred other families bought it."
-- **On screen:** `I made this for my daughter.`
-- **Visual:** Antonia holding the unit, Bermuda light
 
 ## Script
 ```
@@ -46,7 +46,7 @@ Keywords hit: iPad (case on screen), DigiRoo; "screen time" on screen
 ## Captions
 **TikTok**
 ```
-I made this for my daughter in lockdown. 1,200 families later, here's the story #smallbusiness #momboss #bermuda #screentime #digiroo
+I made this for my daughter in lockdown. 1,200 families later, here's the story Bermuda parents: where did you first spot a DigiRoo? 👇 #smallbusiness #momboss #bermuda #screentime #digiroo
 ```
 **Instagram Reels**
 ```
@@ -55,6 +55,8 @@ I made this for my daughter. Then about 1,200 other families bought it.
 Lockdown 2020, she was folded in half over an iPad, and I couldn't un-see it. I sketched a case with a stand that lifts the screen, built it, patented it, and it picked up a Fast Company Innovation by Design mention in 2022.
 
 Now I'm trying to get it into more homes, from Bermuda, part-time, with a phone. Follow along. 🦘
+
+Bermuda parents: where did you first spot a DigiRoo? 👇
 
 #smallbusiness #momboss #bermuda #bermudabusiness #screentime #kidsdigitalwellness #digiroo #screentimeelevated
 ```
@@ -65,6 +67,7 @@ I made DigiRoo for my daughter in 2020. About 1,200 families later, here's the s
 
 ## CTA
 "Follow along."
+Comment prompt (every post, per baseline lesson): "Bermuda parents: where did you first spot a DigiRoo? 👇"
 
 ## Platform notes
 - Pin this post on both profiles

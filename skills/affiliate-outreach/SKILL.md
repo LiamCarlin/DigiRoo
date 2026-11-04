@@ -37,10 +37,11 @@ description: Run DigiRoo's clinician affiliate outreach — pick the next 10 ped
 - Rows with status `replied` → summarise the reply, propose the next step (send one-pager / ask address / create code), draft it.
 
 ### "onboard <clinic>"
-1. Code name `DR<LASTNAME>10` (clinic name if no clinician). Note it in `tracker.csv` (`code`), status `onboarded`.
-2. Write the Shopify discount steps for her to follow (Discounts → Create discount → Amount off order → code → 10% → no minimum), or do it via `shopify-admin` with her go.
-3. Draft the welcome message (the template's "If they reply yes" block) with `affiliates/one-pager.pdf` attached. The PDF must exist: if it doesn't, make it from `templates/affiliate-one-pager.md` first, and only once the contact email in it is confirmed (brief §11 #17).
-4. **Content pack:** write 3 post cards from `formats/14-affiliate-clinic-post.md` (one each: the tip, a slouch-to-lift before/after, a parent FAQ) with `templates/post-card.md`. Their handle and code go on screen, and each card is flagged [REVIEW: clinician]. Save them to `affiliates/packs/<code>/`. Use clips already in `media/raw/` where they fit; otherwise add the missing shots to next week's shoot card. Cut them with `edit-cuts` once Antonia approves the cards, and send the mp4s with captions.
+1. Create the code name (`DR<LASTNAME>10`, clinic name if no clinician), note it in `tracker.csv` (`code`), and write the Shopify discount steps for her to follow (Discounts → Create discount → Amount off order → code → 10%, no minimum, one code per clinic), or do it via `shopify-admin` with her go.
+2. Make the clinic's folder `affiliates/onboarded/<clinic-slug>/` with `clinic.json` (`CLINIC`, `CLINICIAN`, `HANDLE`, `CODE`, `CITY`).
+3. Fill the pack: copy `affiliates/content-pack/post-0{1,2,3}-*.md` and `edits/*.json` into the folder with the placeholders replaced; run `python3 affiliates/content-pack/build_pdfs.py affiliates/onboarded/<clinic-slug>/` for the handout and code card; run `edit-cuts` on the three edit files (add `"intro"` if the clinic sent a selfie line) to produce the three mp4s.
+4. Draft the "welcome + content pack" message from `templates/outreach-dm.md` (the "if they reply yes" block), attach the three videos, the handout PDF, the code card PDF and the captions, and email `affiliates/one-pager.pdf` if they haven't had it. That PDF is made once from `templates/affiliate-one-pager.md`, and only after the contact email in it is confirmed (brief §11 #17). Flag the two clinician-voiced intros **[REVIEW: clinician]** for Antonia and the clinic.
+5. Log `onboarded` in `tracker.csv` with the date; set `next_action_date` to the 1st of next month for the monthly loop (`commissions` below: new post + their numbers + thanks).
 
 ### "add this clinic"
 - Append a row to `clinician-list.csv` with whatever she gives; fill fit_score by the rubric in `affiliates/list-sources.md`.
@@ -49,7 +50,7 @@ description: Run DigiRoo's clinician affiliate outreach — pick the next 10 ped
 1. Ask for Shopify → Analytics → Reports → **Sales by discount** for last month (screenshot or CSV).
 2. For every code in `tracker.csv`: orders, sales after the discount (before tax and shipping), commission = `affiliate_commission_pct` (brief §12) × those sales. Codes with no orders still get a row.
 3. Write `affiliates/commissions-YYYY-MM.csv` (month, code, clinic, orders, sales, commission, paid). Leave `paid` blank.
-4. Draft each clinic's monthly note (what the one-pager promises: orders with their code, their commission, anything new in their content pack). Present them with the total owed.
+4. Draft each clinic's monthly note (what the one-pager promises: orders with their code, their commission, and the month's fourth post from the content pack's monthly loop, `affiliates/content-pack/README.md`). Present them with the total owed.
 5. Antonia pays and sends; Claude never moves money. When she confirms, fill `paid` with the date.
 6. The month's order total is the "sales" number in `weekly-review`'s affiliate funnel.
 

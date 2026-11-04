@@ -32,6 +32,8 @@ Instant self-identification; before/after inside one framing; zero talking neede
 Rotate the setting weekly: couch, car seat, restaurant, grandma's, airplane tray.
 
 ## Proof (add links as you save them)
-- [ ] reference 1: (paste saved reel/TikTok link + views)
+- [x] @kelseymcdonald.pt hula-hoop trick: https://www.tiktok.com/@kelseymcdonald.pt/video/7665880463042546974 — 3.1M views, 10 s, zero cuts, title in frame one with credential; the shape this format should take
+- [x] @thescreentimeconsultant 5-s kid skit (15 followers, 1,941 views vs ~1,000 for her talking heads): https://www.tiktok.com/@thescreentimeconsultant/video/7249484353799998763
+- [ ] reference: (paste saved reel/TikTok link + views)
 - [ ] reference 2:
 - Teardown notes from `tools/ingest_videos.py` go in `research/teardowns/`.

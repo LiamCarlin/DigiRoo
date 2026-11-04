@@ -31,6 +31,7 @@ Answers the question the buyer is silently asking; comment screenshots read as s
 Keep a running list of objections in lessons-learned.md; one per month becomes this format.
 
 ## Proof (add links as you save them)
-- [ ] reference 1: (paste saved reel/TikTok link + views)
+- [x] @momtestedfinds comment-reply iPad tutorials: https://www.tiktok.com/@momtestedfinds/video/7588617095299091767 — 327K on a 600-follower account; opens on the comment card
+- [ ] reference: (paste saved reel/TikTok link + views)
 - [ ] reference 2:
 - Teardown notes from `tools/ingest_videos.py` go in `research/teardowns/`.

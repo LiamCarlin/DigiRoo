@@ -11,9 +11,9 @@
 | **Review flag** | none (calendar: gift-guide season Nov; Black Friday Nov 27 tease, no price promise yet) |
 
 ## Hook (first 1.5 s)
+- **Title (frame one, stays):** `if there's an iPad under the tree, read this first (mom + inventor)`
+- **Visual (frame one):** the before shot: kid hunched over a bare iPad on the couch, side-on (reuse Mon shot 1). The box comes third, not first.
 - **Spoken:** "If there's an iPad under the tree this year, put this with it."
-- **On screen:** `the iPad gift that comes with a posture plan`
-- **Visual:** DigiRoo box sliding into frame next to wrapping paper
 
 ## Script
 ```
@@ -28,9 +28,9 @@ Keywords hit: iPad case, kids (posture on screen), DigiRoo
 ## Shot list (phone only)
 | # | Shot | Framing | What happens | ~sec |
 |---|---|---|---|---|
-| 1 | Box reveal | Top-down on table, wrapping paper | Box slides in, hand taps it | 3 |
-| 2 | Before | Side-on | iPad flat, kid's (or doll's/your own) head down | 3 |
-| 3 | After | Same framing | DigiRoo raised, head level | 3 |
+| 1 | Before | Side-on (reuse Mon shot 1) | iPad flat, head down; title on | 3 |
+| 2 | After | Same framing (reuse Mon shot 3) | DigiRoo raised, head level | 3 |
+| 3 | Box | Top-down on table, wrapping paper | Box slides in next to the paper | 3 |
 | 4 | Colours | Top-down | Pink + blue units side by side, stand up | 4 |
 | 5 | CTA | Hands close the box | | 3 |
 
@@ -43,7 +43,7 @@ Keywords hit: iPad case, kids (posture on screen), DigiRoo
 ## Captions
 **TikTok**
 ```
-if an iPad is on the list this year, this goes with it 🎁 (yes it fits the 10th gen) #giftsforkids #kidsipadcase #momfinds #techneck #digiroo
+if an iPad is on the list this year, this goes with it 🎁 (yes it fits the 10th gen) Is an iPad on your kid's list this year? Yes or no 👇 #giftsforkids #kidsipadcase #momfinds #techneck #digiroo
 ```
 **Instagram Reels**
 ```
@@ -52,6 +52,8 @@ Gift-guide season, parents. If there's an iPad on the list, put this with it.
 DigiRoo: a kids' iPad case with a stand that lifts the screen to eye level, so the new iPad doesn't come with a new slouch. Pink or blue. Fits iPad 10.2" (7th–9th gen) and there's a 10th-gen version.
 
 Gift guide + shop in bio. Something's coming for Black Friday. 🦘
+
+Is an iPad on your kid's list this year? Yes or no 👇
 
 #giftsforkids #holidaygiftguide #kidsipadcase #ipadstand #momfinds #techneck #digiroo #screentimeelevated
 ```
@@ -62,6 +64,7 @@ If there's an iPad under the tree this year, put a DigiRoo with it. Pink or blue
 
 ## CTA
 "Gift guides in my bio." (+ soft Black Friday tease)
+Comment prompt (every post, per baseline lesson): "Is an iPad on your kid's list this year? Yes or no 👇"
 
 ## Platform notes
 - Cover frame: box + text 1

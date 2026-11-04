@@ -6,3 +6,5 @@ media/raw/**
 __pycache__/
 .DS_Store
 !media/week-01/demo-cut/*.mp4
+research/segment/.pages/
+media/raw/segment/

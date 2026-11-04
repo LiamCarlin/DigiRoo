@@ -8,6 +8,7 @@ description: Turn the week's raw phone clips plus a post card into a finished, c
 **Promise:** raw clips in → post-ready mp4 + .srt per post, no timeline editing by her. Two modes; always deliver one of them.
 
 ## Read first
+- `skills/content-week/references/video-rules.md` → the script prints the pre-publish checklist; a cut that fails it goes back to the card, not to the queue. Defaults: persistent `title` in the upper third, plain white lower-middle captions, no overlay over burned-in text.
 - The post card(s) for the week (`media/<week>/post-cards/*.md`): script lines, on-screen text, hook, shot order, "Edit notes".
 - `DIGIROO-brief.md` §4 (voice) for any caption rewording, §5 (claims).
 - Clips: `media/raw/<week>/<post-id>/` (one folder per post; file order = shot order), or whatever she uploaded.
@@ -20,7 +21,8 @@ Runs anywhere with Python 3.10+ and an ffmpeg built with libass (on a Mac that's
    - `hook` = the card's on-screen hook text.
    - per clip: `text` = that shot's spoken line; `overlay` = that shot's on-screen text; `trim` = `"auto"` (default), `[start,end]` if she said "use 0:04–0:09", or `null` for B-roll; `mute: true` for B-roll under VO.
    - `end_card` default on (the last clip's sound fades out under it; `"audio": "silent"` to turn that off); `music` only if she dropped a bed file.
-   - Muted B-roll with no music bed is dead air. With UGC, prefer a moment where the creator is talking over the product shot.
+   - `vo` = a separately recorded voice memo (m4a) to lay over muted clips; `intro` = a clip to prepend untouched (used by the affiliate pack for the clinic's 5-second selfie line; the hook banner then starts after it).
+   - Muted B-roll with no `vo` and no music bed is dead air. With UGC, prefer a moment where the creator is talking over the product shot.
 3. **Run:** `python3 skills/edit-cuts/edit_cuts.py --edit media/<week>/edits/<post-id>.json` (on a Mac set up as below, `~/.digiroo/bin/python` so Whisper is found)
    - Whisper present → each clip is trimmed to the spoken segment that matches its script line, captions are word-timed.
    - Whisper absent/blocked → `--no-whisper` behaviour: leading/trailing silence trimmed, captions spread across the clip by word length. Still post-ready.

@@ -1,0 +1,31 @@
+{
+  "output": "../../../media/cuts/pack-02-before-after.mp4",
+  "hook": null,
+  "end_card": {
+    "line1": "{{HANDLE}} · code {{CODE}}",
+    "line2": "DigiRoo · kidsdigitalwellness.com",
+    "seconds": 2
+  },
+  "clips": [
+    {
+      "file": "../../media/raw/week-01/w45-fri-gift-season/before.mov",
+      "text": "",
+      "trim": [
+        0,
+        4
+      ],
+      "mute": true,
+      "overlay": "iPad in the lap"
+    },
+    {
+      "file": "../../media/raw/week-01/w45-fri-gift-season/after.mov",
+      "text": "",
+      "trim": [
+        0,
+        4
+      ],
+      "mute": true,
+      "overlay": "iPad at eye level"
+    }
+  ]
+}

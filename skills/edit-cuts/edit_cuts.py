@@ -26,11 +26,14 @@ word-level timing kicks in automatically.
 edit.json schema
 {
   "output": "media/cuts/w45-mon-pov-couch.mp4",
-  "hook": "POV: you look over and see this",        # top overlay, first 2 s (optional)
+  "hook": "POV: you look over and see this",        # top banner, first 2 s (optional; prefer "title")
+  "title": "how to fix the iPad slouch (mom + inventor)",  # persistent title, upper third, whole video (video-rules rule 1)
   "end_card": {"line1": "Screen Time, Elevated.", "line2": "DigiRoo · link in bio", "seconds": 2.5,
                "audio": "tail"},                    # tail = last clip's sound fades out under the card | silent
   "caption": {"words_per_cue": 3, "uppercase": false, "size": 72, "margin_v": 430},
   "music": {"file": "bed.mp3", "volume": 0.15},     # optional
+  "intro": "clinic-intro.mov",                      # optional: a clip prepended untouched (affiliate pack: the clinic's 5-s selfie line)
+  "vo": "vo.m4a",                                   # optional: separately recorded voice-over, mixed over the clips (starts after the intro)
   "clips": [
     {"file": "IMG_0001.MOV", "text": "Every parent has seen this.", "trim": "auto"},
     {"file": "IMG_0002.MOV", "text": "", "trim": [0.5, 4.0], "overlay": "and now I don't have to say sit up"},
@@ -217,7 +220,7 @@ def cues_from_text(text, offset, dur, per_cue):
         out.append((t, t + seg, " ".join(g))); t += seg
     return out
 
-def build_ass(cues, overlays, hook, cfg, total, end=None):
+def build_ass(cues, overlays, hook, cfg, total, hook_at=0.0, title=None, end=None):
     font = pick_font(); size = int(cfg.get("size", 72)); mv = int(cfg.get("margin_v", 430)); up = cfg.get("uppercase", False)
     head = f"""[Script Info]
 ScriptType: v4.00+
@@ -230,15 +233,18 @@ ScaledBorderAndShadow: yes
 Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
 Style: Cap,{font},{size},&H00FFFFFF,&H000000FF,&H00000000,&H80000000,-1,0,0,0,100,100,0,0,1,6,1,2,80,80,{mv},1
 Style: Hook,{font},{int(size*1.15)},&H00FFFFFF,&H000000FF,&H00000000,&H9A000000,-1,0,0,0,100,100,0,0,3,10,0,8,70,70,300,1
-Style: Over,{font},{int(size*0.95)},&H0000FFFF,&H000000FF,&H00000000,&H80000000,-1,0,0,0,100,100,0,0,1,6,1,5,90,90,0,1
+Style: Over,{font},{int(size*0.95)},&H00FFFFFF,&H000000FF,&H00000000,&H80000000,-1,0,0,0,100,100,0,0,1,5,1,5,90,90,0,1
+Style: Title,{font},{int(size*0.9)},&H00FFFFFF,&H000000FF,&H00000000,&H9A000000,-1,0,0,0,100,100,0,0,3,10,0,8,90,90,380,1
 Style: End,{font},96,&H00FFFFFF,&H000000FF,&H00000000,&H00000000,-1,0,0,0,100,100,0,0,1,0,0,5,90,90,0,1
 
 [Events]
 Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
 """
     ev = []
+    if title:
+        ev.append(f"Dialogue: 1,{ass_t(hook_at)},{ass_t(end[0] if end else total)},Title,,0,0,0,,{esc(title)}")  # off before the end card text
     if hook:
-        ev.append(f"Dialogue: 1,{ass_t(0)},{ass_t(min(2.2, total))},Hook,,0,0,0,,{{\\fad(0,150)}}{esc(hook.upper() if up else hook)}")
+        ev.append(f"Dialogue: 1,{ass_t(hook_at)},{ass_t(min(hook_at + 2.2, total))},Hook,,0,0,0,,{{\\fad(0,150)}}{esc(hook.upper() if up else hook)}")
     for s, e, txt in overlays:
         ev.append(f"Dialogue: 1,{ass_t(s)},{ass_t(e)},Over,,0,0,0,,{{\\fad(120,120)}}{esc(txt)}")
     for s, e, txt in cues:
@@ -295,6 +301,9 @@ def main():
     os.makedirs(os.path.dirname(out) or ".", exist_ok=True)
     tmp = tempfile.mkdtemp(prefix="cuts_"); parts = []; cues = []; overlays = []; offset = 0.0; log = []; tail = None
     per_cue = int(cfg.get("caption", {}).get("words_per_cue", 3))
+    intro_dur = 0.0
+    if cfg.get("intro"):
+        cfg["clips"] = [{"file": cfg["intro"], "text": "", "trim": "auto", "_intro": True}] + list(cfg["clips"])
 
     for i, clip in enumerate(cfg["clips"]):
         src = clip["file"] if os.path.isabs(clip["file"]) else os.path.join(base, clip["file"])
@@ -316,12 +325,15 @@ def main():
             else:
                 start, end = silence_trim(src); mode = "silence"
         dst = os.path.join(tmp, f"c{i:02d}.mp4")
+        try: clip["_src_h"] = int(run([FFPROBE, "-v", "error", "-select_streams", "v:0", "-show_entries", "stream=height", "-of", "csv=p=0", src]).stdout.strip().splitlines()[0])
+        except Exception: clip["_src_h"] = 1920
         d = normalise(src, dst, start, end, mute=clip.get("mute", False))
         if text:
             cues += cues_from_words(words, offset, per_cue) if mode == "whisper" else cues_from_text(text, offset, d, per_cue)
         if clip.get("overlay"):
             overlays.append((offset + 0.1, offset + d - 0.1, clip["overlay"]))
         log.append({"clip": os.path.basename(src), "trim_mode": mode, "start": round(start or 0, 2), "end": round(end or 0, 2), "duration": round(d, 2)})
+        if clip.get("_intro"): intro_dur = d
         parts.append(dst); offset += d
         # the end card can carry on this clip's sound if there's more of it after the cut
         tail = (src, end) if (end and not clip.get("mute") and has_audio(src) and end < duration(src) - 0.5) else None
@@ -336,15 +348,23 @@ def main():
     lst = os.path.join(tmp, "list.txt"); open(lst, "w").write("".join(f"file '{p}'\n" for p in parts))
     joined = os.path.join(tmp, "joined.mp4")
     run([FFMPEG, "-y", "-hide_banner", "-loglevel", "error", "-f", "concat", "-safe", "0", "-i", lst, "-c", "copy", joined])
-    ass = os.path.join(tmp, "caps.ass"); open(ass, "w", encoding="utf-8").write(build_ass(cues, overlays, cfg.get("hook"), cfg.get("caption", {}), total, end_ev))
+    ass = os.path.join(tmp, "caps.ass"); open(ass, "w", encoding="utf-8").write(build_ass(cues, overlays, cfg.get("hook"), cfg.get("caption", {}), total, hook_at=intro_dur, title=cfg.get("title"), end=end_ev))
 
     cmd = [FFMPEG, "-y", "-hide_banner", "-loglevel", "error", "-i", joined]
-    music = cfg.get("music")
+    music = cfg.get("music"); vo = cfg.get("vo")
+    extra_in, fc, mix = [], [f"[0:v]ass={shlex.quote(ass)}[v]"], ["[0:a]"]
+    if vo:
+        vp = vo if os.path.isabs(vo) else os.path.join(base, vo)
+        extra_in += ["-i", vp]; idx = len(extra_in) // 2
+        delay = int(intro_dur * 1000)
+        fc.append(f"[{idx}:a]adelay={delay}|{delay},loudnorm=I=-16:TP=-1.5:LRA=11[vo]"); mix.append("[vo]")
     if music and music.get("file"):
         mp = music["file"] if os.path.isabs(music["file"]) else os.path.join(base, music["file"])
-        cmd += ["-stream_loop", "-1", "-i", mp, "-filter_complex",
-                f"[0:v]ass={shlex.quote(ass)}[v];[1:a]volume={music.get('volume', 0.15)}[m];[0:a][m]amix=inputs=2:duration=first:dropout_transition=0[a]",
-                "-map", "[v]", "-map", "[a]"]
+        extra_in += ["-stream_loop", "-1", "-i", mp]; idx = sum(1 for x in extra_in if x == "-i")
+        fc.append(f"[{idx}:a]volume={music.get('volume', 0.15)}[m]"); mix.append("[m]")
+    if len(mix) > 1:
+        fc.append("".join(mix) + f"amix=inputs={len(mix)}:duration=first:dropout_transition=0:normalize=0[a]")
+        cmd += extra_in + ["-filter_complex", ";".join(fc), "-map", "[v]", "-map", "[a]"]
     else:
         cmd += ["-vf", f"ass={shlex.quote(ass)}"]
     cmd += ["-t", f"{total:.3f}", "-c:v", "libx264", "-preset", "medium", "-crf", "20", "-pix_fmt", "yuv420p",
@@ -356,6 +376,20 @@ def main():
               open(os.path.splitext(out)[0] + ".edit.json", "w"), indent=2)
     shutil.rmtree(tmp, ignore_errors=True)
     print(json.dumps({"output": out, "srt": srt, "duration_sec": round(total, 2), "clips": log, "captions": len(cues), "dead_air": gaps}, indent=2))
+    cuts = len(parts) - (1 if cfg.get("end_card") else 0) - 1
+    checks = [
+        ("title or hook in frame one", bool(cfg.get("title") or cfg.get("hook"))),
+        ("<= 3 cuts, one subject, one setting", cuts <= 3),
+        ("10-30 s (or scripted explainer / tutorial)", 10 <= total <= 32),
+        ("one text system (no overlay over burned-in captions)", not cfg.get("_burned_in_captions")),
+        ("ends with a save/share line + question (end_card line2 or last overlay)", any("?" in (o[2] or "") for o in overlays) or "?" in (cfg.get("end_card") or {}).get("line2", "")),
+        ("sources >= 1080x1920 (not upscaled)", all(float(c.get("_src_h", 1920)) >= 1080 for c in cfg["clips"])),
+        ("no dead air > 0.7 s before the end card (fine for a text + sound post)", not gaps),
+    ]
+    print("\nvideo-rules checklist (skills/content-week/references/video-rules.md):")
+    for name, ok in checks: print(("  [x] " if ok else "  [ ] ") + name)
+    print("  [ ] problem (slouch) visible before the product  <- check by eye, frame one")
+    print("  [ ] no claim words (brief §5)                      <- check captions + overlays")
 
 if __name__ == "__main__":
     main()
