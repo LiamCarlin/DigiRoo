@@ -19,7 +19,7 @@ Three ready-to-post videos (plus captions), a printable parent handout and a cod
 
 Each post ships two ways:
 - **As-is:** finished mp4 with Antonia's voice and the clinic's handle + code on the end card. The clinic posts it and adds one line of caption.
-- **Clinic intro:** the clinic records a 5-second selfie line (given on each card), sends it over, and `edit-cuts` splices it in front. Same cut, their face first.
+- **Clinic intro:** the clinic records a 5-second selfie line (given on each card), sends it over, and `digiroo-video` splices it in front (`"intro"` in the edit file). Same cut, their face first.
 
 All three are cut from the Week 01 shoot (Mon shots 1/3/4 and Tue lines), so no extra filming by Antonia. Edit configs are in `edits/`.
 

@@ -1,6 +1,6 @@
 ---
 name: schedule-posts
-description: Push the week's finished posts into the free native schedulers — Meta Business Suite (Instagram Reels + Facebook) and TikTok Studio — through Claude in Chrome, with hashtags inserted as real entities and times spread inside Antonia's window; optionally Metricool or Buffer instead. Presents the full queue and never clicks the final Schedule button without her explicit "go". Use when she says "schedule the week", "queue these", "post these", or after edit-cuts delivers the cuts.
+description: Push the week's finished posts into the free native schedulers — Meta Business Suite (Instagram Reels + Facebook) and TikTok Studio — through Claude in Chrome, with hashtags inserted as real entities and times spread inside Antonia's window; optionally Metricool or Buffer instead. Presents the full queue and never clicks the final Schedule button without her explicit "go". Use when she says "schedule the week", "queue these", "post these", or after digiroo-video delivers the cuts.
 ---
 
 # schedule-posts
@@ -16,7 +16,7 @@ description: Push the week's finished posts into the free native schedulers — 
 - Week folder. Optional: "only TikTok", "only IG", a date range.
 
 ## Step 0 — Preflight (no browser yet)
-1. List every post with status `cut`: file exists, duration ≤ 60 s (Reels/TikTok sweet spot), 9:16, size < 287 MB (TikTok web) / < 1 GB (MBS).
+1. List every post with status `cut`: file exists, duration ≤ 60 s (Reels/TikTok sweet spot), 9:16, size < 287 MB (TikTok web) / < 1 GB (MBS), and its `media/cuts/<post-id>.qc.md` says PASS (or PASS with notes she's seen). No QC file → run `skills/digiroo-video/scripts/qc.py` first. Upload the clean mp4 we made (never a re-downloaded copy), leave platform auto-captions off (ours are burned in), use `<post-id>.cover.jpg` / frame one as the cover.
 2. Build the time grid: run `python3 skills/schedule-posts/schedule_grid.py --calendar media/<week>/weekly-calendar.md` (wraps the tiktok-bulk-scheduler grid logic: spreads inside the window, 5-minute snaps, skips <20 min from now, refuses >10 days ahead on TikTok). Alternate midday/evening slots across the week; IG + FB at the same time as TikTok unless she says otherwise.
 3. **Show the queue table**: day, time ET, platform, first caption line, file, hashtags. Ask once: "Reply **go** to schedule all, or tell me what to change."
 

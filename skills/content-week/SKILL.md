@@ -8,7 +8,7 @@ description: Turn Antonia's brain dump (or nothing at all) into a complete 5–7
 **Promise:** 20-minute brain dump in → a week she could hand to a stranger to film. Runs in one pass. Asks at most 2 questions, and only if the answer changes the plan.
 
 ## Read first (every run)
-0. `skills/content-week/references/video-rules.md` — the ten rules every post must pass (title in frame one, problem before product, one kid/one place/≤3 cuts, before→lift→after in one framing, 10–30 s, one text system, true credentials, save/share + question, sound rule, reply-to-comment). Default shot recipe: the slouch-to-lift.
+0. `references/video-rules.md` (a synced copy of `skills/digiroo-video/references/video-rules.md`; edit that one) — the ten rules every post must pass (title in frame one, problem before product, one kid/one place/≤3 cuts, before→lift→after in one framing, 10–30 s, one text system, true credentials, save/share + question, sound rule, reply-to-comment). Default shot recipe: the slouch-to-lift.
 1. `DIGIROO-brief.md` — pillars (§6), voice (§4), claims (§5), hook/CTA/hashtag banks (§7–9), settings (§12).
 2. `format-library.md` — pick formats; open the chosen `formats/*.md` for the skeletons.
 3. `lessons-learned.md` — last entry's "3 changes for next week" are hard constraints this week.
@@ -44,7 +44,7 @@ Otherwise assume brief defaults and go.
    - Review flag if the post quotes/voices a clinician or states a number.
 6. **Rules pass.** Every card is checked against `references/video-rules.md` (checklist at the bottom). A card that fails is rewritten to the slouch-to-lift recipe or swapped for a listed exception (07, 15, 16). Then the **claims pass**: Re-read every script against brief §5. Rewrite anything that promises an outcome into habit/comfort language.
 7. **Write `media/<week>/weekly-calendar.md`** from `templates/weekly-calendar.md`: day, time (spread inside the posting window, alternate midday/evening), platforms, pillar, format, hook, card link, status `scripted`.
-8. **Hand off:** tell her (a) what's in the week in 5 lines, (b) which posts need the kid, (c) "say `shoot day` and I'll group the shots into one session."
+8. **Hand off:** tell her (a) what's in the week in 5 lines, (b) which posts need the kid, (c) "say `shoot day` and I'll turn this into one coached filming session." (`digiroo-video` takes it from there: shoot card → clip check → cut → QC.)
 
 ## Output files
 ```

@@ -31,7 +31,7 @@ Pick one per post. Each file has a script skeleton, shot list and the pillar it 
 Baselines behind 15 and 16: `research/baseline-tiktok.md`, `research/baseline-instagram.md`. Teardowns of all her own videos are in `research/teardowns/`.
 
 ## Every post passes the video rules
-`skills/content-week/references/video-rules.md`: title in frame one, problem before product, one kid/one place/≤3 cuts, before→lift→after in one framing, 10–30 s, one text system. Format 13 (re-cut) only with raw, uncaptioned clips.
+`skills/digiroo-video/references/video-rules.md`: title in frame one, problem before product, one kid/one place/≤3 cuts, before→lift→after in one framing, 10–30 s, one text system. Format 13 (re-cut) only with raw, uncaptioned clips.
 
 ## Rotation rule
 Don't repeat a format within 2 weeks except 01 (the banker). `content-week` checks `lessons-learned.md` and prefers formats that beat the view-jail threshold last time.

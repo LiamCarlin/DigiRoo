@@ -1,6 +1,7 @@
+<!-- synced copy of skills/digiroo-video/references/video-rules.md by tools/package_skills.py; edit that file -->
 # Video rules — what the winning videos in DigiRoo's niche actually do
 
-Derived from 30 top-performing TikToks across 18 pediatric-chiro, pediatric-PT, posture and parenting accounts (frames, cut counts, speech timing and public stats; `research/segment-analysis.md`), plus Antonia's own 50 posts. Every post card from `content-week`, every shoot card and every `edit-cuts` export must pass this checklist. If a card can't pass, change the card, not the rule.
+Derived from 30 top-performing TikToks across 18 pediatric-chiro, pediatric-PT, posture and parenting accounts (frames, cut counts, speech timing and public stats; `research/segment-analysis.md`), plus Antonia's own 50 posts. Every post card from `content-week`, every shoot card and every cut from `digiroo-video` must pass this checklist. If a card can't pass, change the card, not the rule.
 
 ## The ten rules
 
@@ -24,18 +25,20 @@ Derived from 30 top-performing TikToks across 18 pediatric-chiro, pediatric-PT, 
 - Spoken intro before the title ("Hi, I'm Antonia…" as frame one). Her best-liked talking head still opened with a slow walk-in.
 - Anything under 1080×1920 or upscaled from 720p.
 
-## Shot recipe that satisfies rules 1–6 (the "slouch-to-lift")
-| # | Shot | Framing | Seconds | Text |
+## Shot recipe that satisfies rules 1–6: the "slouch-to-lift", filmed as ONE take
+The phone leans on a mug, side-on, at the kid's head height, and nobody touches it. Press record and let her sink into her show. Pop the stand, let her sit upright, say the line off-camera, stop. The editor (`digiroo-video`) finds the pop on its own and trims around it. Zero cuts, the same framing guaranteed, nothing to line up.
+
+| Beat | What's on screen | Framing | Seconds | Text |
 |---|---|---|---|---|
-| 1 | Kid hunched over the iPad flat on lap/couch | side-on, phone leaning on a mug at the kid's head height | 4 | TITLE (stays) |
-| 2 | Hand pops the DigiRoo stand up; screen rises | same framing, don't touch the phone | 4 | "watch her neck" |
-| 3 | Kid upright, watching; hold | same framing | 5 | "eye level, no nagging" |
-| 4 | (optional) Antonia selfie, one line | selfie | 5 | caption of the spoken line |
-| 5 | End frame: question | same as 3, freeze | 2 | "what's your house rule? 👇 save this" |
+| Slouch | kid hunched over the iPad flat on lap/couch | side-on, phone on a mug at her head height | 3.5 | TITLE (stays) |
+| Pop | hand pops the DigiRoo stand up, screen rises, she sits up | same take | ~1 | "watch her neck" |
+| Upright | kid upright, watching; Antonia's one line off-camera | same take | 4.5–5.5 | caption of the line |
+| (optional) Selfie | Antonia, one line | selfie, eye level | 4–5 | caption of the line |
+| End frame | the last frame frozen and darkened | — | 3 | question + "save this…" |
 
-Total 15–20 s, 3 cuts, one kid, one place.
+Total 11–20 s, 0–1 cuts, one kid, one place. Filming coaching: `filming-guide.md` card A.
 
-## Pre-publish checklist (edit-cuts prints this)
+## Pre-publish checklist (`qc.py` measures what it can; the rest is the eye check in `qc-and-review.md`)
 - [ ] Title readable in frame one, 6–12 words, credential included
 - [ ] Problem visible before the product
 - [ ] ≤3 cuts, one subject, one setting
