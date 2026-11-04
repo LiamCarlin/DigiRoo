@@ -133,7 +133,7 @@ Say at least two of these out loud in every video, naturally: **tech neck**, **s
 |---|---|---|
 | 1 | Who buys today (kid age, country, ship-to)? | Moms of 4–12-year-olds; US + Bermuda; ships US/CA/BM/UK |
 | 2 | Current Shopify price and any bundle? | $49.99 |
-| 3 | Affiliate tracking: Shopify discount codes, Shopify Collabs, or other? | Unique Shopify discount code per clinician, 10% off / 15% commission |
+| 3 | Affiliate tracking: Shopify discount codes, Shopify Collabs, or other? | Unique Shopify discount code per clinician, 10% off / 15% commission on sales after the discount, before tax and shipping, paid monthly |
 | 4 | Any claims your lawyer/patent counsel wants avoided? | No medical/therapeutic claims (see §5) |
 | 5 | Can you share the saved-reel links (export from IG saves)? | Using Drive UGC clips + comparable accounts |
 | 6 | Posting cadence you'll actually keep? | 5/week Mon–Fri, TikTok + Reels + FB mirror |
@@ -147,6 +147,7 @@ Say at least two of these out loud in every video, naturally: **tech neck**, **s
 | 14 | OK to download and study the collab reels (@enlighteningells 84K, @checollab 24.5K), and would those partners collab again? | Links and public play counts only; no download until the partner agrees |
 | 15 | OK to change both bios to the §5 suggestion? | No change until you say yes |
 | 16 | Who is the pediatric chiropractor behind "20-year-olds with the spinal health of 40-year-olds", and can we name them? | Don't reuse the quote |
+| 17 | Which email should clinics write back to? The one-pager says antonia@kidsdigitalwellness.com. | Don't make `affiliates/one-pager.pdf` until confirmed |
 
 ## 12. Settings the skills read
 

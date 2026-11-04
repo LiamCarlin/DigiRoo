@@ -12,7 +12,8 @@ Everything runs inside Claude. Five sentences, one shoot, posts scheduled.
 | **Wed, 5 min** | `cut the week` | Finished, captioned 9:16 videos for every post (or a CapCut cut sheet if you'd rather assemble). |
 | **Wed, 5 min** | `schedule the week` → read the queue → reply **go** | Posts scheduled in Meta Business Suite (Reels + Facebook) and TikTok Studio. Nothing posts until you say go. |
 | **Friday, 10 min** | `do outreach` → approve the 10 messages → send | Ten personalised clinic DMs/emails, logged, with follow-ups drafted on day 5. |
-| **Next Monday, 10 min** | screenshots of TikTok Studio + IG Insights + Shopify, then `review the week` | What worked, what didn't, three changes. Next week's plan already knows them. |
+| **Next Monday, 10 min** | a screenshot of each post's TikTok Studio analytics and Instagram insights, plus Shopify's "Sales by discount" report, then `review the week` | What worked, what didn't, three changes. Next week's plan already knows them. |
+| **First Monday of the month, 10 min** | Shopify's "Sales by discount" report for last month, then `commissions` | What each clinic earned, with a short note to each. You pay and send; Claude never moves money. |
 
 If you have no ideas on a Monday, just say `plan my week`. Claude proposes from the pillars and the calendar.
 

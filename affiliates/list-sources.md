@@ -44,7 +44,7 @@ Canada / UK
 ## Counts (127 rows, deduped on clinic+city)
 By geography: Bermuda 20 | MA 9 | NY 14 (+1 NJ/NY home-PT) | FL 22 | TX 25 | CA 28 | Canada 6 | UK 1 | US creator 1
 By fit score: 5 = 6 | 4 = 41 | 3 = 61 | 2 = 15 | 1 = 4
-Rows with a known IG/TikTok handle: 26 (Bermuda 4; NY 3; FL 5; TX 7; CA 7; other 0; creator 1). Follower counts recorded for 10 of them.
+Rows with a known IG/TikTok handle: 29 (Bermuda 4; NY 3; FL 5; TX 8; CA 9; other 0; creator 1); 3 added 2026-11-04 from the clinics' own sites. Follower counts recorded for 10 of them.
 
 ## Caveats
 - Bermuda has no private paediatric physio; the island's only ICPA-fellow DC is Dr. Nicole Harford (Advanced Chiropractic) and the only ACCP-certified pediatric DC is Dr. Laura Dowling (AIIH). Most Bermuda physio rows are general/sports clinics (fit 1-2) included for completeness per brief.
