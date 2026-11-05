@@ -27,7 +27,7 @@ Run the moves in order when she says "do the whole week's video". Each move also
 3. `DIGIROO-brief.md` §4 (voice), §5 (claims), §12 (settings). From the content-week skill: the week's post cards in `media/<week>/post-cards/`.
 4. Then only what the move needs:
    - Moves 1–3: `references/filming-guide.md`.
-   - Move 4: `references/edit-craft.md` and `references/qc-and-review.md`.
+   - Move 4: `references/edit-craft.md`, `references/edit-style.md` (the native look and its evidence) and `references/qc-and-review.md`.
    - `references/sources.md` only if someone asks where a technique came from.
 
 ## Move 1 — Shoot card ("shoot day")
@@ -80,7 +80,8 @@ If it's her first shoot, send the 5-line phone setup once and say it's a one-tim
 ### Mode A — automatic
 1. **Write `media/<week>/edits/<post-id>.json`.** Shortcut: `python3 <this skill>/scripts/edit_cuts.py --card <post card> --clips <folder> --out media/cuts/<post-id>.mp4` builds one from the card. Then tighten it by hand using the patterns in `references/edit-craft.md`:
    - `recipe`
-   - `title`: frame one, 6–12 words, with the credential
+   - `title`: frame one, a full sentence a parent would say (≤12 words), off by about 4 s (`title_until`); `label`: the credential or format pill ("mom review", "before")
+   - the native extras (edit-style.md): `tags` (BEFORE/AFTER), callouts with a `point` arrow, `zooms` on the beat, `sfx` (`builtin:pop` …, at most 2), `end_card.style` `live` or `split`
    - per clip: `text` (the line as spoken), `trim` (`"lift"` for the one-take)
    - `overlays` with `"at": "lift"` / `"after"`
    - `end_card.question`
@@ -170,6 +171,6 @@ scripts/vet_music.py     check a music track before it goes under a cut: level, 
 scripts/dvlib.py         shared helpers (probe, motion, speech, loudness, text drawing)
 references/              video-rules · filming-guide · edit-craft · qc-and-review · sources
 templates/               shoot-card.md · edit.json · video-notes.md · trends.md
-fonts/                   Poppins (SIL OFL 1.1), so text looks the same on a Mac and in the sandbox
+fonts/                   TikTok Sans (native style) and Poppins (classic), both SIL OFL 1.1, so text looks the same on a Mac and in the sandbox
 ```
 Setup on a Mac (once): `brew install ffmpeg pillow` (Homebrew's Python refuses `pip3 install`). Optional, for word-exact captions: faster-whisper in a virtual environment (`dist/SETUP.md` §C). In a chat sandbox, `pip install pillow` if it's missing. The scripts need no libass, drawtext or zscale; all the text is drawn with Pillow.

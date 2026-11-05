@@ -42,6 +42,11 @@ Three layers, in this order [video-director quality.md:3-6]:
 | music present | no-talking cuts: the bed is there (>-45 dBFS before the master) | then the bed is the sound | measured on the music stem |
 | ends on a question | the end card question has "?" | video-rules 8 | segment analysis |
 
+Under `"style": "native"` some thresholds change, each from the evidence in `edit-style.md`:
+- title ≥52 px; text ≥38 px;
+- captions ≤4 words, at ≤7 words/s;
+- safe zone x 65–940, y 285–1250 (TikTok and Reels).
+
 FAIL means fix before she sees it. WARN means fix it, or tell her in one line why it stays. **Never loosen a threshold to pass** [earshot fixer.md:46]. A deliberate exception gets written into the delivery note as `qa_ok: <reason>` so the next round doesn't re-argue it.
 
 ## 2. The four images (Claude opens every one)

@@ -31,6 +31,8 @@ Total is 11–15 s. Add a 4–5 s selfie line and it's 15–20 s. That sits insi
 
 ## 2. Words on screen
 
+**The default is now `"style": "native"`. Its spec, sizes and evidence are in `edit-style.md`.** The table below is the original `"classic"` look, which is still available.
+
 | Element | Rule | Source |
 |---|---|---|
 | Title | Frame one, finished. Never fades in at 0 s, because frame one is also the cover (a caption on screen at 0 s doesn't fade in either). On multi-shot cuts, `"title_until": "first_cut"` keeps a "before" title off the after shot and off faces. | video-director S:155, explainroo A:777 |

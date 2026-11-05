@@ -313,47 +313,144 @@ def font_path(weight=800):
 _EMOJI = re.compile("[\U0001F000-\U0001FAFF\u2600-\u27BF\uFE0F\u200d]")
 def burnable(text):
     """Burned-in text uses Poppins, which has no emoji. Emoji stay in the post caption, not the picture."""
-    return re.sub(r"\s{2,}", " ", _EMOJI.sub("", text or "")).strip()
+    return re.sub(r"[ \t]{2,}", " ", _EMOJI.sub("", text or "")).strip()
 
 def wrap(text, font, max_w):
-    words, lines, cur = text.split(), [], ""
-    for w in words:
-        trial = (cur + " " + w).strip()
-        if font.getlength(trial) <= max_w or not cur:
-            cur = trial
-        else:
-            lines.append(cur); cur = w
-    if cur: lines.append(cur)
+    """Greedy word wrap; a "\n" in the text forces a line break."""
+    lines = []
+    for para in text.split("\n"):
+        cur = ""
+        for w in para.split():
+            trial = (cur + " " + w).strip()
+            if font.getlength(trial) <= max_w or not cur:
+                cur = trial
+            else:
+                lines.append(cur); cur = w
+        if cur: lines.append(cur)
     return lines
 
-def text_block(text, size, max_w, weight=800, stroke=None, shadow=True, line_gap=0.12):
-    """One block of centred white text with a thin dark outline and a soft drop shadow (video-rules rule 6).
-    Returns an RGBA image cropped to the text plus its shadow."""
-    from PIL import Image, ImageDraw, ImageFilter, ImageFont
-    font = ImageFont.truetype(font_path(weight), size)
+# Brand colours, sampled from the DigiRoo box and logo (2026-11-04): the letters of "DigiRoo" use all five.
+BRAND = {"orange": (238, 106, 47), "yellow": (246, 194, 62), "green": (125, 187, 66), "teal": (47, 163, 160),
+         "indigo": (52, 53, 143), "ink": (22, 22, 28), "white": (255, 255, 255)}
+TIKTOK_FONT = os.path.join(FONT_DIR, "TikTokSans-VF.ttf")
+
+def get_font(weight=800, size=60, family="poppins"):
+    """family "tiktok" = TikTok Sans (SIL OFL 1.1, the platform's own UI font, variable weight 300-900): on-screen text
+    then looks native, the way the niche's top videos do. Falls back to Poppins when the file isn't there."""
+    from PIL import ImageFont
+    if family == "tiktok" and os.path.exists(TIKTOK_FONT):
+        f = ImageFont.truetype(TIKTOK_FONT, size)
+        try:
+            f.set_variation_by_axes([36, 100, max(300, min(900, weight)), 0])  # optical size, width, weight, slant
+        except Exception:
+            pass
+        return f
+    return ImageFont.truetype(font_path(weight if weight >= 700 else 700), size)
+
+def _rgb(c):
+    return BRAND.get(c, c) if isinstance(c, str) else tuple(c)
+
+def text_block(text, size, max_w, weight=800, stroke=None, shadow=True, line_gap=0.12, family="poppins", style="outline",
+               fill="white", box="white", highlight=None, upper=False):
+    """One block of centred text. Returns an RGBA image cropped to the text plus its shadow, and the line count.
+    style "outline": white text, dark outline, drop shadow (the original DigiRoo look).
+          "soft":    white text, thin outline, soft shadow (TikTok's default text; captions).
+          "box":     text on a rounded box per line, the TikTok "background" text style (hooks, labels, callouts).
+    highlight=(word index, box colour, text colour): that word sits on its own small box (the spoken word, karaoke-style)."""
+    from PIL import Image, ImageDraw, ImageFilter
+    if upper:
+        text = text.upper()
+    fill, box = _rgb(fill), _rgb(box)
+    font = get_font(weight, size, family)
     lines = wrap(text, font, max_w)
-    stroke = stroke if stroke is not None else max(3, size // 14)
-    asc, desc = font.getmetrics(); lh = asc + desc; gap = int(size * line_gap)
-    tw = int(max(font.getlength(l) for l in lines)) + 2 * stroke
-    th = lh * len(lines) + gap * (len(lines) - 1) + 2 * stroke
+    asc, desc = font.getmetrics(); lh = asc + desc
+    if style == "outline":
+        stroke = stroke if stroke is not None else max(3, size // 14)
+    elif style == "soft":
+        stroke = stroke if stroke is not None else max(2, size // 26)
+    else:
+        stroke = 0
+    padx, pady = (int(size * 0.42), int(size * 0.14)) if style == "box" else (0, 0)
+    gap = int(size * line_gap) if style != "box" else -int(size * 0.06)  # box lines touch, like TikTok's
+    widths = [font.getlength(l) for l in lines]
+    hp = int(size * 0.16) if highlight else 0
+    tw = int(max(widths)) + 2 * stroke + 2 * padx + 2 * hp
+    row_h = lh + 2 * pady
+    th = row_h * len(lines) + gap * (len(lines) - 1) + 2 * stroke
     pad = 24
     img = Image.new("RGBA", (tw + 2 * pad, th + 2 * pad), (0, 0, 0, 0))
     d = ImageDraw.Draw(img)
-    y = pad + stroke
-    for l in lines:
-        x = pad + (tw - font.getlength(l)) / 2
-        d.text((x, y), l, font=font, fill=(255, 255, 255, 255), stroke_width=stroke, stroke_fill=(0, 0, 0, 255))
-        y += lh + gap
+    y = pad + stroke; wi = 0; space = font.getlength(" ")
+    for l, w in zip(lines, widths):
+        x0 = pad + (tw - (w + 2 * padx)) / 2
+        if style == "box":
+            d.rounded_rectangle([x0, y, x0 + w + 2 * padx, y + row_h], int(size * 0.3), fill=box + (255,))
+        tx = x0 + padx
+        for wd in l.split(" "):
+            ww = font.getlength(wd)
+            if highlight and wi == highlight[0]:
+                tx += hp  # the box gets its own room; it never eats the space before or after the word
+                d.rounded_rectangle([tx - hp, y + pady + int(lh * 0.04), tx + ww + hp, y + pady + lh - int(lh * 0.04)],
+                                    int(size * 0.22), fill=_rgb(highlight[1]) + (255,))
+                d.text((tx, y + pady), wd, font=font, fill=_rgb(highlight[2]) + (255,))
+                tx += hp
+            else:
+                d.text((tx, y + pady), wd, font=font, fill=fill + (255,), stroke_width=stroke, stroke_fill=(0, 0, 0, 255))
+            tx += ww + space; wi += 1
+        y += row_h + gap
     if shadow:
+        a, blur = {"outline": (0.55, max(4, size // 12)), "soft": (0.6, max(5, size // 9)), "box": (0.22, max(6, size // 7))}[style]
         sh = Image.new("RGBA", img.size, (0, 0, 0, 0))
-        alpha = img.split()[3].point(lambda a: int(a * 0.55))
-        sh.putalpha(alpha)
-        sh = sh.filter(ImageFilter.GaussianBlur(max(4, size // 12)))
+        sh.putalpha(img.split()[3].point(lambda v: int(v * a)))
+        sh = sh.filter(ImageFilter.GaussianBlur(blur))
         base = Image.new("RGBA", img.size, (0, 0, 0, 0))
-        base.alpha_composite(sh, (0, max(3, size // 18)))
+        base.alpha_composite(sh, (0, max(2, size // 20)))
         base.alpha_composite(img)
         img = base
     return img, len(lines)
+
+def wordmark(size=110):
+    """"DigiRoo" in the logo's letter colours (D orange, i yellow, g green, i teal, R indigo, oo orange) on a white pill.
+    Drawn, not copied: the brand's own name in its own colours."""
+    from PIL import Image, ImageDraw
+    font = get_font(900, size, "tiktok")
+    cols = ["orange", "yellow", "green", "teal", "indigo", "orange", "orange"]
+    word = "DigiRoo"; w = sum(font.getlength(c) for c in word); asc, desc = font.getmetrics()
+    padx, pady = int(size * 0.45), int(size * 0.2)
+    img = Image.new("RGBA", (int(w) + 2 * padx, asc + desc + 2 * pady), (0, 0, 0, 0)); d = ImageDraw.Draw(img)
+    d.rounded_rectangle([0, 0, img.width - 1, img.height - 1], int(img.height / 2), fill=(255, 255, 255, 255))
+    x = padx
+    for ch, c in zip(word, cols):
+        d.text((x, pady), ch, font=font, fill=BRAND[c] + (255,)); x += font.getlength(ch)
+    return img
+
+def draw_arrow(canvas, start, end, colour="yellow", width=12, alpha=1.0):
+    """A plain arrow from a callout box to the thing it names (the red lines on the 18.5M neck video do this job)."""
+    from PIL import Image, ImageDraw
+    layer = Image.new("RGBA", canvas.size, (0, 0, 0, 0)); d = ImageDraw.Draw(layer)
+    (x0, y0), (x1, y1) = start, end
+    ang = math.atan2(y1 - y0, x1 - x0); head = width * 3.2
+    bx, by = x1 - head * 0.8 * math.cos(ang), y1 - head * 0.8 * math.sin(ang)
+    pts = [(x1, y1), (bx - head * 0.6 * math.sin(ang), by + head * 0.6 * math.cos(ang)),
+           (bx + head * 0.6 * math.sin(ang), by - head * 0.6 * math.cos(ang))]
+    for wdt, col in ((width + 6, (0, 0, 0, 150)), (width, _rgb(colour) + (255,))):
+        d.line([(x0, y0), (bx, by)], fill=col, width=wdt)
+    d.polygon(pts, fill=_rgb(colour) + (255,), outline=(0, 0, 0, 150))
+    if alpha < 1:
+        layer.putalpha(layer.split()[3].point(lambda v: int(v * alpha)))
+    canvas.alpha_composite(layer)
+
+SFX = {  # synthesised, so there's nothing to license: short, soft, under the voice
+    "pop":    "aevalsrc='0.6*sin(2*PI*(380+2600*t)*t)*exp(-38*t)':s=48000:d=0.18",
+    "whoosh": "anoisesrc=color=pink:amplitude=0.5:d=0.45:r=48000,bandpass=f=1400:width_type=o:w=1.6,afade=t=in:d=0.28,afade=t=out:st=0.28:d=0.17",
+    "ding":   "aevalsrc='0.45*sin(2*PI*1568*t)*exp(-5*t)+0.2*sin(2*PI*3136*t)*exp(-8*t)':s=48000:d=0.9",
+    "tick":   "aevalsrc='0.5*sin(2*PI*2200*t)*exp(-90*t)':s=48000:d=0.06",
+}
+def make_sfx(name, out):
+    if name not in SFX:
+        raise SystemExit(f"unknown built-in sound '{name}': use one of {', '.join(SFX)}")
+    run(["ffmpeg", "-y", "-hide_banner", "-loglevel", "error", "-f", "lavfi", "-i", SFX[name], "-ac", "2", "-c:a", "pcm_s16le", out])
+    return out
 
 
 # ---------- frames and sheets ----------
