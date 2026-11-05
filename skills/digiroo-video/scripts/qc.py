@@ -128,6 +128,28 @@ def run_qc(path, log=None, reference=None):
     else:
         add("loudness", "PASS" if abs(ld["lufs"] - L.LUFS) <= 1.0 else "WARN", f"{ld['lufs']} LUFS", "-14 LUFS ±1, measured after AAC")
         add("true peak", "PASS" if ld["tp"] is not None and ld["tp"] <= -1.0 else "WARN", f"{ld['tp']} dBTP", "≤ -1 dBTP")
+    mi = log.get("music_info")
+    if mi:  # the music verification step: licensed, and never over her voice
+        add("music licence", "PASS" if mi.get("license") and mi.get("source") else "FAIL",
+            f"{mi.get('license') or 'none'} · {mi.get('source') or 'no source page'}",
+            "licence + the track's own page recorded in edit.json (CC0 / Mixkit / Pixabay, read that session)")
+        bal = mi.get("balance") or {}
+        mg = bal.get("speech_band_margin_db")
+        if mg is not None:
+            add("music under voice", "PASS" if mg >= 15 else ("WARN" if mg >= 10 else "FAIL"), f"{mg} dB under her voice (1-4 kHz, while talking)",
+                "her words stay clear: the bed sits ≥15 dB under the voice in the speech band (raise under_voice_db)")
+            gp = bal.get("gaps_under_voice_db")
+            if gp is not None:
+                add("music in the gaps", "PASS" if 8 <= gp <= 24 else "WARN", f"{gp} dB under her talking level",
+                    "between lines the bed is heard but never louder than 8 dB under her voice (8-24 dB)")
+        else:
+            lvl = bal.get("music_level_db")
+            add("music present", "PASS" if lvl is not None and lvl > -45 else "WARN", f"{lvl} dBFS before the master" if lvl is not None else "silent",
+                "no one talks, so the bed carries the cut: it must be there and the master must reach -14 LUFS")
+    if log.get("sfx"):
+        n = len(log["sfx"])
+        add("sound effects", "PASS" if n <= 2 else "WARN", ", ".join(f"{x['sound']} at {x['at']}s ({x['gain_db']} dB)" for x in log["sfx"]),
+            "at most 2, under the voice (edit-style.md)")
     body_end = log.get("body_end", dur)
     p = run(["ffmpeg", "-hide_banner", "-nostats", "-i", path, "-t", f"{body_end:.2f}", "-vn", "-af", "silencedetect=n=-50dB:d=1.0", "-f", "null", "-"], check=False)
     sil = [round(float(x), 2) for x in re.findall(r"silence_start: ([\d.]+)", p.stderr)]
@@ -155,24 +177,35 @@ def run_qc(path, log=None, reference=None):
     add("title in frame one", "PASS" if title and title["s"] <= 0.04 else ("WARN" if title else "FAIL"),
         title["text"] if title else "no title", "video-rules 1: the title is on screen at 0.0 s")
     if title:
-        add("title size", "PASS" if title["size"] >= 84 and title["lines"] <= 4 else "WARN", f"{title['size']} px, {title['lines']} lines", "≥84 px, ≤4 lines (video-director, take-one)")
+        native = log.get("style", "classic") == "native"  # native: TikTok Sans on a box, sized like the niche's own text
+        tmin = 52 if native else 84
+        add("title size", "PASS" if title["size"] >= tmin and title["lines"] <= 4 else "WARN", f"{title['size']} px, {title['lines']} lines",
+            f"≥{tmin} px, ≤4 lines ({'native style: TikTok-size text on a box, references/edit-style.md' if native else 'video-director, take-one'})")
         n = len(title["text"].split())
         add("title length", "PASS" if 5 <= n <= 13 else "WARN", f"{n} words", "6–12 words + credential")
+    nat = log.get("style") == "native"
+    sx0, sy1 = (65, 1250) if nat else (SAFE["x0"], SAFE["y1"])  # native also clears Reels: 6 % sides, bottom 35 % (Meta ads guide)
     bad = []
     for b in boxes:
         x0, y0, x1, y1 = b["box"]
-        right = SAFE["rail_x"] if y1 > SAFE["rail_y"] else W - SAFE["x0"]
-        if x0 < SAFE["x0"] or x1 > right or y0 < SAFE["y0"] or y1 > SAFE["y1"]:
+        right = SAFE["rail_x"] if y1 > SAFE["rail_y"] else W - sx0
+        if x0 < sx0 or x1 > right or y0 < SAFE["y0"] or y1 > sy1:
             bad.append(f"{b['text'][:24]}… {b['box']}")
-    add("safe zone", "PASS" if not bad else "FAIL", bad or "all text inside", "x 56–940 beside the button rail, y 285–1480")
-    small = [f"{b['text'][:20]} {b['size']}px" for b in boxes if b["size"] < 70]
-    add("text size", "PASS" if not small else "WARN", small or "all ≥70 px", "nothing that must be read under 70 px")
+    add("safe zone", "PASS" if not bad else "FAIL", bad or "all text inside",
+        f"x {sx0}–940 beside the button rail, y {SAFE['y0']}–{sy1}" + (" (TikTok + Reels)" if nat else ""))
+    floor = 38 if log.get("style") == "native" else 70  # native labels are 40 px pills; captions 60 px
+    small = [f"{b['text'][:20]} {b['size']}px" for b in boxes if b["size"] < floor]
+    add("text size", "PASS" if not small else "WARN", small or f"all ≥{floor} px", f"nothing that must be read under {floor} px")
     caps = [b for b in boxes if b["slot"] == "cap"]
-    long_cues = [c["text"] for c in caps if len(c["text"].split()) > 5]
-    add("words per caption", "PASS" if not long_cues else "WARN", long_cues or f"{len(caps)} cues ≤5 words", "2–5 words a cue")
+    wmax, rate = (4, 7.0) if nat else (5, 3.6)
+    long_cues = [c["text"] for c in caps if len(c["text"].split()) > wmax]
+    add("words per caption", "PASS" if not long_cues else "WARN", long_cues or f"{len(caps)} cues ≤{wmax} words",
+        "1–4 words, one line (native)" if nat else "2–5 words a cue")
     fast = [f"{c['text']} ({len(c['text'].split()) / max(c['e'] - c['s'], 0.01):.1f}/s)" for c in caps
-            if len(c["text"].split()) / max(c["e"] - c["s"], 0.01) > 3.6]
-    add("caption speed", "PASS" if not fast else "WARN", fast[:4] or "all ≤3.5 words/s", "captions read at ≤3.5 words a second (video-director)")
+            if len(c["text"].split()) / max(c["e"] - c["s"], 0.01) > rate]
+    add("caption speed", "PASS" if not fast else "WARN", fast[:4] or f"all ≤{rate:g} words/s",
+        "≤7 words/s: synced to her voice; fast text did better in VidMob's 1,400 TikTok ads (references/edit-style.md)" if nat
+        else "captions read at ≤3.5 words a second (video-director)")
     still = [b for b in boxes if b["slot"].startswith("over")]
     short = [b["text"] for b in still if (b["e"] - b["s"]) < max(1.5, 1.0 + 0.3 * len(b["text"].split())) - 0.05]
     if still:
@@ -192,8 +225,10 @@ def run_qc(path, log=None, reference=None):
     if shots:
         add("cuts between shots", "PASS" if len(shots) - 1 <= 3 else "WARN", f"{len(shots)} shots", "video-rules 3: ≤3 cuts, one kid, one place")
     if log.get("recipe") == "slouch-to-lift":
-        add("lift found", "PASS" if log.get("lift_at") else "WARN", log.get("lift_at") or "not found",
-            "the stand-pop sits 25–60 % in, after a slouch you can see")
+        la, be = log.get("lift_at"), log.get("body_end") or dur
+        pos = la / be if la and be else None
+        add("lift found", "PASS" if la and 0.25 <= pos <= 0.6 else "WARN", f"{la}s ({pos:.0%} in)" if la else "not found",
+            "the stand-pop sits 25–60 % in, after a slouch you can see (check the pop still: is it the stand?)")
     if log:
         q = log.get("end_question") or next((b["text"] for b in reversed(boxes) if "?" in b["text"]), None)
         add("ends on a question", "PASS" if q and "?" in q else "WARN", q or "no question", "video-rules 8: save/share line + a question")

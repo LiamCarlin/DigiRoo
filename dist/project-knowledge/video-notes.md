@@ -4,6 +4,7 @@
 
 ## Taste (from her notes on cuts)
 <!-- - 2026-11-12 · "the music's too loud under my voice" → under_voice_db 15 from now on -->
+- 2026-11-04 · Babson team (Michael), on all six UGC test cuts: "too plain, they are just text", "the text is too bold", "doesn't make sense" → standing note (it's about the whole look, not one video): research how the niche edits, then a lighter native text system with motion, graphics and sound. Clearer copy: every on-screen line has to read as a sentence a parent would say.
 
 ## Filming notes (from clip checks)
 <!-- - 2026-11-11 · car clips dark after 4 pm → film the car block first -->

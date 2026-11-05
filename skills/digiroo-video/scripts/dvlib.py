@@ -129,24 +129,61 @@ def motion_events(series, fps=15):
                 ev[-1] = (series[i][0], vals[i])
     return ev
 
-def find_lift(path, fps=15):
+_BURSTS = {}
+def lift_bursts(path, fps=15, share=0.4):
+    """Every clear burst of motion in a static take, strongest first: [(start, peak, end, strength)] in seconds.
+    A burst counts when its 0.5 s average clears max(0.008, 2.5x the take's median) and `share` of the strongest;
+    peaks closer than 1 s are one burst. In a skit the strongest burst is often NOT the stand-pop: a parent walking
+    in close to the lens or a kid flailing moves more pixels than a stand rising (seen on real footage, 2026-11)."""
+    key = (path, fps)
+    if key not in _BURSTS:
+        s = motion_series(path, fps=fps)
+        if len(s) < fps * 2:
+            _BURSTS[key] = ([], [], 0.0)
+        else:
+            win = max(3, fps // 2)  # 0.5 s moving average
+            vals = [v for _, v in s]
+            sm = [sum(vals[max(0, i - win // 2): i + win // 2 + 1]) / len(vals[max(0, i - win // 2): i + win // 2 + 1]) for i in range(len(vals))]
+            _BURSTS[key] = (s, sm, _median(sm))
+    s, sm, base = _BURSTS[key]
+    if not sm:
+        return []
+    floor = max(0.008, base * 2.5)
+    if max(sm) < floor:
+        return []
+    need = max(floor, share * max(sm))
+    peaks = []
+    for i in range(len(sm)):
+        if sm[i] < need or (i and sm[i] < sm[i - 1]) or (i < len(sm) - 1 and sm[i] < sm[i + 1]):
+            continue
+        if peaks and s[i][0] - s[peaks[-1]][0] < 1.0:
+            if sm[i] > sm[peaks[-1]]: peaks[-1] = i
+        else:
+            peaks.append(i)
+    out = []
+    for pk in peaks:
+        thr = base + 0.3 * (sm[pk] - base)
+        a = pk
+        while a > 0 and sm[a - 1] > thr: a -= 1
+        b = pk
+        while b < len(sm) - 1 and sm[b + 1] > thr: b += 1
+        out.append((s[a][0], s[pk][0], s[b][0], sm[pk]))
+    return sorted(out, key=lambda x: -x[3])
+
+def find_lift(path, fps=15, at=None):
     """The stand-pop: the strongest sustained burst of motion in a static, side-on take.
+    `at` (seconds into the clip, from her note or from a reviewer who looked at the frames) picks the burst nearest
+    that moment instead; with no burst within 1.5 s it trusts the number and keeps a short span around it.
     Returns (start, peak, end) of the burst in seconds, or None when the take has no clear burst."""
-    s = motion_series(path, fps=fps)
-    if len(s) < fps * 2:
-        return None
-    win = max(3, fps // 2)  # 0.5 s moving average
-    vals = [v for _, v in s]
-    sm = [sum(vals[max(0, i - win // 2): i + win // 2 + 1]) / len(vals[max(0, i - win // 2): i + win // 2 + 1]) for i in range(len(vals))]
-    base = _median(sm); pk = max(range(len(sm)), key=lambda i: sm[i])
-    if sm[pk] < max(0.008, base * 2.5):
-        return None
-    thr = base + 0.3 * (sm[pk] - base)
-    a = pk
-    while a > 0 and sm[a - 1] > thr: a -= 1
-    b = pk
-    while b < len(sm) - 1 and sm[b + 1] > thr: b += 1
-    return s[a][0], s[pk][0], s[b][0]
+    if at is not None:
+        near = [x for x in lift_bursts(path, fps, share=0.0) if abs(x[1] - float(at)) <= 1.5]
+        if near:
+            a, pk, b, _ = min(near, key=lambda x: abs(x[1] - float(at)))
+            return a, pk, b
+        at = float(at)
+        return max(0.0, at - 0.3), at, at + 0.5
+    bursts = lift_bursts(path, fps)
+    return bursts[0][:3] if bursts else None
 
 def brightness(path, fps=2):
     """Mean luma (0-255) sampled twice a second, plus 10th/90th percentile, on an 8-bit grey copy."""
@@ -178,19 +215,59 @@ def gain_to(path, target, start=None, dur=None, most=20.0):
     m = loudness(path, start, dur)["lufs"]
     return 0.0 if m is None or m < -70 else max(-most, min(most, target - m))
 
-def level_series(path, start=None, end=None, win=0.05):
-    """RMS level (dBFS) per 50 ms window, using astats; no numpy needed."""
+def level_series(path, start=None, end=None, win=0.05, pre=None):
+    """RMS level (dBFS) per 50 ms window, using astats; no numpy needed. `pre` is an optional filter run first
+    (e.g. a band-pass to measure only the speech band)."""
     cmd = ["ffmpeg", "-hide_banner", "-nostats"]
     if start: cmd += ["-ss", f"{start:.3f}"]
     cmd += ["-i", path]
     if end: cmd += ["-t", f"{end - (start or 0):.3f}"]
     n = int(16000 * win)
-    p = run(cmd + ["-vn", "-af", f"aformat=channel_layouts=mono,aresample=16000,asetnsamples=n={n}:p=0,"
+    p = run(cmd + ["-vn", "-af", (pre + "," if pre else "") + f"aformat=channel_layouts=mono,aresample=16000,asetnsamples=n={n}:p=0,"
                    "astats=metadata=1:reset=1,ametadata=print:key=lavfi.astats.Overall.RMS_level", "-f", "null", "-"], check=False)
     lv = []
     for x in re.findall(r"RMS_level=(-?[\d.]+|-inf)", p.stderr):
         lv.append(-120.0 if x == "-inf" else float(x))
     return [((start or 0) + i * win, v) for i, v in enumerate(lv)]
+
+def _power_mean(dbs):
+    dbs = [d for d in dbs if d > -110]
+    return round(10 * math.log10(sum(10 ** (d / 10) for d in dbs) / len(dbs)), 1) if dbs else None
+
+SPEECH_BAND = "highpass=f=1000,lowpass=f=4000"
+def mix_balance(voice_wav, music_wav, body_end=None, talk_spans=None):
+    """How the music bed sits against her voice, from the two stems the editor writes (before the master gain,
+    which moves both equally). Talking windows come from `talk_spans` (the cut's caption timings) when given; an
+    empty list means nobody talks, so a kid's groan or the stand's click is never mistaken for a voice. Without it,
+    talking windows are 50 ms frames where the voice stem is within 20 dB of its own 95th percentile. Returns:
+      speech_band_margin_db  voice minus music in the 1-4 kHz band while she talks (intelligibility; ≥15 is clear)
+      gaps_under_voice_db    how far the bed sits under her talking level when she isn't talking (8-24 = audible, not loud)
+      talk_share             share of the body where someone is talking
+    The margin is None when nobody talks (a text-story cut): then the bed IS the sound and loudness alone judges it."""
+    end = body_end
+    v = [x for x in level_series(voice_wav, end=end)]
+    m = [x for x in level_series(music_wav, end=end)]
+    vb = level_series(voice_wav, end=end, pre=SPEECH_BAND)
+    mb = level_series(music_wav, end=end, pre=SPEECH_BAND)
+    n = min(len(v), len(m), len(vb), len(mb))
+    if not n:
+        return None
+    vals = sorted(x[1] for x in v[:n])
+    p95 = vals[min(n - 1, int(n * 0.95))]
+    if talk_spans is not None:
+        talk = [i for i in range(n) if any(a <= v[i][0] <= b for a, b in talk_spans)]
+    else:
+        talk = [i for i in range(n) if v[i][1] > max(p95 - 20, -50) and p95 > -45]
+    quiet = [i for i in range(n) if i not in set(talk)]
+    out = {"talk_share": round(len(talk) / n, 2)}
+    if len(talk) >= 10:  # half a second of talking at least
+        out["speech_band_margin_db"] = round(_power_mean([vb[i][1] for i in talk]) - _power_mean([mb[i][1] for i in talk]), 1)
+        voice_lvl = _power_mean([v[i][1] for i in talk]); bed = _power_mean([m[i][1] for i in quiet]) if quiet else None
+        out["gaps_under_voice_db"] = round(voice_lvl - bed, 1) if bed is not None else None
+    else:
+        out["speech_band_margin_db"] = None; out["gaps_under_voice_db"] = None
+    out["music_level_db"] = _power_mean([x[1] for x in m[:n]])
+    return out
 
 _LEVELS = {}
 def speech_spans(path, start=None, end=None, below_p95_db=30.0, merge_gap=0.12, min_len=0.12):
@@ -236,47 +313,144 @@ def font_path(weight=800):
 _EMOJI = re.compile("[\U0001F000-\U0001FAFF\u2600-\u27BF\uFE0F\u200d]")
 def burnable(text):
     """Burned-in text uses Poppins, which has no emoji. Emoji stay in the post caption, not the picture."""
-    return re.sub(r"\s{2,}", " ", _EMOJI.sub("", text or "")).strip()
+    return re.sub(r"[ \t]{2,}", " ", _EMOJI.sub("", text or "")).strip()
 
 def wrap(text, font, max_w):
-    words, lines, cur = text.split(), [], ""
-    for w in words:
-        trial = (cur + " " + w).strip()
-        if font.getlength(trial) <= max_w or not cur:
-            cur = trial
-        else:
-            lines.append(cur); cur = w
-    if cur: lines.append(cur)
+    """Greedy word wrap; a "\n" in the text forces a line break."""
+    lines = []
+    for para in text.split("\n"):
+        cur = ""
+        for w in para.split():
+            trial = (cur + " " + w).strip()
+            if font.getlength(trial) <= max_w or not cur:
+                cur = trial
+            else:
+                lines.append(cur); cur = w
+        if cur: lines.append(cur)
     return lines
 
-def text_block(text, size, max_w, weight=800, stroke=None, shadow=True, line_gap=0.12):
-    """One block of centred white text with a thin dark outline and a soft drop shadow (video-rules rule 6).
-    Returns an RGBA image cropped to the text plus its shadow."""
-    from PIL import Image, ImageDraw, ImageFilter, ImageFont
-    font = ImageFont.truetype(font_path(weight), size)
+# Brand colours, sampled from the DigiRoo box and logo (2026-11-04): the letters of "DigiRoo" use all five.
+BRAND = {"orange": (238, 106, 47), "yellow": (246, 194, 62), "green": (125, 187, 66), "teal": (47, 163, 160),
+         "indigo": (52, 53, 143), "ink": (22, 22, 28), "white": (255, 255, 255)}
+TIKTOK_FONT = os.path.join(FONT_DIR, "TikTokSans-VF.ttf")
+
+def get_font(weight=800, size=60, family="poppins"):
+    """family "tiktok" = TikTok Sans (SIL OFL 1.1, the platform's own UI font, variable weight 300-900): on-screen text
+    then looks native, the way the niche's top videos do. Falls back to Poppins when the file isn't there."""
+    from PIL import ImageFont
+    if family == "tiktok" and os.path.exists(TIKTOK_FONT):
+        f = ImageFont.truetype(TIKTOK_FONT, size)
+        try:
+            f.set_variation_by_axes([36, 100, max(300, min(900, weight)), 0])  # optical size, width, weight, slant
+        except Exception:
+            pass
+        return f
+    return ImageFont.truetype(font_path(weight if weight >= 700 else 700), size)
+
+def _rgb(c):
+    return BRAND.get(c, c) if isinstance(c, str) else tuple(c)
+
+def text_block(text, size, max_w, weight=800, stroke=None, shadow=True, line_gap=0.12, family="poppins", style="outline",
+               fill="white", box="white", highlight=None, upper=False):
+    """One block of centred text. Returns an RGBA image cropped to the text plus its shadow, and the line count.
+    style "outline": white text, dark outline, drop shadow (the original DigiRoo look).
+          "soft":    white text, thin outline, soft shadow (TikTok's default text; captions).
+          "box":     text on a rounded box per line, the TikTok "background" text style (hooks, labels, callouts).
+    highlight=(word index, box colour, text colour): that word sits on its own small box (the spoken word, karaoke-style)."""
+    from PIL import Image, ImageDraw, ImageFilter
+    if upper:
+        text = text.upper()
+    fill, box = _rgb(fill), _rgb(box)
+    font = get_font(weight, size, family)
     lines = wrap(text, font, max_w)
-    stroke = stroke if stroke is not None else max(3, size // 14)
-    asc, desc = font.getmetrics(); lh = asc + desc; gap = int(size * line_gap)
-    tw = int(max(font.getlength(l) for l in lines)) + 2 * stroke
-    th = lh * len(lines) + gap * (len(lines) - 1) + 2 * stroke
+    asc, desc = font.getmetrics(); lh = asc + desc
+    if style == "outline":
+        stroke = stroke if stroke is not None else max(3, size // 14)
+    elif style == "soft":
+        stroke = stroke if stroke is not None else max(2, size // 26)
+    else:
+        stroke = 0
+    padx, pady = (int(size * 0.42), int(size * 0.14)) if style == "box" else (0, 0)
+    gap = int(size * line_gap) if style != "box" else -int(size * 0.06)  # box lines touch, like TikTok's
+    widths = [font.getlength(l) for l in lines]
+    hp = int(size * 0.16) if highlight else 0
+    tw = int(max(widths)) + 2 * stroke + 2 * padx + 2 * hp
+    row_h = lh + 2 * pady
+    th = row_h * len(lines) + gap * (len(lines) - 1) + 2 * stroke
     pad = 24
     img = Image.new("RGBA", (tw + 2 * pad, th + 2 * pad), (0, 0, 0, 0))
     d = ImageDraw.Draw(img)
-    y = pad + stroke
-    for l in lines:
-        x = pad + (tw - font.getlength(l)) / 2
-        d.text((x, y), l, font=font, fill=(255, 255, 255, 255), stroke_width=stroke, stroke_fill=(0, 0, 0, 255))
-        y += lh + gap
+    y = pad + stroke; wi = 0; space = font.getlength(" ")
+    for l, w in zip(lines, widths):
+        x0 = pad + (tw - (w + 2 * padx)) / 2
+        if style == "box":
+            d.rounded_rectangle([x0, y, x0 + w + 2 * padx, y + row_h], int(size * 0.3), fill=box + (255,))
+        tx = x0 + padx
+        for wd in l.split(" "):
+            ww = font.getlength(wd)
+            if highlight and wi == highlight[0]:
+                tx += hp  # the box gets its own room; it never eats the space before or after the word
+                d.rounded_rectangle([tx - hp, y + pady + int(lh * 0.04), tx + ww + hp, y + pady + lh - int(lh * 0.04)],
+                                    int(size * 0.22), fill=_rgb(highlight[1]) + (255,))
+                d.text((tx, y + pady), wd, font=font, fill=_rgb(highlight[2]) + (255,))
+                tx += hp
+            else:
+                d.text((tx, y + pady), wd, font=font, fill=fill + (255,), stroke_width=stroke, stroke_fill=(0, 0, 0, 255))
+            tx += ww + space; wi += 1
+        y += row_h + gap
     if shadow:
+        a, blur = {"outline": (0.55, max(4, size // 12)), "soft": (0.6, max(5, size // 9)), "box": (0.22, max(6, size // 7))}[style]
         sh = Image.new("RGBA", img.size, (0, 0, 0, 0))
-        alpha = img.split()[3].point(lambda a: int(a * 0.55))
-        sh.putalpha(alpha)
-        sh = sh.filter(ImageFilter.GaussianBlur(max(4, size // 12)))
+        sh.putalpha(img.split()[3].point(lambda v: int(v * a)))
+        sh = sh.filter(ImageFilter.GaussianBlur(blur))
         base = Image.new("RGBA", img.size, (0, 0, 0, 0))
-        base.alpha_composite(sh, (0, max(3, size // 18)))
+        base.alpha_composite(sh, (0, max(2, size // 20)))
         base.alpha_composite(img)
         img = base
     return img, len(lines)
+
+def wordmark(size=110):
+    """"DigiRoo" in the logo's letter colours (D orange, i yellow, g green, i teal, R indigo, oo orange) on a white pill.
+    Drawn, not copied: the brand's own name in its own colours."""
+    from PIL import Image, ImageDraw
+    font = get_font(900, size, "tiktok")
+    cols = ["orange", "yellow", "green", "teal", "indigo", "orange", "orange"]
+    word = "DigiRoo"; w = sum(font.getlength(c) for c in word); asc, desc = font.getmetrics()
+    padx, pady = int(size * 0.45), int(size * 0.2)
+    img = Image.new("RGBA", (int(w) + 2 * padx, asc + desc + 2 * pady), (0, 0, 0, 0)); d = ImageDraw.Draw(img)
+    d.rounded_rectangle([0, 0, img.width - 1, img.height - 1], int(img.height / 2), fill=(255, 255, 255, 255))
+    x = padx
+    for ch, c in zip(word, cols):
+        d.text((x, pady), ch, font=font, fill=BRAND[c] + (255,)); x += font.getlength(ch)
+    return img
+
+def draw_arrow(canvas, start, end, colour="yellow", width=12, alpha=1.0):
+    """A plain arrow from a callout box to the thing it names (the red lines on the 18.5M neck video do this job)."""
+    from PIL import Image, ImageDraw
+    layer = Image.new("RGBA", canvas.size, (0, 0, 0, 0)); d = ImageDraw.Draw(layer)
+    (x0, y0), (x1, y1) = start, end
+    ang = math.atan2(y1 - y0, x1 - x0); head = width * 3.2
+    bx, by = x1 - head * 0.8 * math.cos(ang), y1 - head * 0.8 * math.sin(ang)
+    pts = [(x1, y1), (bx - head * 0.6 * math.sin(ang), by + head * 0.6 * math.cos(ang)),
+           (bx + head * 0.6 * math.sin(ang), by - head * 0.6 * math.cos(ang))]
+    for wdt, col in ((width + 6, (0, 0, 0, 150)), (width, _rgb(colour) + (255,))):
+        d.line([(x0, y0), (bx, by)], fill=col, width=wdt)
+    d.polygon(pts, fill=_rgb(colour) + (255,), outline=(0, 0, 0, 150))
+    if alpha < 1:
+        layer.putalpha(layer.split()[3].point(lambda v: int(v * alpha)))
+    canvas.alpha_composite(layer)
+
+SFX = {  # synthesised, so there's nothing to license: short, soft, under the voice
+    "pop":    "aevalsrc='0.6*sin(2*PI*(380+2600*t)*t)*exp(-38*t)':s=48000:d=0.18",
+    "whoosh": "anoisesrc=color=pink:amplitude=0.5:d=0.45:r=48000,bandpass=f=1400:width_type=o:w=1.6,afade=t=in:d=0.28,afade=t=out:st=0.28:d=0.17",
+    "ding":   "aevalsrc='0.45*sin(2*PI*1568*t)*exp(-5*t)+0.2*sin(2*PI*3136*t)*exp(-8*t)':s=48000:d=0.9",
+    "tick":   "aevalsrc='0.5*sin(2*PI*2200*t)*exp(-90*t)':s=48000:d=0.06",
+}
+def make_sfx(name, out):
+    if name not in SFX:
+        raise SystemExit(f"unknown built-in sound '{name}': use one of {', '.join(SFX)}")
+    run(["ffmpeg", "-y", "-hide_banner", "-loglevel", "error", "-f", "lavfi", "-i", SFX[name], "-ac", "2", "-c:a", "pcm_s16le", out])
+    return out
 
 
 # ---------- frames and sheets ----------

@@ -31,13 +31,15 @@ Total is 11–15 s. Add a 4–5 s selfie line and it's 15–20 s. That sits insi
 
 ## 2. Words on screen
 
+**The default is now `"style": "native"`. Its spec, sizes and evidence are in `edit-style.md`.** The table below is the original `"classic"` look, which is still available.
+
 | Element | Rule | Source |
 |---|---|---|
-| Title | Frame one, finished. Never fades in at 0 s, because frame one is also the cover. | video-director S:155, explainroo A:777 |
+| Title | Frame one, finished. Never fades in at 0 s, because frame one is also the cover (a caption on screen at 0 s doesn't fade in either). On multi-shot cuts, `"title_until": "first_cut"` keeps a "before" title off the after shot and off faces. | video-director S:155, explainroo A:777 |
 | Title copy | 6–12 words + the credential ("(mom + inventor)") | video-rules 1 |
 | Title size and length | 84 px, up to 4 lines. "The headline gets a second line, not a smaller size." Only past 4 lines does it drop to 76. | video-director ≥84 px by 3 s; take-one vertical.md:39 |
 | Title position | Top at y 300. Inside the 4:5 feed-preview crop (y ≥ 285) and the IG grid's middle 3:4. | take-one vertical.md:41,76 |
-| Captions | 2–5 words. Break at a phrase end, ≤28 characters, no full stop on screen. | take-one words.md:22-23, explainroo captions.js |
+| Captions | 2–5 words. Break at a phrase end, ≤28 characters, no full stop on screen, never end a cue on "the", "I", "of" (the editor picks the split). A line already on screen as the title gets `"captions": false`. | take-one words.md:22-23, explainroo captions.js |
 | Caption position | Lower-middle; block bottom at y 1340, width ≤760 px centred, clear of the button rail (x > 940 below y 880) | take-one, explainroo safe areas |
 | Caption timing | Lands 0.08 s ahead of the word and eases in over 4 frames. ≤3.5 words/s. | huashu craft.md:33, video-director |
 | Overlays | Same style, same slot as captions, only where no caption is showing. Never the same words as the captions. Held for max(1.5 s, 1 s + 0.3 s a word). | explainroo A:774, video-director craft.md:51 |
@@ -82,6 +84,10 @@ Why static gain, not loudnorm: dynamic loudnorm lifts the hiss between lines and
 - **The default is no music in the export.** For text-narrated transformations she adds a soft trending sound in-app at post time, from the Commercial Music Library because DigiRoo is a business account (video-rules 9).
 - How-tos and talking heads keep original sound.
 - If a bed is used: calm acoustic or folk at 80–110 BPM, warm and family. No techno, trap, or drums under a voice [huashu music.md].
+- **Vet it first:** `python3 <this skill>/scripts/vet_music.py bed.mp3` reports length, level swings, how busy the track is in the 1–4 kHz voice range, how long its intro takes (`"start"`), and whether Whisper hears singing in it (a sung bed never goes under a voice).
+- **Record the licence in edit.json:** `"music": {"file", "license", "source", "start", "under_voice_db"}`. `qc.py` fails a bed with no licence and source, and measures the bed against her voice on separate stems (`music under voice`, `music in the gaps`). Under a voice the bed also loses 4 dB around 2.5 kHz (`"carve": false` turns that off).
+- On Pixabay, skip tracks with the "Content ID Registered" badge: they can be auto-claimed or muted on Reels even when used legally. Mixkit's free licence forbids Content ID registration.
+- **UGC that already has music under the voice** (the gaps between her words sit within ~15 dB of her voice): add no bed, set `"clean": false` (level it, skip the denoiser, which smears music), and don't `tighten` it (every cut makes the music jump). The creator's track is unlicensed for the brand until the creator names it; ask, or ask for the clean voice-over.
 
 **Silence.**
 - With the sound off, the video must still make sense; that's the hook-sheet test.
